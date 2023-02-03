@@ -1,0 +1,344 @@
+[
+{"id":"1","name":"Afghanistan","iso3":"AFG","iso2":"AF","phonecode":"93","capital":"Kabul","currency":"AFN","natives":null,"flag":"1","wiki_data_id":"Q889","native":"افغانستان","code":"4"}
+,
+{"id":"2","name":"Aland Islands","iso3":"ALA","iso2":"AX","phonecode":"+358-18","capital":"Mariehamn","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"","native":"Åland","code":"248"}
+,
+{"id":"3","name":"Albania","iso3":"ALB","iso2":"AL","phonecode":"355","capital":"Tirana","currency":"ALL","natives":null,"flag":"1","wiki_data_id":"Q222","native":"Shqipëria","code":"8"}
+,
+{"id":"4","name":"Algeria","iso3":"DZA","iso2":"DZ","phonecode":"213","capital":"Algiers","currency":"DZD","natives":null,"flag":"1","wiki_data_id":"Q262","native":"الجزائر","code":"12"}
+,
+{"id":"5","name":"American Samoa","iso3":"ASM","iso2":"AS","phonecode":"+1-684","capital":"Pago Pago","currency":"USD","natives":null,"flag":"1","wiki_data_id":"","native":"American Samoa","code":"16"},
+{"id":"6","name":"Andorra","iso3":"AND","iso2":"AD","phonecode":"376","capital":"Andorra la Vella","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q228","native":"Andorra","code":"20"},
+{"id":"7","name":"Angola","iso3":"AGO","iso2":"AO","phonecode":"244","capital":"Luanda","currency":"AOA","natives":null,"flag":"1","wiki_data_id":"Q916","native":"Angola","code":"24"},
+{"id":"8","name":"Anguilla","iso3":"AIA","iso2":"AI","phonecode":"+1-264","capital":"The Valley","currency":"XCD","natives":null,"flag":"1","wiki_data_id":"","native":"Anguilla","code":"660"},
+{"id":"9","name":"Antarctica","iso3":"ATA","iso2":"AQ","phonecode":"","capital":"","currency":"","natives":null,"flag":"1","wiki_data_id":"","native":"Antarctica","code":"10"},
+{"id":"10","name":"Antigua And Barbuda","iso3":"ATG","iso2":"AG","phonecode":"+1-268","capital":"St. John's","currency":"XCD","natives":null,"flag":"1","wiki_data_id":"Q781","native":"Antigua and Barbuda","code":"28"},
+{"id":"11","name":"Argentina","iso3":"ARG","iso2":"AR","phonecode":"54","capital":"Buenos Aires","currency":"ARS","natives":null,"flag":"1","wiki_data_id":"Q414","native":"Argentina","code":"32"},
+{"id":"12","name":"Armenia","iso3":"ARM","iso2":"AM","phonecode":"374","capital":"Yerevan","currency":"AMD","natives":null,"flag":"1","wiki_data_id":"Q399","native":"Հայաստան","code":"51"}
+,
+{"id":"13","name":"Aruba","iso3":"ABW","iso2":"AW","phonecode":"297","capital":"Oranjestad","currency":"AWG","natives":null,"flag":"1","wiki_data_id":"","native":"Aruba","code":"533"},
+{"id":"14","name":"Australia","iso3":"AUS","iso2":"AU","phonecode":"61","capital":"Canberra","currency":"AUD","natives":null,"flag":"1","wiki_data_id":"Q408","native":"Australia","code":"36"},
+{"id":"15","name":"Austria","iso3":"AUT","iso2":"AT","phonecode":"43","capital":"Vienna","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q40","native":"Österreich","code":"40"}
+,
+{"id":"16","name":"Azerbaijan","iso3":"AZE","iso2":"AZ","phonecode":"994","capital":"Baku","currency":"AZN","natives":null,"flag":"1","wiki_data_id":"Q227","native":"Azərbaycan","code":"31"}
+,
+{"id":"17","name":"Bahamas The","iso3":"BHS","iso2":"BS","phonecode":"+1-242","capital":"Nassau","currency":"BSD","natives":null,"flag":"1","wiki_data_id":"Q778","native":"Bahamas","code":"44"},
+{"id":"18","name":"Bahrain","iso3":"BHR","iso2":"BH","phonecode":"973","capital":"Manama","currency":"BHD","natives":null,"flag":"1","wiki_data_id":"Q398","native":"‏البحرين","code":"48"}
+,
+{"id":"19","name":"Bangladesh","iso3":"BGD","iso2":"BD","phonecode":"880","capital":"Dhaka","currency":"BDT","natives":null,"flag":"1","wiki_data_id":"Q902","native":"Bangladesh","code":"50"},
+{"id":"20","name":"Barbados","iso3":"BRB","iso2":"BB","phonecode":"+1-246","capital":"Bridgetown","currency":"BBD","natives":null,"flag":"1","wiki_data_id":"Q244","native":"Barbados","code":"52"},
+{"id":"21","name":"Belarus","iso3":"BLR","iso2":"BY","phonecode":"375","capital":"Minsk","currency":"BYN","natives":null,"flag":"1","wiki_data_id":"Q184","native":"Белару́сь","code":"112"}
+,
+{"id":"22","name":"Belgium","iso3":"BEL","iso2":"BE","phonecode":"32","capital":"Brussels","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q31","native":"België","code":"56"}
+,
+{"id":"23","name":"Belize","iso3":"BLZ","iso2":"BZ","phonecode":"501","capital":"Belmopan","currency":"BZD","natives":null,"flag":"1","wiki_data_id":"Q242","native":"Belize","code":"84"},
+{"id":"24","name":"Benin","iso3":"BEN","iso2":"BJ","phonecode":"229","capital":"Porto-Novo","currency":"XOF","natives":null,"flag":"1","wiki_data_id":"Q962","native":"Bénin","code":"204"}
+,
+{"id":"25","name":"Bermuda","iso3":"BMU","iso2":"BM","phonecode":"+1-441","capital":"Hamilton","currency":"BMD","natives":null,"flag":"1","wiki_data_id":"","native":"Bermuda","code":"60"},
+{"id":"26","name":"Bhutan","iso3":"BTN","iso2":"BT","phonecode":"975","capital":"Thimphu","currency":"BTN","natives":null,"flag":"1","wiki_data_id":"Q917","native":"ʼbrug-yul","code":"64"}
+,
+{"id":"27","name":"Bolivia","iso3":"BOL","iso2":"BO","phonecode":"591","capital":"Sucre","currency":"BOB","natives":null,"flag":"1","wiki_data_id":"Q750","native":"Bolivia","code":"68"},
+{"id":"28","name":"Bosnia and Herzegovina","iso3":"BIH","iso2":"BA","phonecode":"387","capital":"Sarajevo","currency":"BAM","natives":null,"flag":"1","wiki_data_id":"Q225","native":"Bosna i Hercegovina","code":"70"},
+{"id":"29","name":"Botswana","iso3":"BWA","iso2":"BW","phonecode":"267","capital":"Gaborone","currency":"BWP","natives":null,"flag":"1","wiki_data_id":"Q963","native":"Botswana","code":"72"},
+{"id":"30","name":"Bouvet Island","iso3":"BVT","iso2":"BV","phonecode":"","capital":"","currency":"NOK","natives":null,"flag":"0","wiki_data_id":"","native":"Bouvetøya","code":"74"}
+,
+{"id":"31","name":"Brazil","iso3":"BRA","iso2":"BR","phonecode":"55","capital":"Brasilia","currency":"BRL","natives":null,"flag":"1","wiki_data_id":"Q155","native":"Brasil","code":"76"},
+{"id":"32","name":"British Indian Ocean Territory","iso3":"IOT","iso2":"IO","phonecode":"246","capital":"Diego Garcia","currency":"USD","natives":null,"flag":"1","wiki_data_id":"","native":"British Indian Ocean Territory","code":"86"},
+{"id":"33","name":"Brunei","iso3":"BRN","iso2":"BN","phonecode":"673","capital":"Bandar Seri Begawan","currency":"BND","natives":null,"flag":"1","wiki_data_id":"Q921","native":"Negara Brunei Darussalam","code":"96"},
+{"id":"34","name":"Bulgaria","iso3":"BGR","iso2":"BG","phonecode":"359","capital":"Sofia","currency":"BGN","natives":null,"flag":"1","wiki_data_id":"Q219","native":"България","code":"100"}
+,
+{"id":"35","name":"Burkina Faso","iso3":"BFA","iso2":"BF","phonecode":"226","capital":"Ouagadougou","currency":"XOF","natives":null,"flag":"1","wiki_data_id":"Q965","native":"Burkina Faso","code":"854"},
+{"id":"36","name":"Burundi","iso3":"BDI","iso2":"BI","phonecode":"257","capital":"Bujumbura","currency":"BIF","natives":null,"flag":"1","wiki_data_id":"Q967","native":"Burundi","code":"108"},
+{"id":"37","name":"Cambodia","iso3":"KHM","iso2":"KH","phonecode":"855","capital":"Phnom Penh","currency":"KHR","natives":null,"flag":"1","wiki_data_id":"Q424","native":"Kâmpŭchéa","code":"116"}
+,
+{"id":"38","name":"Cameroon","iso3":"CMR","iso2":"CM","phonecode":"237","capital":"Yaounde","currency":"XAF","natives":null,"flag":"1","wiki_data_id":"Q1009","native":"Cameroon","code":"120"},
+{"id":"39","name":"Canada","iso3":"CAN","iso2":"CA","phonecode":"1","capital":"Ottawa","currency":"CAD","natives":null,"flag":"1","wiki_data_id":"Q16","native":"Canada","code":"124"},
+{"id":"40","name":"Cape Verde","iso3":"CPV","iso2":"CV","phonecode":"238","capital":"Praia","currency":"CVE","natives":null,"flag":"1","wiki_data_id":"Q1011","native":"Cabo Verde","code":null},
+{"id":"41","name":"Cayman Islands","iso3":"CYM","iso2":"KY","phonecode":"+1-345","capital":"George Town","currency":"KYD","natives":null,"flag":"1","wiki_data_id":"","native":"Cayman Islands","code":"136"},
+{"id":"42","name":"Central African Republic","iso3":"CAF","iso2":"CF","phonecode":"236","capital":"Bangui","currency":"XAF","natives":null,"flag":"1","wiki_data_id":"Q929","native":"Ködörösêse tî Bêafrîka","code":"140"}
+,
+{"id":"43","name":"Chad","iso3":"TCD","iso2":"TD","phonecode":"235","capital":"N'Djamena","currency":"XAF","natives":null,"flag":"1","wiki_data_id":"Q657","native":"Tchad","code":"148"},
+{"id":"44","name":"Chile","iso3":"CHL","iso2":"CL","phonecode":"56","capital":"Santiago","currency":"CLP","natives":null,"flag":"1","wiki_data_id":"Q298","native":"Chile","code":"152"},
+{"id":"45","name":"China","iso3":"CHN","iso2":"CN","phonecode":"86","capital":"Beijing","currency":"CNY","natives":null,"flag":"1","wiki_data_id":"Q148","native":"中国","code":"156"}
+,
+{"id":"46","name":"Christmas Island","iso3":"CXR","iso2":"CX","phonecode":"61","capital":"Flying Fish Cove","currency":"AUD","natives":null,"flag":"1","wiki_data_id":"","native":"Christmas Island","code":"162"},
+{"id":"47","name":"Cocos (Keeling) Islands","iso3":"CCK","iso2":"CC","phonecode":"61","capital":"West Island","currency":"AUD","natives":null,"flag":"1","wiki_data_id":"","native":"Cocos (Keeling) Islands","code":"166"},
+{"id":"48","name":"Colombia","iso3":"COL","iso2":"CO","phonecode":"57","capital":"Bogota","currency":"COP","natives":null,"flag":"1","wiki_data_id":"Q739","native":"Colombia","code":"170"},
+{"id":"49","name":"Comoros","iso3":"COM","iso2":"KM","phonecode":"269","capital":"Moroni","currency":"KMF","natives":null,"flag":"1","wiki_data_id":"Q970","native":"Komori","code":"174"},
+{"id":"50","name":"Congo","iso3":"COG","iso2":"CG","phonecode":"242","capital":"Brazzaville","currency":"XAF","natives":null,"flag":"1","wiki_data_id":"Q971","native":"République du Congo","code":"178"}
+,
+{"id":"51","name":"Congo The Democratic Republic Of The","iso3":"COD","iso2":"CD","phonecode":"243","capital":"Kinshasa","currency":"CDF","natives":null,"flag":"1","wiki_data_id":"Q974","native":"République démocratique du Congo","code":"180"}
+,
+{"id":"52","name":"Cook Islands","iso3":"COK","iso2":"CK","phonecode":"682","capital":"Avarua","currency":"NZD","natives":null,"flag":"1","wiki_data_id":"Q26988","native":"Cook Islands","code":"184"},
+{"id":"53","name":"Costa Rica","iso3":"CRI","iso2":"CR","phonecode":"506","capital":"San Jose","currency":"CRC","natives":null,"flag":"1","wiki_data_id":"Q800","native":"Costa Rica","code":"188"},
+{"id":"54","name":"Cote D'Ivoire (Ivory Coast)","iso3":"CIV","iso2":"CI","phonecode":"225","capital":"Yamoussoukro","currency":"XOF","natives":null,"flag":"1","wiki_data_id":"Q1008","native":"","code":"384"},
+{"id":"55","name":"Croatia (Hrvatska)","iso3":"HRV","iso2":"HR","phonecode":"385","capital":"Zagreb","currency":"HRK","natives":null,"flag":"1","wiki_data_id":"Q224","native":"Hrvatska","code":"191"},
+{"id":"56","name":"Cuba","iso3":"CUB","iso2":"CU","phonecode":"53","capital":"Havana","currency":"CUP","natives":null,"flag":"1","wiki_data_id":"Q241","native":"Cuba","code":"192"},
+{"id":"57","name":"Cyprus","iso3":"CYP","iso2":"CY","phonecode":"357","capital":"Nicosia","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q229","native":"Κύπρος","code":"196"}
+,
+{"id":"58","name":"Czech Republic","iso3":"CZE","iso2":"CZ","phonecode":"420","capital":"Prague","currency":"CZK","natives":null,"flag":"1","wiki_data_id":"Q213","native":"Česká republika","code":"203"}
+,
+{"id":"59","name":"Denmark","iso3":"DNK","iso2":"DK","phonecode":"45","capital":"Copenhagen","currency":"DKK","natives":null,"flag":"1","wiki_data_id":"Q35","native":"Danmark","code":"208"},
+{"id":"60","name":"Djibouti","iso3":"DJI","iso2":"DJ","phonecode":"253","capital":"Djibouti","currency":"DJF","natives":null,"flag":"1","wiki_data_id":"Q977","native":"Djibouti","code":"262"},
+{"id":"61","name":"Dominica","iso3":"DMA","iso2":"DM","phonecode":"+1-767","capital":"Roseau","currency":"XCD","natives":null,"flag":"1","wiki_data_id":"Q784","native":"Dominica","code":"212"},
+{"id":"62","name":"Dominican Republic","iso3":"DOM","iso2":"DO","phonecode":"+1-809 and 1-829","capital":"Santo Domingo","currency":"DOP","natives":null,"flag":"1","wiki_data_id":"Q786","native":"República Dominicana","code":"214"}
+,
+{"id":"63","name":"East Timor","iso3":"TLS","iso2":"TL","phonecode":"670","capital":"Dili","currency":"USD","natives":null,"flag":"1","wiki_data_id":"Q574","native":"Timor-Leste","code":"626"},
+{"id":"64","name":"Ecuador","iso3":"ECU","iso2":"EC","phonecode":"593","capital":"Quito","currency":"USD","natives":null,"flag":"1","wiki_data_id":"Q736","native":"Ecuador","code":"218"},
+{"id":"65","name":"Egypt","iso3":"EGY","iso2":"EG","phonecode":"20","capital":"Cairo","currency":"EGP","natives":null,"flag":"1","wiki_data_id":"Q79","native":"مصر‎","code":"818"}
+,
+{"id":"66","name":"El Salvador","iso3":"SLV","iso2":"SV","phonecode":"503","capital":"San Salvador","currency":"USD","natives":null,"flag":"1","wiki_data_id":"Q792","native":"El Salvador","code":"222"},
+{"id":"67","name":"Equatorial Guinea","iso3":"GNQ","iso2":"GQ","phonecode":"240","capital":"Malabo","currency":"XAF","natives":null,"flag":"1","wiki_data_id":"Q983","native":"Guinea Ecuatorial","code":"226"},
+{"id":"68","name":"Eritrea","iso3":"ERI","iso2":"ER","phonecode":"291","capital":"Asmara","currency":"ERN","natives":null,"flag":"1","wiki_data_id":"Q986","native":"ኤርትራ","code":"232"}
+,
+{"id":"69","name":"Estonia","iso3":"EST","iso2":"EE","phonecode":"372","capital":"Tallinn","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q191","native":"Eesti","code":"233"},
+{"id":"70","name":"Ethiopia","iso3":"ETH","iso2":"ET","phonecode":"251","capital":"Addis Ababa","currency":"ETB","natives":null,"flag":"1","wiki_data_id":"Q115","native":"ኢትዮጵያ","code":"231"}
+,
+{"id":"71","name":"Falkland Islands","iso3":"FLK","iso2":"FK","phonecode":"500","capital":"Stanley","currency":"FKP","natives":null,"flag":"1","wiki_data_id":"","native":"Falkland Islands","code":"238"},
+{"id":"72","name":"Faroe Islands","iso3":"FRO","iso2":"FO","phonecode":"298","capital":"Torshavn","currency":"DKK","natives":null,"flag":"1","wiki_data_id":"","native":"Føroyar","code":"234"}
+,
+{"id":"73","name":"Fiji Islands","iso3":"FJI","iso2":"FJ","phonecode":"679","capital":"Suva","currency":"FJD","natives":null,"flag":"1","wiki_data_id":"Q712","native":"Fiji","code":"242"},
+{"id":"74","name":"Finland","iso3":"FIN","iso2":"FI","phonecode":"358","capital":"Helsinki","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q33","native":"Suomi","code":"246"},
+{"id":"75","name":"France","iso3":"FRA","iso2":"FR","phonecode":"33","capital":"Paris","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q142","native":"France","code":"250"},
+{"id":"76","name":"French Guiana","iso3":"GUF","iso2":"GF","phonecode":"594","capital":"Cayenne","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"","native":"Guyane française","code":"254"}
+,
+{"id":"77","name":"French Polynesia","iso3":"PYF","iso2":"PF","phonecode":"689","capital":"Papeete","currency":"XPF","natives":null,"flag":"1","wiki_data_id":"","native":"Polynésie française","code":"258"}
+,
+{"id":"78","name":"French Southern Territories","iso3":"ATF","iso2":"TF","phonecode":"","capital":"Port-aux-Francais","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"","native":"Territoire des Terres australes et antarctiques fr","code":"260"},
+{"id":"79","name":"Gabon","iso3":"GAB","iso2":"GA","phonecode":"241","capital":"Libreville","currency":"XAF","natives":null,"flag":"1","wiki_data_id":"Q1000","native":"Gabon","code":"266"},
+{"id":"80","name":"Gambia The","iso3":"GMB","iso2":"GM","phonecode":"220","capital":"Banjul","currency":"GMD","natives":null,"flag":"1","wiki_data_id":"Q1005","native":"Gambia","code":"270"},
+{"id":"81","name":"Georgia","iso3":"GEO","iso2":"GE","phonecode":"995","capital":"Tbilisi","currency":"GEL","natives":null,"flag":"1","wiki_data_id":"Q230","native":"საქართველო","code":"268"}
+,
+{"id":"82","name":"Germany","iso3":"DEU","iso2":"DE","phonecode":"49","capital":"Berlin","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q183","native":"Deutschland","code":"276"},
+{"id":"83","name":"Ghana","iso3":"GHA","iso2":"GH","phonecode":"233","capital":"Accra","currency":"GHS","natives":null,"flag":"1","wiki_data_id":"Q117","native":"Ghana","code":"288"},
+{"id":"84","name":"Gibraltar","iso3":"GIB","iso2":"GI","phonecode":"350","capital":"Gibraltar","currency":"GIP","natives":null,"flag":"1","wiki_data_id":"","native":"Gibraltar","code":"292"},
+{"id":"85","name":"Greece","iso3":"GRC","iso2":"GR","phonecode":"30","capital":"Athens","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q41","native":"Ελλάδα","code":"300"}
+,
+{"id":"86","name":"Greenland","iso3":"GRL","iso2":"GL","phonecode":"299","capital":"Nuuk","currency":"DKK","natives":null,"flag":"1","wiki_data_id":"","native":"Kalaallit Nunaat","code":"304"},
+{"id":"87","name":"Grenada","iso3":"GRD","iso2":"GD","phonecode":"+1-473","capital":"St. George's","currency":"XCD","natives":null,"flag":"1","wiki_data_id":"Q769","native":"Grenada","code":"308"},
+{"id":"88","name":"Guadeloupe","iso3":"GLP","iso2":"GP","phonecode":"590","capital":"Basse-Terre","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"","native":"Guadeloupe","code":"312"},
+{"id":"89","name":"Guam","iso3":"GUM","iso2":"GU","phonecode":"+1-671","capital":"Hagatna","currency":"USD","natives":null,"flag":"1","wiki_data_id":"","native":"Guam","code":"316"},
+{"id":"90","name":"Guatemala","iso3":"GTM","iso2":"GT","phonecode":"502","capital":"Guatemala City","currency":"GTQ","natives":null,"flag":"1","wiki_data_id":"Q774","native":"Guatemala","code":"320"},
+{"id":"91","name":"Guernsey and Alderney","iso3":"GGY","iso2":"GG","phonecode":"+44-1481","capital":"St Peter Port","currency":"GBP","natives":null,"flag":"1","wiki_data_id":"","native":"Guernsey","code":"831"},
+{"id":"92","name":"Guinea","iso3":"GIN","iso2":"GN","phonecode":"224","capital":"Conakry","currency":"GNF","natives":null,"flag":"1","wiki_data_id":"Q1006","native":"Guinée","code":"324"}
+,
+{"id":"93","name":"Guinea-Bissau","iso3":"GNB","iso2":"GW","phonecode":"245","capital":"Bissau","currency":"XOF","natives":null,"flag":"1","wiki_data_id":"Q1007","native":"Guiné-Bissau","code":"624"}
+,
+{"id":"94","name":"Guyana","iso3":"GUY","iso2":"GY","phonecode":"592","capital":"Georgetown","currency":"GYD","natives":null,"flag":"1","wiki_data_id":"Q734","native":"Guyana","code":"328"},
+{"id":"95","name":"Haiti","iso3":"HTI","iso2":"HT","phonecode":"509","capital":"Port-au-Prince","currency":"HTG","natives":null,"flag":"1","wiki_data_id":"Q790","native":"Haïti","code":"332"}
+,
+{"id":"96","name":"Heard and McDonald Islands","iso3":"HMD","iso2":"HM","phonecode":"","capital":"","currency":"AUD","natives":null,"flag":"0","wiki_data_id":"","native":"Heard Island and McDonald Islands","code":"334"},
+{"id":"97","name":"Honduras","iso3":"HND","iso2":"HN","phonecode":"504","capital":"Tegucigalpa","currency":"HNL","natives":null,"flag":"1","wiki_data_id":"Q783","native":"Honduras","code":"340"},
+{"id":"98","name":"Hong Kong S.A.R.","iso3":"HKG","iso2":"HK","phonecode":"852","capital":"Hong Kong","currency":"HKD","natives":null,"flag":"1","wiki_data_id":"","native":"香港","code":"344"}
+,
+{"id":"99","name":"Hungary","iso3":"HUN","iso2":"HU","phonecode":"36","capital":"Budapest","currency":"HUF","natives":null,"flag":"1","wiki_data_id":"Q28","native":"Magyarország","code":"348"}
+,
+{"id":"100","name":"Iceland","iso3":"ISL","iso2":"IS","phonecode":"354","capital":"Reykjavik","currency":"ISK","natives":null,"flag":"1","wiki_data_id":"Q189","native":"Ísland","code":"352"}
+,
+{"id":"101","name":"India","iso3":"IND","iso2":"IN","phonecode":"91","capital":"New Delhi","currency":"INR","natives":null,"flag":"1","wiki_data_id":"Q668","native":"भारत","code":"356"}
+,
+{"id":"102","name":"Indonesia","iso3":"IDN","iso2":"ID","phonecode":"62","capital":"Jakarta","currency":"IDR","natives":null,"flag":"1","wiki_data_id":"Q252","native":"Indonesia","code":"360"},
+{"id":"103","name":"Iran","iso3":"IRN","iso2":"IR","phonecode":"98","capital":"Tehran","currency":"IRR","natives":null,"flag":"1","wiki_data_id":"Q794","native":"ایران","code":"364"}
+,
+{"id":"104","name":"Iraq","iso3":"IRQ","iso2":"IQ","phonecode":"964","capital":"Baghdad","currency":"IQD","natives":null,"flag":"1","wiki_data_id":"Q796","native":"العراق","code":"368"}
+,
+{"id":"105","name":"Ireland","iso3":"IRL","iso2":"IE","phonecode":"353","capital":"Dublin","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q27","native":"Éire","code":"372"}
+,
+{"id":"106","name":"Israel","iso3":"ISR","iso2":"IL","phonecode":"972","capital":"Jerusalem","currency":"ILS","natives":null,"flag":"1","wiki_data_id":"Q801","native":"יִשְׂרָאֵל","code":"376"}
+,
+{"id":"107","name":"Italy","iso3":"ITA","iso2":"IT","phonecode":"39","capital":"Rome","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q38","native":"Italia","code":"380"},
+{"id":"108","name":"Jamaica","iso3":"JAM","iso2":"JM","phonecode":"+1-876","capital":"Kingston","currency":"JMD","natives":null,"flag":"1","wiki_data_id":"Q766","native":"Jamaica","code":"388"},
+{"id":"109","name":"Japan","iso3":"JPN","iso2":"JP","phonecode":"81","capital":"Tokyo","currency":"JPY","natives":null,"flag":"1","wiki_data_id":"Q17","native":"日本","code":"392"}
+,
+{"id":"110","name":"Jersey","iso3":"JEY","iso2":"JE","phonecode":"+44-1534","capital":"Saint Helier","currency":"GBP","natives":null,"flag":"1","wiki_data_id":"Q785","native":"Jersey","code":"832"},
+{"id":"111","name":"Jordan","iso3":"JOR","iso2":"JO","phonecode":"962","capital":"Amman","currency":"JOD","natives":null,"flag":"1","wiki_data_id":"Q810","native":"الأردن","code":"400"}
+,
+{"id":"112","name":"Kazakhstan","iso3":"KAZ","iso2":"KZ","phonecode":"7","capital":"Astana","currency":"KZT","natives":null,"flag":"1","wiki_data_id":"Q232","native":"Қазақстан","code":"398"}
+,
+{"id":"113","name":"Kenya","iso3":"KEN","iso2":"KE","phonecode":"254","capital":"Nairobi","currency":"KES","natives":null,"flag":"1","wiki_data_id":"Q114","native":"Kenya","code":"404"},
+{"id":"114","name":"Kiribati","iso3":"KIR","iso2":"KI","phonecode":"686","capital":"Tarawa","currency":"AUD","natives":null,"flag":"1","wiki_data_id":"Q710","native":"Kiribati","code":"296"},
+{"id":"115","name":"Korea North","iso3":"PRK","iso2":"KP","phonecode":"850","capital":"Pyongyang","currency":"KPW","natives":null,"flag":"1","wiki_data_id":"Q423","native":"북한","code":"408"}
+,
+{"id":"116","name":"Korea South","iso3":"KOR","iso2":"KR","phonecode":"82","capital":"Seoul","currency":"KRW","natives":null,"flag":"1","wiki_data_id":"Q884","native":"대한민국","code":"410"}
+,
+{"id":"117","name":"Kuwait","iso3":"KWT","iso2":"KW","phonecode":"965","capital":"Kuwait City","currency":"KWD","natives":null,"flag":"1","wiki_data_id":"Q817","native":"الكويت","code":"414"}
+,
+{"id":"118","name":"Kyrgyzstan","iso3":"KGZ","iso2":"KG","phonecode":"996","capital":"Bishkek","currency":"KGS","natives":null,"flag":"1","wiki_data_id":"Q813","native":"Кыргызстан","code":"417"}
+,
+{"id":"119","name":"Laos","iso3":"LAO","iso2":"LA","phonecode":"856","capital":"Vientiane","currency":"LAK","natives":null,"flag":"1","wiki_data_id":"Q819","native":"ສປປລາວ","code":"418"}
+,
+{"id":"120","name":"Latvia","iso3":"LVA","iso2":"LV","phonecode":"371","capital":"Riga","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q211","native":"Latvija","code":"428"},
+{"id":"121","name":"Lebanon","iso3":"LBN","iso2":"LB","phonecode":"961","capital":"Beirut","currency":"LBP","natives":null,"flag":"1","wiki_data_id":"Q822","native":"لبنان","code":"422"}
+,
+{"id":"122","name":"Lesotho","iso3":"LSO","iso2":"LS","phonecode":"266","capital":"Maseru","currency":"LSL","natives":null,"flag":"1","wiki_data_id":"Q1013","native":"Lesotho","code":"426"},
+{"id":"123","name":"Liberia","iso3":"LBR","iso2":"LR","phonecode":"231","capital":"Monrovia","currency":"LRD","natives":null,"flag":"1","wiki_data_id":"Q1014","native":"Liberia","code":"430"},
+{"id":"124","name":"Libya","iso3":"LBY","iso2":"LY","phonecode":"218","capital":"Tripolis","currency":"LYD","natives":null,"flag":"1","wiki_data_id":"Q1016","native":"‏ليبيا","code":"434"}
+,
+{"id":"125","name":"Liechtenstein","iso3":"LIE","iso2":"LI","phonecode":"423","capital":"Vaduz","currency":"CHF","natives":null,"flag":"1","wiki_data_id":"Q347","native":"Liechtenstein","code":"438"},
+{"id":"126","name":"Lithuania","iso3":"LTU","iso2":"LT","phonecode":"370","capital":"Vilnius","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q37","native":"Lietuva","code":"440"},
+{"id":"127","name":"Luxembourg","iso3":"LUX","iso2":"LU","phonecode":"352","capital":"Luxembourg","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q32","native":"Luxembourg","code":"442"},
+{"id":"128","name":"Macau S.A.R.","iso3":"MAC","iso2":"MO","phonecode":"853","capital":"Macao","currency":"MOP","natives":null,"flag":"1","wiki_data_id":"","native":"澳門","code":"446"}
+,
+{"id":"129","name":"Macedonia","iso3":"MKD","iso2":"MK","phonecode":"389","capital":"Skopje","currency":"MKD","natives":null,"flag":"1","wiki_data_id":"Q221","native":"Северна Македонија","code":"807"}
+,
+{"id":"130","name":"Madagascar","iso3":"MDG","iso2":"MG","phonecode":"261","capital":"Antananarivo","currency":"MGA","natives":null,"flag":"1","wiki_data_id":"Q1019","native":"Madagasikara","code":"450"},
+{"id":"131","name":"Malawi","iso3":"MWI","iso2":"MW","phonecode":"265","capital":"Lilongwe","currency":"MWK","natives":null,"flag":"1","wiki_data_id":"Q1020","native":"Malawi","code":"454"},
+{"id":"132","name":"Malaysia","iso3":"MYS","iso2":"MY","phonecode":"60","capital":"Kuala Lumpur","currency":"MYR","natives":null,"flag":"1","wiki_data_id":"Q833","native":"Malaysia","code":"458"},
+{"id":"133","name":"Maldives","iso3":"MDV","iso2":"MV","phonecode":"960","capital":"Male","currency":"MVR","natives":null,"flag":"1","wiki_data_id":"Q826","native":"Maldives","code":"462"},
+{"id":"134","name":"Mali","iso3":"MLI","iso2":"ML","phonecode":"223","capital":"Bamako","currency":"XOF","natives":null,"flag":"1","wiki_data_id":"Q912","native":"Mali","code":"466"},
+{"id":"135","name":"Malta","iso3":"MLT","iso2":"MT","phonecode":"356","capital":"Valletta","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q233","native":"Malta","code":"470"},
+{"id":"136","name":"Man (Isle of)","iso3":"IMN","iso2":"IM","phonecode":"+44-1624","capital":"Douglas, Isle of Man","currency":"GBP","natives":null,"flag":"1","wiki_data_id":"","native":"Isle of Man","code":null},
+{"id":"137","name":"Marshall Islands","iso3":"MHL","iso2":"MH","phonecode":"692","capital":"Majuro","currency":"USD","natives":null,"flag":"1","wiki_data_id":"Q709","native":"M̧ajeļ","code":"584"}
+,
+{"id":"138","name":"Martinique","iso3":"MTQ","iso2":"MQ","phonecode":"596","capital":"Fort-de-France","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"","native":"Martinique","code":"474"},
+{"id":"139","name":"Mauritania","iso3":"MRT","iso2":"MR","phonecode":"222","capital":"Nouakchott","currency":"MRO","natives":null,"flag":"1","wiki_data_id":"Q1025","native":"موريتانيا","code":"478"}
+,
+{"id":"140","name":"Mauritius","iso3":"MUS","iso2":"MU","phonecode":"230","capital":"Port Louis","currency":"MUR","natives":null,"flag":"1","wiki_data_id":"Q1027","native":"Maurice","code":"480"},
+{"id":"141","name":"Mayotte","iso3":"MYT","iso2":"YT","phonecode":"262","capital":"Mamoudzou","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"","native":"Mayotte","code":"175"},
+{"id":"142","name":"Mexico","iso3":"MEX","iso2":"MX","phonecode":"52","capital":"Mexico City","currency":"MXN","natives":null,"flag":"1","wiki_data_id":"Q96","native":"México","code":"484"}
+,
+{"id":"143","name":"Micronesia","iso3":"FSM","iso2":"FM","phonecode":"691","capital":"Palikir","currency":"USD","natives":null,"flag":"1","wiki_data_id":"Q702","native":"Micronesia","code":"583"},
+{"id":"144","name":"Moldova","iso3":"MDA","iso2":"MD","phonecode":"373","capital":"Chisinau","currency":"MDL","natives":null,"flag":"1","wiki_data_id":"Q217","native":"Moldova","code":"498"},
+{"id":"145","name":"Monaco","iso3":"MCO","iso2":"MC","phonecode":"377","capital":"Monaco","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"","native":"Monaco","code":"492"},
+{"id":"146","name":"Mongolia","iso3":"MNG","iso2":"MN","phonecode":"976","capital":"Ulan Bator","currency":"MNT","natives":null,"flag":"1","wiki_data_id":"Q711","native":"Монгол улс","code":"496"}
+,
+{"id":"147","name":"Montenegro","iso3":"MNE","iso2":"ME","phonecode":"382","capital":"Podgorica","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q236","native":"Црна Гора","code":"499"}
+,
+{"id":"148","name":"Montserrat","iso3":"MSR","iso2":"MS","phonecode":"+1-664","capital":"Plymouth","currency":"XCD","natives":null,"flag":"1","wiki_data_id":"","native":"Montserrat","code":"500"},
+{"id":"149","name":"Morocco","iso3":"MAR","iso2":"MA","phonecode":"212","capital":"Rabat","currency":"MAD","natives":null,"flag":"1","wiki_data_id":"Q1028","native":"المغرب","code":"504"}
+,
+{"id":"150","name":"Mozambique","iso3":"MOZ","iso2":"MZ","phonecode":"258","capital":"Maputo","currency":"MZN","natives":null,"flag":"1","wiki_data_id":"Q1029","native":"Moçambique","code":"508"}
+,
+{"id":"151","name":"Myanmar","iso3":"MMR","iso2":"MM","phonecode":"95","capital":"Nay Pyi Taw","currency":"MMK","natives":null,"flag":"1","wiki_data_id":"Q836","native":"မြန်မာ","code":"104"}
+,
+{"id":"152","name":"Namibia","iso3":"NAM","iso2":"NA","phonecode":"264","capital":"Windhoek","currency":"NAD","natives":null,"flag":"1","wiki_data_id":"Q1030","native":"Namibia","code":"516"},
+{"id":"153","name":"Nauru","iso3":"NRU","iso2":"NR","phonecode":"674","capital":"Yaren","currency":"AUD","natives":null,"flag":"1","wiki_data_id":"Q697","native":"Nauru","code":"520"},
+{"id":"154","name":"Nepal","iso3":"NPL","iso2":"NP","phonecode":"977","capital":"Kathmandu","currency":"NPR","natives":null,"flag":"1","wiki_data_id":"Q837","native":"नपल","code":"524"}
+,
+{"id":"155","name":"Netherlands Antilles","iso3":"ANT","iso2":"AN","phonecode":"","capital":"","currency":"","natives":null,"flag":"0","wiki_data_id":"","native":"","code":null},
+{"id":"156","name":"Netherlands The","iso3":"NLD","iso2":"NL","phonecode":"31","capital":"Amsterdam","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q55","native":"Nederland","code":"528"},
+{"id":"157","name":"New Caledonia","iso3":"NCL","iso2":"NC","phonecode":"687","capital":"Noumea","currency":"XPF","natives":null,"flag":"1","wiki_data_id":"","native":"Nouvelle-Calédonie","code":"540"}
+,
+{"id":"158","name":"New Zealand","iso3":"NZL","iso2":"NZ","phonecode":"64","capital":"Wellington","currency":"NZD","natives":null,"flag":"1","wiki_data_id":"Q664","native":"New Zealand","code":"554"},
+{"id":"159","name":"Nicaragua","iso3":"NIC","iso2":"NI","phonecode":"505","capital":"Managua","currency":"NIO","natives":null,"flag":"1","wiki_data_id":"Q811","native":"Nicaragua","code":"558"},
+{"id":"160","name":"Niger","iso3":"NER","iso2":"NE","phonecode":"227","capital":"Niamey","currency":"XOF","natives":null,"flag":"1","wiki_data_id":"Q1032","native":"Niger","code":"562"},
+{"id":"161","name":"Nigeria","iso3":"NGA","iso2":"NG","phonecode":"234","capital":"Abuja","currency":"NGN","natives":null,"flag":"1","wiki_data_id":"Q1033","native":"Nigeria","code":"566"},
+{"id":"162","name":"Niue","iso3":"NIU","iso2":"NU","phonecode":"683","capital":"Alofi","currency":"NZD","natives":null,"flag":"1","wiki_data_id":"Q34020","native":"Niuē","code":"570"}
+,
+{"id":"163","name":"Norfolk Island","iso3":"NFK","iso2":"NF","phonecode":"672","capital":"Kingston","currency":"AUD","natives":null,"flag":"1","wiki_data_id":"","native":"Norfolk Island","code":"574"},
+{"id":"164","name":"Northern Mariana Islands","iso3":"MNP","iso2":"MP","phonecode":"+1-670","capital":"Saipan","currency":"USD","natives":null,"flag":"1","wiki_data_id":"","native":"Northern Mariana Islands","code":"580"},
+{"id":"165","name":"Norway","iso3":"NOR","iso2":"NO","phonecode":"47","capital":"Oslo","currency":"NOK","natives":null,"flag":"1","wiki_data_id":"Q20","native":"Norge","code":"578"},
+{"id":"166","name":"Oman","iso3":"OMN","iso2":"OM","phonecode":"968","capital":"Muscat","currency":"OMR","natives":null,"flag":"1","wiki_data_id":"Q842","native":"عمان","code":"512"}
+,
+{"id":"167","name":"Pakistan","iso3":"PAK","iso2":"PK","phonecode":"92","capital":"Islamabad","currency":"PKR","natives":null,"flag":"1","wiki_data_id":"Q843","native":"Pakistan","code":"586"},
+{"id":"168","name":"Palau","iso3":"PLW","iso2":"PW","phonecode":"680","capital":"Melekeok","currency":"USD","natives":null,"flag":"1","wiki_data_id":"Q695","native":"Palau","code":"585"},
+{"id":"169","name":"Palestinian Territory Occupied","iso3":"PSE","iso2":"PS","phonecode":"970","capital":"East Jerusalem","currency":"ILS","natives":null,"flag":"1","wiki_data_id":"","native":"فلسطين","code":"275"}
+,
+{"id":"170","name":"Panama","iso3":"PAN","iso2":"PA","phonecode":"507","capital":"Panama City","currency":"PAB","natives":null,"flag":"1","wiki_data_id":"Q804","native":"Panamá","code":"591"}
+,
+{"id":"171","name":"Papua new Guinea","iso3":"PNG","iso2":"PG","phonecode":"675","capital":"Port Moresby","currency":"PGK","natives":null,"flag":"1","wiki_data_id":"Q691","native":"Papua Niugini","code":"598"},
+{"id":"172","name":"Paraguay","iso3":"PRY","iso2":"PY","phonecode":"595","capital":"Asuncion","currency":"PYG","natives":null,"flag":"1","wiki_data_id":"Q733","native":"Paraguay","code":"600"},
+{"id":"173","name":"Peru","iso3":"PER","iso2":"PE","phonecode":"51","capital":"Lima","currency":"PEN","natives":null,"flag":"1","wiki_data_id":"Q419","native":"Perú","code":"604"}
+,
+{"id":"174","name":"Philippines","iso3":"PHL","iso2":"PH","phonecode":"63","capital":"Manila","currency":"PHP","natives":null,"flag":"1","wiki_data_id":"Q928","native":"Pilipinas","code":"608"},
+{"id":"175","name":"Pitcairn Island","iso3":"PCN","iso2":"PN","phonecode":"870","capital":"Adamstown","currency":"NZD","natives":null,"flag":"1","wiki_data_id":"","native":"Pitcairn Islands","code":"612"},
+{"id":"176","name":"Poland","iso3":"POL","iso2":"PL","phonecode":"48","capital":"Warsaw","currency":"PLN","natives":null,"flag":"1","wiki_data_id":"Q36","native":"Polska","code":"616"},
+{"id":"177","name":"Portugal","iso3":"PRT","iso2":"PT","phonecode":"351","capital":"Lisbon","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q45","native":"Portugal","code":"620"},
+{"id":"178","name":"Puerto Rico","iso3":"PRI","iso2":"PR","phonecode":"+1-787 and 1-939","capital":"San Juan","currency":"USD","natives":null,"flag":"1","wiki_data_id":"","native":"Puerto Rico","code":"630"},
+{"id":"179","name":"Qatar","iso3":"QAT","iso2":"QA","phonecode":"974","capital":"Doha","currency":"QAR","natives":null,"flag":"1","wiki_data_id":"Q846","native":"قطر","code":"634"}
+,
+{"id":"180","name":"Reunion","iso3":"REU","iso2":"RE","phonecode":"262","capital":"Saint-Denis","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"","native":"La Réunion","code":"638"}
+,
+{"id":"181","name":"Romania","iso3":"ROU","iso2":"RO","phonecode":"40","capital":"Bucharest","currency":"RON","natives":null,"flag":"1","wiki_data_id":"Q218","native":"România","code":"642"}
+,
+{"id":"182","name":"Russia","iso3":"RUS","iso2":"RU","phonecode":"7","capital":"Moscow","currency":"RUB","natives":null,"flag":"1","wiki_data_id":"Q159","native":"Россия","code":"643"}
+,
+{"id":"183","name":"Rwanda","iso3":"RWA","iso2":"RW","phonecode":"250","capital":"Kigali","currency":"RWF","natives":null,"flag":"1","wiki_data_id":"Q1037","native":"Rwanda","code":"646"},
+{"id":"184","name":"Saint Helena","iso3":"SHN","iso2":"SH","phonecode":"290","capital":"Jamestown","currency":"SHP","natives":null,"flag":"1","wiki_data_id":"","native":"Saint Helena","code":"654"},
+{"id":"185","name":"Saint Kitts And Nevis","iso3":"KNA","iso2":"KN","phonecode":"+1-869","capital":"Basseterre","currency":"XCD","natives":null,"flag":"1","wiki_data_id":"Q763","native":"Saint Kitts and Nevis","code":"659"},
+{"id":"186","name":"Saint Lucia","iso3":"LCA","iso2":"LC","phonecode":"+1-758","capital":"Castries","currency":"XCD","natives":null,"flag":"1","wiki_data_id":"Q760","native":"Saint Lucia","code":"662"},
+{"id":"187","name":"Saint Pierre and Miquelon","iso3":"SPM","iso2":"PM","phonecode":"508","capital":"Saint-Pierre","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"","native":"Saint-Pierre-et-Miquelon","code":"666"},
+{"id":"188","name":"Saint Vincent And The Grenadines","iso3":"VCT","iso2":"VC","phonecode":"+1-784","capital":"Kingstown","currency":"XCD","natives":null,"flag":"1","wiki_data_id":"Q757","native":"Saint Vincent and the Grenadines","code":"670"},
+{"id":"189","name":"Saint-Barthelemy","iso3":"BLM","iso2":"BL","phonecode":"590","capital":"Gustavia","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"","native":"Saint-Barthélemy","code":null}
+,
+{"id":"190","name":"Saint-Martin (French part)","iso3":"MAF","iso2":"MF","phonecode":"590","capital":"Marigot","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"","native":"Saint-Martin","code":null},
+{"id":"191","name":"Samoa","iso3":"WSM","iso2":"WS","phonecode":"685","capital":"Apia","currency":"WST","natives":null,"flag":"1","wiki_data_id":"Q683","native":"Samoa","code":"882"},
+{"id":"192","name":"San Marino","iso3":"SMR","iso2":"SM","phonecode":"378","capital":"San Marino","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q238","native":"San Marino","code":"674"},
+{"id":"193","name":"Sao Tome and Principe","iso3":"STP","iso2":"ST","phonecode":"239","capital":"Sao Tome","currency":"STD","natives":null,"flag":"1","wiki_data_id":"Q1039","native":"São Tomé e Príncipe","code":"678"}
+,
+{"id":"194","name":"Saudi Arabia","iso3":"SAU","iso2":"SA","phonecode":"966","capital":"Riyadh","currency":"SAR","natives":null,"flag":"1","wiki_data_id":"Q851","native":"العربية السعودية","code":"682"}
+,
+{"id":"195","name":"Senegal","iso3":"SEN","iso2":"SN","phonecode":"221","capital":"Dakar","currency":"XOF","natives":null,"flag":"1","wiki_data_id":"Q1041","native":"Sénégal","code":"686"}
+,
+{"id":"196","name":"Serbia","iso3":"SRB","iso2":"RS","phonecode":"381","capital":"Belgrade","currency":"RSD","natives":null,"flag":"1","wiki_data_id":"Q403","native":"Србија","code":"688"}
+,
+{"id":"197","name":"Seychelles","iso3":"SYC","iso2":"SC","phonecode":"248","capital":"Victoria","currency":"SCR","natives":null,"flag":"1","wiki_data_id":"Q1042","native":"Seychelles","code":"690"},
+{"id":"198","name":"Sierra Leone","iso3":"SLE","iso2":"SL","phonecode":"232","capital":"Freetown","currency":"SLL","natives":null,"flag":"1","wiki_data_id":"Q1044","native":"Sierra Leone","code":"694"},
+{"id":"199","name":"Singapore","iso3":"SGP","iso2":"SG","phonecode":"65","capital":"Singapur","currency":"SGD","natives":null,"flag":"1","wiki_data_id":"Q334","native":"Singapore","code":"702"},
+{"id":"200","name":"Slovakia","iso3":"SVK","iso2":"SK","phonecode":"421","capital":"Bratislava","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q214","native":"Slovensko","code":"703"},
+{"id":"201","name":"Slovenia","iso3":"SVN","iso2":"SI","phonecode":"386","capital":"Ljubljana","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q215","native":"Slovenija","code":"705"},
+{"id":"202","name":"Solomon Islands","iso3":"SLB","iso2":"SB","phonecode":"677","capital":"Honiara","currency":"SBD","natives":null,"flag":"1","wiki_data_id":"Q685","native":"Solomon Islands","code":"90"},
+{"id":"203","name":"Somalia","iso3":"SOM","iso2":"SO","phonecode":"252","capital":"Mogadishu","currency":"SOS","natives":null,"flag":"1","wiki_data_id":"Q1045","native":"Soomaaliya","code":"706"},
+{"id":"204","name":"South Africa","iso3":"ZAF","iso2":"ZA","phonecode":"27","capital":"Pretoria","currency":"ZAR","natives":null,"flag":"1","wiki_data_id":"Q258","native":"South Africa","code":"710"},
+{"id":"205","name":"South Georgia","iso3":"SGS","iso2":"GS","phonecode":"","capital":"Grytviken","currency":"GBP","natives":null,"flag":"1","wiki_data_id":"","native":"South Georgia","code":"239"},
+{"id":"206","name":"South Sudan","iso3":"SSD","iso2":"SS","phonecode":"211","capital":"Juba","currency":"SSP","natives":null,"flag":"1","wiki_data_id":"Q958","native":"South Sudan","code":"728"},
+{"id":"207","name":"Spain","iso3":"ESP","iso2":"ES","phonecode":"34","capital":"Madrid","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q29","native":"España","code":"724"}
+,
+{"id":"208","name":"Sri Lanka","iso3":"LKA","iso2":"LK","phonecode":"94","capital":"Colombo","currency":"LKR","natives":null,"flag":"1","wiki_data_id":"Q854","native":"śrī laṃkāva","code":"144"}
+,
+{"id":"209","name":"Sudan","iso3":"SDN","iso2":"SD","phonecode":"249","capital":"Khartoum","currency":"SDG","natives":null,"flag":"1","wiki_data_id":"Q1049","native":"السودان","code":"729"}
+,
+{"id":"210","name":"Suriname","iso3":"SUR","iso2":"SR","phonecode":"597","capital":"Paramaribo","currency":"SRD","natives":null,"flag":"1","wiki_data_id":"Q730","native":"Suriname","code":"740"},
+{"id":"211","name":"Svalbard And Jan Mayen Islands","iso3":"SJM","iso2":"SJ","phonecode":"47","capital":"Longyearbyen","currency":"NOK","natives":null,"flag":"1","wiki_data_id":"","native":"Svalbard og Jan Mayen","code":"744"},
+{"id":"212","name":"Swaziland","iso3":"SWZ","iso2":"SZ","phonecode":"268","capital":"Mbabane","currency":"SZL","natives":null,"flag":"1","wiki_data_id":"Q1050","native":"Swaziland","code":"748"},
+{"id":"213","name":"Sweden","iso3":"SWE","iso2":"SE","phonecode":"46","capital":"Stockholm","currency":"SEK","natives":null,"flag":"1","wiki_data_id":"Q34","native":"Sverige","code":"752"},
+{"id":"214","name":"Switzerland","iso3":"CHE","iso2":"CH","phonecode":"41","capital":"Berne","currency":"CHF","natives":null,"flag":"1","wiki_data_id":"Q39","native":"Schweiz","code":"756"},
+{"id":"215","name":"Syria","iso3":"SYR","iso2":"SY","phonecode":"963","capital":"Damascus","currency":"SYP","natives":null,"flag":"1","wiki_data_id":"Q858","native":"سوريا","code":"760"}
+,
+{"id":"216","name":"Taiwan","iso3":"TWN","iso2":"TW","phonecode":"886","capital":"Taipei","currency":"TWD","natives":null,"flag":"1","wiki_data_id":"Q865","native":"臺灣","code":"158"}
+,
+{"id":"217","name":"Tajikistan","iso3":"TJK","iso2":"TJ","phonecode":"992","capital":"Dushanbe","currency":"TJS","natives":null,"flag":"1","wiki_data_id":"Q863","native":"Тоҷикистон","code":"762"}
+,
+{"id":"218","name":"Tanzania","iso3":"TZA","iso2":"TZ","phonecode":"255","capital":"Dodoma","currency":"TZS","natives":null,"flag":"1","wiki_data_id":"Q924","native":"Tanzania","code":"834"},
+{"id":"219","name":"Thailand","iso3":"THA","iso2":"TH","phonecode":"66","capital":"Bangkok","currency":"THB","natives":null,"flag":"1","wiki_data_id":"Q869","native":"ประเทศไทย","code":"764"}
+,
+{"id":"220","name":"Togo","iso3":"TGO","iso2":"TG","phonecode":"228","capital":"Lome","currency":"XOF","natives":null,"flag":"1","wiki_data_id":"Q945","native":"Togo","code":"768"},
+{"id":"221","name":"Tokelau","iso3":"TKL","iso2":"TK","phonecode":"690","capital":"","currency":"NZD","natives":null,"flag":"1","wiki_data_id":"","native":"Tokelau","code":"772"},
+{"id":"222","name":"Tonga","iso3":"TON","iso2":"TO","phonecode":"676","capital":"Nuku'alofa","currency":"TOP","natives":null,"flag":"1","wiki_data_id":"Q678","native":"Tonga","code":"776"},
+{"id":"223","name":"Trinidad And Tobago","iso3":"TTO","iso2":"TT","phonecode":"+1-868","capital":"Port of Spain","currency":"TTD","natives":null,"flag":"1","wiki_data_id":"Q754","native":"Trinidad and Tobago","code":"780"},
+{"id":"224","name":"Tunisia","iso3":"TUN","iso2":"TN","phonecode":"216","capital":"Tunis","currency":"TND","natives":null,"flag":"1","wiki_data_id":"Q948","native":"تونس","code":"788"}
+,
+{"id":"225","name":"Turkey","iso3":"TUR","iso2":"TR","phonecode":"90","capital":"Ankara","currency":"TRY","natives":null,"flag":"1","wiki_data_id":"Q43","native":"Türkiye","code":"792"}
+,
+{"id":"226","name":"Turkmenistan","iso3":"TKM","iso2":"TM","phonecode":"993","capital":"Ashgabat","currency":"TMT","natives":null,"flag":"1","wiki_data_id":"Q874","native":"Türkmenistan","code":"795"}
+,
+{"id":"227","name":"Turks And Caicos Islands","iso3":"TCA","iso2":"TC","phonecode":"+1-649","capital":"Cockburn Town","currency":"USD","natives":null,"flag":"1","wiki_data_id":"","native":"Turks and Caicos Islands","code":"796"},
+{"id":"228","name":"Tuvalu","iso3":"TUV","iso2":"TV","phonecode":"688","capital":"Funafuti","currency":"AUD","natives":null,"flag":"1","wiki_data_id":"Q672","native":"Tuvalu","code":"798"},
+{"id":"229","name":"Uganda","iso3":"UGA","iso2":"UG","phonecode":"256","capital":"Kampala","currency":"UGX","natives":null,"flag":"1","wiki_data_id":"Q1036","native":"Uganda","code":"800"},
+{"id":"230","name":"Ukraine","iso3":"UKR","iso2":"UA","phonecode":"380","capital":"Kiev","currency":"UAH","natives":null,"flag":"1","wiki_data_id":"Q212","native":"Україна","code":"804"}
+,
+{"id":"231","name":"United Arab Emirates","iso3":"ARE","iso2":"AE","phonecode":"971","capital":"Abu Dhabi","currency":"AED","natives":null,"flag":"1","wiki_data_id":"Q878","native":"دولة الإمارات العربية المتحدة","code":"784"}
+,
+{"id":"232","name":"United Kingdom","iso3":"GBR","iso2":"GB","phonecode":"44","capital":"London","currency":"GBP","natives":null,"flag":"1","wiki_data_id":"Q145","native":"United Kingdom","code":"826"},
+{"id":"233","name":"United States","iso3":"USA","iso2":"US","phonecode":"1","capital":"Washington","currency":"USD","natives":null,"flag":"1","wiki_data_id":"Q30","native":"United States","code":"840"},
+{"id":"234","name":"United States Minor Outlying Islands","iso3":"UMI","iso2":"UM","phonecode":"1","capital":"","currency":"USD","natives":null,"flag":"1","wiki_data_id":"","native":"United States Minor Outlying Islands","code":"581"},
+{"id":"235","name":"Uruguay","iso3":"URY","iso2":"UY","phonecode":"598","capital":"Montevideo","currency":"UYU","natives":null,"flag":"1","wiki_data_id":"Q77","native":"Uruguay","code":"858"},
+{"id":"236","name":"Uzbekistan","iso3":"UZB","iso2":"UZ","phonecode":"998","capital":"Tashkent","currency":"UZS","natives":null,"flag":"1","wiki_data_id":"Q265","native":"O‘zbekiston","code":"860"}
+,
+{"id":"237","name":"Vanuatu","iso3":"VUT","iso2":"VU","phonecode":"678","capital":"Port Vila","currency":"VUV","natives":null,"flag":"1","wiki_data_id":"Q686","native":"Vanuatu","code":"548"},
+{"id":"238","name":"Vatican City State (Holy See)","iso3":"VAT","iso2":"VA","phonecode":"379","capital":"Vatican City","currency":"EUR","natives":null,"flag":"1","wiki_data_id":"Q237","native":"Vaticano","code":null},
+{"id":"239","name":"Venezuela","iso3":"VEN","iso2":"VE","phonecode":"58","capital":"Caracas","currency":"VEF","natives":null,"flag":"1","wiki_data_id":"Q717","native":"Venezuela","code":"862"},
+{"id":"240","name":"Vietnam","iso3":"VNM","iso2":"VN","phonecode":"84","capital":"Hanoi","currency":"VND","natives":null,"flag":"1","wiki_data_id":"Q881","native":"Việt Nam","code":"704"}
+,
+{"id":"241","name":"Virgin Islands (British)","iso3":"VGB","iso2":"VG","phonecode":"+1-284","capital":"Road Town","currency":"USD","natives":null,"flag":"1","wiki_data_id":"","native":"British Virgin Islands","code":"92"},
+{"id":"242","name":"Virgin Islands (US)","iso3":"VIR","iso2":"VI","phonecode":"+1-340","capital":"Charlotte Amalie","currency":"USD","natives":null,"flag":"1","wiki_data_id":"","native":"United States Virgin Islands","code":"850"},
+{"id":"243","name":"Wallis And Futuna Islands","iso3":"WLF","iso2":"WF","phonecode":"681","capital":"Mata Utu","currency":"XPF","natives":null,"flag":"1","wiki_data_id":"","native":"Wallis et Futuna","code":"876"},
+{"id":"244","name":"Western Sahara","iso3":"ESH","iso2":"EH","phonecode":"212","capital":"El-Aaiun","currency":"MAD","natives":null,"flag":"1","wiki_data_id":"","native":"الصحراء الغربية","code":"732"}
+,
+{"id":"245","name":"Yemen","iso3":"YEM","iso2":"YE","phonecode":"967","capital":"Sanaa","currency":"YER","natives":null,"flag":"1","wiki_data_id":"Q805","native":"اليَمَن","code":"887"}
+,
+{"id":"246","name":"Zambia","iso3":"ZMB","iso2":"ZM","phonecode":"260","capital":"Lusaka","currency":"ZMW","natives":null,"flag":"1","wiki_data_id":"Q953","native":"Zambia","code":"894"},
+{"id":"247","name":"Zimbabwe","iso3":"ZWE","iso2":"ZW","phonecode":"263","capital":"Harare","currency":"ZWL","natives":null,"flag":"1","wiki_data_id":"Q954","native":"Zimbabwe","code":"716"},
+{"id":"248","name":"Kosovo","iso3":"XKX","iso2":"XK","phonecode":"383","capital":"Pristina","currency":"EUR","natives":null,"flag":"0","wiki_data_id":"Q1246","native":"Republika e Kosovës","code":null}
+
+]
