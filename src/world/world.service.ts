@@ -1,10 +1,11 @@
 import { HttpException, Injectable } from "@nestjs/common";
-import { createOrderParams, IResultReturn, sendFail, sendOk } from "../libs/utils/functionReturn";
+import { createOrderParams, sendFail, sendOk } from "../libs/utils/functionReturn";
 import { makeErrorInfoObjForHttpException } from "../libs/utils/globalErrorHandler";
 import { WorldCountry } from "../entities/worldCountry.entity";
 import { WorldState } from "../entities/worldState.entity";
 import { WorldCity } from "../entities/worldCity.entity";
 import { WorldCountryRepository, WorldStateRepository, WorldCityRepository, IWorldCount } from "./world.repository";
+import {IResultReturn} from "../interface/interface";
 
 interface IWorldData {
   totalCount: number;

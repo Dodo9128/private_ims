@@ -1,8 +1,4 @@
-export interface IResultReturn {
-  result: "OK" | "FAIL";
-  message: string | null;
-  data: object | null;
-}
+import { IResultReturn } from "../../interface/interface";
 
 export const sendOk = (msg: string, data: object) => {
   const returnObject: IResultReturn = {
@@ -38,12 +34,6 @@ export const currentTimeMaker = () => {
 
   return `${currentTime.substring(0, 10)} ${currentTime.substring(11, 19)}`;
 };
-
-interface ICreateOrderParams {
-  key: string;
-  elem1?: string | number | boolean;
-  elem2?: number;
-}
 
 /**
  * SQL Order / Limit 쿼리를 위한 4개의 params 만드는 함수

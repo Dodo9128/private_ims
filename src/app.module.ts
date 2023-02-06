@@ -8,6 +8,7 @@ import { DatabaseModule } from "./database/database.module";
 import { AppController } from "./app.controller";
 import { WorldModule } from "./world/world.module";
 import { WorldController } from "./world/world.controller";
+import { ApiModule } from './api/api.module';
 
 const node_env = process.env.NODE_ENV || "development";
 
@@ -41,6 +42,7 @@ console.log(`Environment Path is: ${envPath}`);
     }),
     DatabaseModule,
     WorldModule,
+    ApiModule,
   ],
   controllers: [AppController],
   providers: [
