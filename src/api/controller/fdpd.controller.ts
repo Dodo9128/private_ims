@@ -4,6 +4,10 @@ import { Response } from "express";
 import { getGroupChannel, insertChannelIP, getEventId, setEventStatus, reSet } from "../decorator/api.decorator";
 import { IResultReturn } from "../../interface/interface";
 
+/**
+ * comment for connect on Jira
+ */
+
 // @ApiExcludeController()
 // @Controller("4dpd")
 @Controller({ path: "4dpd", version: ["v1"], durable: true })
