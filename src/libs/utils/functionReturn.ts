@@ -1,4 +1,4 @@
-import { IResultReturn } from "../../interface/interface";
+import { IResultReturn } from "../../global/interface";
 
 export const sendOk = (msg: string, data: object) => {
   const returnObject: IResultReturn = {

@@ -5,7 +5,7 @@ import { WorldCountry } from "../entities/worldCountry.entity";
 import { WorldState } from "../entities/worldState.entity";
 import { WorldCity } from "../entities/worldCity.entity";
 import { WorldCountryRepository, WorldStateRepository, WorldCityRepository, IWorldCount } from "./world.repository";
-import {IResultReturn} from "../interface/interface";
+import {IResultReturn} from "../global/interface";
 
 interface IWorldData {
   totalCount: number;

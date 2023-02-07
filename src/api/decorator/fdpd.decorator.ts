@@ -1,6 +1,7 @@
 import { applyDecorators } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse } from "@nestjs/swagger";
-import { IInsertChannelParams, IMakeContent, TEventStatus } from "../../interface/interface";
+import { IInsertChannelParams, IMakeContent, TEventStatus } from "../../global/interface";
+import { EVENT_ID, LIVE_INDEX, PARAM, SCHEDULED_AT, STATUS, SYSTEM_ID } from "../../global/constant";
 
 // TODO: API decorator swagger return params create / add
 
@@ -63,7 +64,7 @@ export const getGroupChannel = () =>
       description: `<p>\n<strong>4DPD에서 시스템 설정하기 위한 정보들을 조회한다.</strong>\n</p>\n<p><img src="${__dirname}/01_4DPD_getSystemFor4DPD.png" /></p>`,
     }),
     ApiParam({
-      name: "system_id",
+      name: `${SYSTEM_ID}`,
       required: true,
       description: `IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A`,
       schema: {
@@ -93,7 +94,7 @@ export const getEventId = () =>
       description: `<p>\n<strong>사용 가능한 event ID를 리턴한다.(live &amp; public)</strong>\n</p>\n<p>새로운 이벤트ID 발급은 아래 이벤트 리셋 API 참고</p>\n<ul>\n<li>/4dpd/{system_id}/{event_id}/reSet</li>\n</ul>\n<p>하나의 시스템에서 live &amp; public 인 이벤트ID는 1개만 존재한다.</p><p><img src="/resources/img/api_doc/01_4DPD_getEventId.png" /></p>`,
     }),
     ApiParam({
-      name: "system_id",
+      name: `${SYSTEM_ID}`,
       required: true,
       description: "IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A",
       schema: {
@@ -123,7 +124,7 @@ export const setEventStatus = () =>
       description: `4DPD에서의 이벤트 시작 및 중지에 대해서 4DSS로 Notification 해준다.<p><img src="/resources/img/api_doc/01_4DPD_setEventStatus.png" /></p>`,
     }),
     ApiParam({
-      name: "system_id",
+      name: `${SYSTEM_ID}`,
       required: true,
       description: "IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A",
       schema: {
@@ -132,7 +133,7 @@ export const setEventStatus = () =>
       },
     }),
     ApiParam({
-      name: "event_id",
+      name: `${EVENT_ID}`,
       required: true,
       description: "IMS로부터 부여받은 이벤트 ID 값<br>ex)0001A0001",
       schema: {
@@ -141,7 +142,7 @@ export const setEventStatus = () =>
       },
     }),
     ApiParam({
-      name: "status",
+      name: `${STATUS}`,
       required: true,
       description: "상태값[resume/pause/end]",
       enum: ["resume", "pause", "end"],
@@ -183,7 +184,7 @@ export const reSet = () =>
 <p><img src=/resources/img/api_doc/01_4DPD_reSet.png /></p>`,
     }),
     ApiParam({
-      name: "system_id",
+      name: `${SYSTEM_ID}`,
       required: true,
       description: "IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A",
       schema: {
@@ -192,7 +193,7 @@ export const reSet = () =>
       },
     }),
     ApiParam({
-      name: "event_id",
+      name: `${EVENT_ID}`,
       required: true,
       description: "IMS로부터 부여받은 이벤트 ID 값<br>ex)0001A0001",
       schema: {
@@ -201,7 +202,7 @@ export const reSet = () =>
       },
     }),
     ApiQuery({
-      name: "scheduled_at",
+      name: `${SCHEDULED_AT}`,
       required: true,
       description: `live 이벤트 시작 시간 설정 <br>시간 입력은 지역과 관계없이 UTC로 입력한다.\n<br>ex) 한국(KST = UTC+9)에서 진행하는 이벤트, 2022-04-04 14:00 인 경우 >> 2022-04-04 05:00 로 입력\n\t\t\t\t\t<br>미국 서부(PST = UTC-8)에서 진행하는 이벤트, 2022-04-04 14:00 인 경우 >> 2022-04-04 22:00 로 입력`,
       schema: {
@@ -340,7 +341,7 @@ export const makeContent = () =>
 <p><img src="/resources/img/api_doc/01_4DPD_makeContent.png" /></p>`,
     }),
     ApiParam({
-      name: "system_id",
+      name: `${SYSTEM_ID}`,
       required: true,
       description: "IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A",
       schema: {
@@ -349,7 +350,7 @@ export const makeContent = () =>
       },
     }),
     ApiParam({
-      name: "event_id",
+      name: `${EVENT_ID}`,
       required: true,
       description: "IMS로부터 부여받은 이벤트 ID 값<br>ex)0001A0001",
       schema: {
@@ -358,7 +359,7 @@ export const makeContent = () =>
       },
     }),
     ApiQuery({
-      name: "param",
+      name: `${PARAM}`,
       required: true,
       description: "makeContent params",
       schema: {
@@ -388,7 +389,7 @@ export const setChannelStatus = () =>
       description: `카메라의 사용 유무값을 설정합니다.<p><img src="/resources/img/api_doc/01_4DPD_setChannelStatus.png" /></p>`,
     }),
     ApiParam({
-      name: "system_id",
+      name: `${SYSTEM_ID}`,
       required: true,
       description: "IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A",
       schema: {
@@ -397,7 +398,7 @@ export const setChannelStatus = () =>
       },
     }),
     ApiParam({
-      name: "live_index",
+      name: `${LIVE_INDEX}`,
       required: true,
       description: "channel의 live_index값. channel_id 와 다름<br>ex)13",
       schema: {
@@ -406,7 +407,7 @@ export const setChannelStatus = () =>
       },
     }),
     ApiParam({
-      name: "status",
+      name: `${STATUS}`,
       required: true,
       description: "상태값[resume/pause/end]",
       enum: ["resume", "pause", "end"],
@@ -538,7 +539,7 @@ export const makeHlsContent = () =>
 `,
     }),
     ApiParam({
-      name: "system_id",
+      name: `${SYSTEM_ID}`,
       required: true,
       description: "IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A",
       schema: {
@@ -547,7 +548,7 @@ export const makeHlsContent = () =>
       },
     }),
     ApiParam({
-      name: "event_id",
+      name: `${EVENT_ID}`,
       required: true,
       description: "IMS로부터 부여받은 이벤트 ID 값<br>ex)0001A0001",
       schema: {
@@ -556,42 +557,12 @@ export const makeHlsContent = () =>
       },
     }),
     ApiQuery({
-      name: "param",
+      name: `${PARAM}`,
       required: true,
       description: "makeHlsContent params",
       schema: {
         type: "string",
         example: makeContentExample,
-      },
-    }),
-    ApiOkResponse({
-      description: "OK !!",
-      schema: {
-        type: "string",
-      },
-    }),
-    ApiResponse({
-      status: 400,
-      description: "BAD REQUEST !!",
-      schema: {
-        type: "string",
-      },
-    }),
-  );
-
-export const getNode4DRS = () =>
-  applyDecorators(
-    ApiOperation({
-      summary: `시스템 설정 조회`,
-      description: `4DRS에서 시스템 설정하기 위한 정보들을 조회한다.\n<p><img src="/resources/img/api_doc/02_4DRS_getSystemFor4DRS.png" /></p>`,
-    }),
-    ApiParam({
-      name: "system_id",
-      required: true,
-      description: "IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A",
-      schema: {
-        type: "string",
-        example: "0001A",
       },
     }),
     ApiOkResponse({

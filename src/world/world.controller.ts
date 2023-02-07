@@ -3,7 +3,7 @@ import { Controller, Res, HttpStatus, Query, Post, Get } from "@nestjs/common";
 import { ApiExcludeController, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import { listWorldCity, listWorldCountry, listWorldState } from "../api/decorator/world.decorator";
-import { IResultReturn } from "../interface/interface";
+import { IResultReturn } from "../global/interface";
 
 // @ApiExcludeController()
 @Controller({ path: "worldCountry", version: ["v1"] })

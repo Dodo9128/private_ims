@@ -10,16 +10,12 @@ import {
   makeContent,
   setChannelStatus,
   makeHlsContent,
-} from "../decorator/api.decorator";
-import { IResultReturn } from "../../interface/interface";
-
-/**
- * comment for connect on Jira
- */
+} from "../decorator/fdpd.decorator";
+import { IResultReturn } from "../../global/interface";
+import { SYSTEM_ID, EVENT_ID, STATUS, LIVE_INDEX } from "../../global/constant";
 
 // @ApiExcludeController()
-// @Controller("4dpd")
-@Controller({ path: "4dpd", version: ["v1"], durable: true })
+@Controller({ path: "4dpd", version: ["v1"] })
 @ApiTags("01. 4DPD >>> IMS")
 // @ApiResponse({ status: 200, description: "4DPD 에서 호출되는 API들" })
 export class FdpdController {
@@ -37,7 +33,7 @@ export class FdpdController {
   @Post("/insertChannelIP")
   @insertChannelIP()
   async insertChannelIP(
-    @Query("system_id") systemId: string,
+    @Query(`${SYSTEM_ID}`) systemId: string,
     @Query("channel_list") channelList: string,
     @Res() res: Response,
   ) {
@@ -64,12 +60,12 @@ export class FdpdController {
      */
   }
 
-  @Post("/:system_id/:event_id/:status/setEventStatus")
+  @Post(`/:${SYSTEM_ID}/:${EVENT_ID}/:${STATUS}/setEventStatus`)
   @setEventStatus()
   async setEventStatus(
-    @Param("system_id") systemId: string,
-    @Param("event_id") eventId: string,
-    @Param("status") status: string,
+    @Param(`${SYSTEM_ID}`) systemId: string,
+    @Param(`${EVENT_ID}`) eventId: string,
+    @Param(`${STATUS}`) status: string,
     @Res() res: Response,
   ) {
     const result: IResultReturn = {
@@ -88,11 +84,11 @@ export class FdpdController {
      */
   }
 
-  @Post("/:system_id/:event_id/makeContent")
+  @Post(`/:${SYSTEM_ID}/:${EVENT_ID}/makeContent`)
   @makeContent()
   async makeContent(
-    @Param("system_id") systemId: string,
-    @Param("event_id") eventId: string,
+    @Param(`${SYSTEM_ID}`) systemId: string,
+    @Param(`${EVENT_ID}`) eventId: string,
     @Query("param") param: string,
     @Res() res: Response,
   ) {
@@ -113,11 +109,11 @@ export class FdpdController {
      */
   }
 
-  @Post("/:system_id/:event_id/makeHlsContent")
+  @Post(`/:${SYSTEM_ID}/:${EVENT_ID}/makeHlsContent`)
   @makeHlsContent()
   async makeHlsContent(
-    @Param("system_id") systemId: string,
-    @Param("event_id") eventId: string,
+    @Param(`${SYSTEM_ID}`) systemId: string,
+    @Param(`${EVENT_ID}`) eventId: string,
     @Query("param") param: string,
     @Res() res: Response,
   ) {
@@ -138,11 +134,11 @@ export class FdpdController {
      */
   }
 
-  @Post("/:system_id/:event_id/reSet")
+  @Post(`/:${SYSTEM_ID}/:${EVENT_ID}/reSet`)
   @reSet()
   async reSet(
-    @Param("system_id") systemId: string,
-    @Param("event_id") eventId: string,
+    @Param(`${SYSTEM_ID}`) systemId: string,
+    @Param(`${EVENT_ID}`) eventId: string,
     @Query("scheduled_at") scheduledAt: string,
     @Res() res: Response,
   ) {
@@ -162,12 +158,12 @@ export class FdpdController {
      */
   }
 
-  @Post("/:system_id/:live_index/:status/setChannelStatus")
+  @Post(`/:${SYSTEM_ID}/:${LIVE_INDEX}/:${STATUS}/setChannelStatus`)
   @setChannelStatus()
   async setChannelStatus(
-    @Param("system_id") systemId: string,
-    @Param("live_index") liveIndex: number,
-    @Param("status") status: string,
+    @Param(`${SYSTEM_ID}`) systemId: string,
+    @Param(`${LIVE_INDEX}`) liveIndex: number,
+    @Param(`${STATUS}`) status: string,
     @Res() res: Response,
   ) {
     const result: IResultReturn = {
@@ -186,9 +182,9 @@ export class FdpdController {
      */
   }
 
-  @Get("/:system_id/getEventId")
+  @Get(`/:${SYSTEM_ID}/getEventId`)
   @getEventId()
-  async getEventId(@Param("system_id") systemId: string, @Res() res: Response) {
+  async getEventId(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
     const result: IResultReturn = {
       result: "OK",
       message: "SUCCESS",
@@ -205,9 +201,9 @@ export class FdpdController {
      */
   }
 
-  @Get("/:system_id/getGroupChannel")
+  @Get(`/:${SYSTEM_ID}/getGroupChannel`)
   @getGroupChannel()
-  async getGroupChannel(@Param("system_id") systemId: string, @Res() res: Response) {
+  async getGroupChannel(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
     const result: IResultReturn = {
       result: "OK",
       message: "SUCCESS",
