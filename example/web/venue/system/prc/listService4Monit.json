@@ -1,0 +1,14 @@
+{
+  "result": "ok",
+  "data": [
+    {
+      "code": "CM0402",
+      "name": "4drs"
+    },
+    {
+      "code": "CM0408",
+      "name": "4dml"
+    }
+  ],
+  "message": "SUCCESS"
+}

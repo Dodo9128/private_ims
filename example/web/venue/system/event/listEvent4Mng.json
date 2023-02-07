@@ -1,0 +1,42 @@
+{
+  "result": "ok",
+  "iTotalRecords": 2,
+  "data": [
+    {
+      "registered_at": "2021-10-27T01:59:27.000+00:00",
+      "content_id": 15,
+      "system_id": "0001A",
+      "status_name": "resume",
+      "description": null,
+      "scheduled_at": null,
+      "banner": null,
+      "is_public_name": "Y",
+      "updated_at": "2021-11-03T07:42:32.000+00:00",
+      "name": "[2110-USA-GCK]Event 자동생성",
+      "is_public": "CM01Y",
+      "live_status_name": "live",
+      "id": "0001A0001",
+      "live_status": "CM0202",
+      "status": "CM0502"
+    },
+    {
+      "registered_at": "2022-06-23T03:35:30.000+00:00",
+      "content_id": 128,
+      "system_id": "0001A",
+      "status_name": "pause",
+      "description": "test",
+      "scheduled_at": "2022-06-22T10:00:00.000+00:00",
+      "banner": "",
+      "is_public_name": "Y",
+      "updated_at": "2022-06-30T09:04:58.000+00:00",
+      "name": "[2110-KOR-GCK]Event 자동생성",
+      "is_public": "CM01Y",
+      "live_status_name": "live",
+      "id": "0001A0002",
+      "live_status": "CM0202",
+      "status": "CM0501"
+    }
+  ],
+  "iTotalDisplayRecords": 2,
+  "message": "SUCCESS"
+}

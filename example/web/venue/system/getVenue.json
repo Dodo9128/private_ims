@@ -1,0 +1,25 @@
+{
+  "result": "ok",
+  "data": {
+    "registered_at": "2021-11-04T05:58:43.000+00:00",
+    "timezone_offset": "",
+    "description": "[TEST]Venue for KBO_고척",
+    "city_latitude": null,
+    "city_longitude": null,
+    "country_code": "KR",
+    "city_name": null,
+    "updated_at": null,
+    "state_name": null,
+    "event_code": "2110-KOR-GCK",
+    "country_name": "Korea South",
+    "name": "[TEST]Venue for KBO_고척",
+    "timezone_name": "",
+    "event_name": "GCK",
+    "comment": null,
+    "id": "0001",
+    "state_id": 0,
+    "country_id": 116,
+    "city_id": 0
+  },
+  "message": "SUCCESS"
+}
