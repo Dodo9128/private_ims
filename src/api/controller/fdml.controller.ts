@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Res } from "@nestjs/common";
-import { ApiExcludeController, ApiExcludeEndpoint, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Res } from "@nestjs/common";
+import { ApiExcludeController, ApiExcludeEndpoint, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import { IResultReturn } from "../../global/interface";
 import {
@@ -38,40 +38,23 @@ export class FdmlController {
   //   private readonly scaleService: ScaleService;
   // ) {}
 
-  @Get(`/:${SYSTEM_ID}/nodeIp`)
-  @nodeIp44DML()
-  async nodeIp4DML(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
+  @Get(`/:${EVENT_ID}/getCFurl`)
+  @getCFurl()
+  async getCFurl(@Param(`${EVENT_ID}`) eventId: string, @Res() res: Response) {
     const result: IResultReturn = {
       result: "OK",
       message: "SUCCESS",
-      data: { system_id: systemId },
+      data: {
+        event_id: eventId,
+      },
     };
 
     return res.status(HttpStatus.OK).json(result);
 
     /**
-     * TODO: connect with nodeService.nodeIp44dML(systemId);
+     * TODO: connect with nodeService.getCFurl(eventId);
      *
-     * const result: IResultReturn = await this.nodeService.nodeIp44dML(systemId);
-     * return res.status(HttpStatus.OK).json(result);
-     */
-  }
-
-  @Get(`/:${SYSTEM_ID}/getSystemInfo`)
-  @getSystemFor4DML()
-  async getSystemFor4DML(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
-    const result: IResultReturn = {
-      result: "OK",
-      message: "SUCCESS",
-      data: { system_id: systemId },
-    };
-
-    return res.status(HttpStatus.OK).json(result);
-
-    /**
-     * TODO: connect with systemService.getSystemFor4DML(systemId);
-     *
-     * const result: IResultReturn = await this.systemService.getSystemFor4DML(systemId);
+     * const result: IResultReturn = await this.nodeService.getCFurl(eventId);
      * return res.status(HttpStatus.OK).json(result);
      */
   }
@@ -110,6 +93,72 @@ export class FdmlController {
      * TODO: connect with scaleService.getScale44DML(systemId);
      *
      * const result: IResultReturn = await this.scaleService.getScale44DML(systemId);
+     * return res.status(HttpStatus.OK).json(result);
+     */
+  }
+
+  @Get(`/:${SYSTEM_ID}/getSystemInfo`)
+  @getSystemFor4DML()
+  async getSystemFor4DML(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
+    const result: IResultReturn = {
+      result: "OK",
+      message: "SUCCESS",
+      data: { system_id: systemId },
+    };
+
+    return res.status(HttpStatus.OK).json(result);
+
+    /**
+     * TODO: connect with systemService.getSystemFor4DML(systemId);
+     *
+     * const result: IResultReturn = await this.systemService.getSystemFor4DML(systemId);
+     * return res.status(HttpStatus.OK).json(result);
+     */
+  }
+
+  @Get(`/:${SYSTEM_ID}/nodeIp`)
+  @nodeIp44DML()
+  async nodeIp4DML(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
+    const result: IResultReturn = {
+      result: "OK",
+      message: "SUCCESS",
+      data: { system_id: systemId },
+    };
+
+    return res.status(HttpStatus.OK).json(result);
+
+    /**
+     * TODO: connect with nodeService.nodeIp44dML(systemId);
+     *
+     * const result: IResultReturn = await this.nodeService.nodeIp44dML(systemId);
+     * return res.status(HttpStatus.OK).json(result);
+     */
+  }
+
+  @Delete(`/:${SYSTEM_ID}/scaleIn4DML/:${NODE_ID}/:${RS_ID}`)
+  @scaleIn4DML()
+  async scaleIn4DML(
+    @Param(`${SYSTEM_ID}`) systemId: string,
+    @Param(`${NODE_ID}`) nodeId: string,
+    @Param(`${RS_ID}`) rsId: string,
+    @Res() res: Response,
+  ) {
+    const result: IResultReturn = {
+      result: "OK",
+      message: "SUCCESS",
+      data: {
+        system_id: systemId,
+        node_id: nodeId,
+        rs_id: rsId,
+      },
+    };
+
+    return res.status(HttpStatus.OK).json(result);
+
+    /**
+     * TODO: connect with nodeService.scaleIn4DML(systemId, nodeId, rsId);
+     *
+     * const result: IResultReturn = await this.nodeService.scaleIn4DML(systemId, nodeId, rsId);
      * return res.status(HttpStatus.OK).json(result);
      */
   }
@@ -178,55 +227,6 @@ export class FdmlController {
      * TODO: connect with nodeService.scaleOut4DMLOk(systemId, nodeId, rsId, publicIp, publicPort, domain);
      *
      * const result: IResultReturn = await this.nodeService.scaleOut4DMLOk(systemId, nodeId, rsId, publicIp, publicPort, domain);
-     * return res.status(HttpStatus.OK).json(result);
-     */
-  }
-
-  @Delete(`/:${SYSTEM_ID}/scaleIn4DML/:${NODE_ID}/:${RS_ID}`)
-  @scaleIn4DML()
-  async scaleIn4DML(
-    @Param(`${SYSTEM_ID}`) systemId: string,
-    @Param(`${NODE_ID}`) nodeId: string,
-    @Param(`${RS_ID}`) rsId: string,
-    @Res() res: Response,
-  ) {
-    const result: IResultReturn = {
-      result: "OK",
-      message: "SUCCESS",
-      data: {
-        system_id: systemId,
-        node_id: nodeId,
-        rs_id: rsId,
-      },
-    };
-
-    return res.status(HttpStatus.OK).json(result);
-
-    /**
-     * TODO: connect with nodeService.scaleIn4DML(systemId, nodeId, rsId);
-     *
-     * const result: IResultReturn = await this.nodeService.scaleIn4DML(systemId, nodeId, rsId);
-     * return res.status(HttpStatus.OK).json(result);
-     */
-  }
-
-  @Get(`/:${EVENT_ID}/getCFurl`)
-  @getCFurl()
-  async getCFurl(@Param(`${EVENT_ID}`) eventId: string, @Res() res: Response) {
-    const result: IResultReturn = {
-      result: "OK",
-      message: "SUCCESS",
-      data: {
-        event_id: eventId,
-      },
-    };
-
-    return res.status(HttpStatus.OK).json(result);
-
-    /**
-     * TODO: connect with nodeService.getCFurl(eventId);
-     *
-     * const result: IResultReturn = await this.nodeService.getCFurl(eventId);
      * return res.status(HttpStatus.OK).json(result);
      */
   }

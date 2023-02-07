@@ -14,3 +14,4 @@ export const PUBLIC_PORT = "public_port";
 export const DOMAIN = "domain";
 export const SCHEDULED_AT = "scheduled_at";
 export const PARAM = "param";
+export const CONTENT_ID = "content_id";

@@ -1,5 +1,5 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Query, Res } from "@nestjs/common";
-import { ApiExcludeController, ApiExcludeEndpoint, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Controller, Get, HttpStatus, Param, Post, Query, Res } from "@nestjs/common";
+import { ApiExcludeController, ApiExcludeEndpoint, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import {
   getGroupChannel,
@@ -12,7 +12,7 @@ import {
   makeHlsContent,
 } from "../decorator/fdpd.decorator";
 import { IResultReturn } from "../../global/interface";
-import { SYSTEM_ID, EVENT_ID, STATUS, LIVE_INDEX } from "../../global/constant";
+import { SYSTEM_ID, EVENT_ID, STATUS, LIVE_INDEX, PARAM, SCHEDULED_AT } from "../../global/constant";
 
 // @ApiExcludeController()
 @Controller({ path: "4dpd", version: ["v1"] })
@@ -89,7 +89,7 @@ export class FdpdController {
   async makeContent(
     @Param(`${SYSTEM_ID}`) systemId: string,
     @Param(`${EVENT_ID}`) eventId: string,
-    @Query("param") param: string,
+    @Query(`${PARAM}`) param: string,
     @Res() res: Response,
   ) {
     param = JSON.parse(param);
@@ -114,7 +114,7 @@ export class FdpdController {
   async makeHlsContent(
     @Param(`${SYSTEM_ID}`) systemId: string,
     @Param(`${EVENT_ID}`) eventId: string,
-    @Query("param") param: string,
+    @Query(`${PARAM}`) param: string,
     @Res() res: Response,
   ) {
     param = JSON.parse(param);
@@ -139,7 +139,7 @@ export class FdpdController {
   async reSet(
     @Param(`${SYSTEM_ID}`) systemId: string,
     @Param(`${EVENT_ID}`) eventId: string,
-    @Query("scheduled_at") scheduledAt: string,
+    @Query(`${SCHEDULED_AT}`) scheduledAt: string,
     @Res() res: Response,
   ) {
     const result: IResultReturn = {
