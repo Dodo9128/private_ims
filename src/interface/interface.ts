@@ -21,3 +21,12 @@ export interface IInsertChannelParams {
   channel_list: IChannelList[];
 }
 export type TEventStatus = "resume" | "pause" | "end";
+
+export interface IMakeContent {
+  title: string;
+  description: string;
+  recording_name: string;
+  start_frame_no: number;
+  end_frame_no: number;
+  channel_list: number[];
+}

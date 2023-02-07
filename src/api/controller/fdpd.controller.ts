@@ -1,7 +1,16 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Query, Res } from "@nestjs/common";
 import { ApiExcludeController, ApiExcludeEndpoint, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
-import { getGroupChannel, insertChannelIP, getEventId, setEventStatus, reSet } from "../decorator/api.decorator";
+import {
+  getGroupChannel,
+  insertChannelIP,
+  getEventId,
+  setEventStatus,
+  reSet,
+  makeContent,
+  setChannelStatus,
+  makeHlsContent,
+} from "../decorator/api.decorator";
 import { IResultReturn } from "../../interface/interface";
 
 /**
@@ -55,44 +64,6 @@ export class FdpdController {
      */
   }
 
-  @Get("/:system_id/getGroupChannel")
-  @getGroupChannel()
-  async getGroupChannel(@Param("system_id") systemId: string, @Res() res: Response) {
-    const result: IResultReturn = {
-      result: "OK",
-      message: "SUCCESS",
-      data: { system_id: systemId },
-    };
-
-    return res.status(HttpStatus.OK).json(result);
-
-    /**
-     * TODO: connect with systemService.getSystemFor4DPD(systemId);
-     *
-     * const result: IResultReturn = await this.systemService.getSystemFor4DPD(systemId);
-     * return res.status(HttpStatus.OK).json(result);
-     */
-  }
-
-  @Get("/:system_id/getEventId")
-  @getEventId()
-  async getEventId(@Param("system_id") systemId: string, @Res() res: Response) {
-    const result: IResultReturn = {
-      result: "OK",
-      message: "SUCCESS",
-      data: { system_id: systemId },
-    };
-
-    return res.status(HttpStatus.OK).json(result);
-
-    /**
-     * TODO: connect with eventService.getLiveEventId(systemId);
-     *
-     * const result: IResultReturn = await this.eventService.getLiveEventId(systemId);
-     * return res.status(HttpStatus.OK).json(result);
-     */
-  }
-
   @Post("/:system_id/:event_id/:status/setEventStatus")
   @setEventStatus()
   async setEventStatus(
@@ -113,6 +84,56 @@ export class FdpdController {
      * TODO: connect with eventService.setEventStatus(systemId, eventId, status);
      *
      * const result: IResultReturn = await this.eventService.setEventStatus(systemId, eventId, status)
+     * return res.status(HttpStatus.OK).json(result);
+     */
+  }
+
+  @Post("/:system_id/:event_id/makeContent")
+  @makeContent()
+  async makeContent(
+    @Param("system_id") systemId: string,
+    @Param("event_id") eventId: string,
+    @Query("param") param: string,
+    @Res() res: Response,
+  ) {
+    param = JSON.parse(param);
+    const result: IResultReturn = {
+      result: "OK",
+      message: "SUCCESS",
+      data: { system_id: systemId, event_id: eventId, param: param },
+    };
+
+    return res.status(HttpStatus.OK).json(result);
+
+    /**
+     * TODO: connect with eventService.makeContent(systemId, eventId, param);
+     *
+     * const result: IResultReturn = await this.eventService.reSet(systemId, eventId, param)
+     * return res.status(HttpStatus.OK).json(result);
+     */
+  }
+
+  @Post("/:system_id/:event_id/makeHlsContent")
+  @makeHlsContent()
+  async makeHlsContent(
+    @Param("system_id") systemId: string,
+    @Param("event_id") eventId: string,
+    @Query("param") param: string,
+    @Res() res: Response,
+  ) {
+    param = JSON.parse(param);
+    const result: IResultReturn = {
+      result: "OK",
+      message: "SUCCESS",
+      data: { system_id: systemId, event_id: eventId, param: param },
+    };
+
+    return res.status(HttpStatus.OK).json(result);
+
+    /**
+     * TODO: connect with eventService.makeHlsContent(systemId, eventId, param);
+     *
+     * const result: IResultReturn = await this.eventService.makeHlsContent(systemId, eventId, param)
      * return res.status(HttpStatus.OK).json(result);
      */
   }
@@ -140,5 +161,66 @@ export class FdpdController {
      * return res.status(HttpStatus.OK).json(result);
      */
   }
-  // TODO: START on makeContent
+
+  @Post("/:system_id/:live_index/:status/setChannelStatus")
+  @setChannelStatus()
+  async setChannelStatus(
+    @Param("system_id") systemId: string,
+    @Param("live_index") liveIndex: number,
+    @Param("status") status: string,
+    @Res() res: Response,
+  ) {
+    const result: IResultReturn = {
+      result: "OK",
+      message: "SUCCESS",
+      data: { system_id: systemId, live_index: liveIndex, status: status },
+    };
+
+    return res.status(HttpStatus.OK).json(result);
+
+    /**
+     * TODO: connect with channelService.setChannelStatus(systemId, liveIndex, status);
+     *
+     * const result: IResultReturn = await this.channelService.setChannelStatus(systemId, liveIndex, status)
+     * return res.status(HttpStatus.OK).json(result);
+     */
+  }
+
+  @Get("/:system_id/getEventId")
+  @getEventId()
+  async getEventId(@Param("system_id") systemId: string, @Res() res: Response) {
+    const result: IResultReturn = {
+      result: "OK",
+      message: "SUCCESS",
+      data: { system_id: systemId },
+    };
+
+    return res.status(HttpStatus.OK).json(result);
+
+    /**
+     * TODO: connect with eventService.getLiveEventId(systemId);
+     *
+     * const result: IResultReturn = await this.eventService.getLiveEventId(systemId);
+     * return res.status(HttpStatus.OK).json(result);
+     */
+  }
+
+  @Get("/:system_id/getGroupChannel")
+  @getGroupChannel()
+  async getGroupChannel(@Param("system_id") systemId: string, @Res() res: Response) {
+    const result: IResultReturn = {
+      result: "OK",
+      message: "SUCCESS",
+      data: { system_id: systemId },
+    };
+
+    return res.status(HttpStatus.OK).json(result);
+
+    /**
+     * TODO: connect with systemService.getSystemFor4DPD(systemId);
+     *
+     * const result: IResultReturn = await this.systemService.getSystemFor4DPD(systemId);
+     * return res.status(HttpStatus.OK).json(result);
+     */
+  }
 }
