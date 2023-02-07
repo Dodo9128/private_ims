@@ -24,7 +24,7 @@ export const nodeIp44DML = () =>
       description: `4DML에서 시스템 설정하기 위해 자기 자신의 node 정보들을 조회한다.`,
     }),
     ApiParam({
-      name: `${SYSTEM_ID}`,
+      name: SYSTEM_ID,
       required: true,
       description: `IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A`,
       schema: {
@@ -54,7 +54,7 @@ export const getSystemFor4DML = () =>
       description: `4DML에서 시스템 설정하기 위한 정보들을 조회한다.`,
     }),
     ApiParam({
-      name: `${SYSTEM_ID}`,
+      name: SYSTEM_ID,
       required: true,
       description: `IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A`,
       schema: {
@@ -84,7 +84,7 @@ export const get4DML = () =>
       description: `4DMLM에서 시스템 설정하기 위한 4DML 정보들을 조회한다.`,
     }),
     ApiParam({
-      name: `${SYSTEM_ID}`,
+      name: SYSTEM_ID,
       required: true,
       description: `IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A`,
       schema: {
@@ -114,7 +114,7 @@ export const getScale44DML = () =>
       description: `IMS에서 설정한 Scale out 정보를 조회한다.`,
     }),
     ApiParam({
-      name: `${SYSTEM_ID}`,
+      name: SYSTEM_ID,
       required: true,
       description: `<p><strong>[4DLS > IMS]</strong></p>\nIMS에서 전달된 초기 시스템 ID 값<br>ex)0001A`,
       schema: {
@@ -144,7 +144,7 @@ export const scaleOut4DML = () =>
       description: `4DMLM이 4DML Scale Out 요청한다.`,
     }),
     ApiParam({
-      name: `${SYSTEM_ID}`,
+      name: SYSTEM_ID,
       required: true,
       description: `IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A`,
       schema: {
@@ -153,7 +153,7 @@ export const scaleOut4DML = () =>
       },
     }),
     ApiQuery({
-      name: `${INSTANCE_ID}`,
+      name: INSTANCE_ID,
       required: true,
       description: `instance_id<br>ex)i-0950f5a279a64a4fd`,
       schema: {
@@ -162,7 +162,7 @@ export const scaleOut4DML = () =>
       },
     }),
     ApiQuery({
-      name: `${PRIVATE_IP}`,
+      name: PRIVATE_IP,
       required: true,
       description: `private_ip<br>ex)175.116.17.219`,
       schema: {
@@ -171,7 +171,7 @@ export const scaleOut4DML = () =>
       },
     }),
     ApiQuery({
-      name: `${PRIVATE_PORT}`,
+      name: PRIVATE_PORT,
       required: true,
       description: `private_port<br>ex)8553`,
       schema: {
@@ -180,7 +180,7 @@ export const scaleOut4DML = () =>
       },
     }),
     ApiQuery({
-      name: `${INITIAL_STATE}`,
+      name: INITIAL_STATE,
       required: true,
       description: `initial_state<br>ex)temporary`,
       schema: {
@@ -189,7 +189,7 @@ export const scaleOut4DML = () =>
       },
     }),
     ApiQuery({
-      name: `${REGION}`,
+      name: REGION,
       required: true,
       description: `region<br>ex)ap-northeast-2`,
       schema: {
@@ -219,7 +219,7 @@ export const scaleOut4DMLOk = () =>
       description: `Scale Out이 정상적으로 running일 경우, IP, PORT, domain 정보 업데이트 한다.`,
     }),
     ApiParam({
-      name: `${SYSTEM_ID}`,
+      name: SYSTEM_ID,
       required: true,
       description: `IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A`,
       schema: {
@@ -228,7 +228,7 @@ export const scaleOut4DMLOk = () =>
       },
     }),
     ApiParam({
-      name: `${NODE_ID}`,
+      name: NODE_ID,
       required: true,
       description: `node_id<br>ex)00000015`,
       schema: {
@@ -237,7 +237,7 @@ export const scaleOut4DMLOk = () =>
       },
     }),
     ApiParam({
-      name: `${RS_ID}`,
+      name: RS_ID,
       required: true,
       description: `rs_id<br>ex)00000015`,
       schema: {
@@ -246,7 +246,7 @@ export const scaleOut4DMLOk = () =>
       },
     }),
     ApiQuery({
-      name: `${PUBLIC_IP}`,
+      name: PUBLIC_IP,
       required: true,
       description: `public_ip<br>ex)169.254.13.122`,
       schema: {
@@ -255,7 +255,7 @@ export const scaleOut4DMLOk = () =>
       },
     }),
     ApiQuery({
-      name: `${PUBLIC_PORT}`,
+      name: PUBLIC_PORT,
       required: true,
       description: `public_port<br>ex)5004`,
       schema: {
@@ -264,7 +264,7 @@ export const scaleOut4DMLOk = () =>
       },
     }),
     ApiQuery({
-      name: `${DOMAIN}`,
+      name: DOMAIN,
       required: true,
       description: `domain<br>ex)ec2-18-144-147-89.us-west-1.compute.amazonaws.com`,
       schema: {
@@ -294,7 +294,7 @@ export const scaleIn4DML = () =>
       description: `4DMLM이 4DML Scale In 요청한다.`,
     }),
     ApiParam({
-      name: `${SYSTEM_ID}`,
+      name: SYSTEM_ID,
       required: true,
       description: `IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A`,
       schema: {
@@ -303,7 +303,7 @@ export const scaleIn4DML = () =>
       },
     }),
     ApiParam({
-      name: `${NODE_ID}`,
+      name: NODE_ID,
       required: true,
       description: `node_id<br>ex)00000015`,
       schema: {
@@ -312,7 +312,7 @@ export const scaleIn4DML = () =>
       },
     }),
     ApiParam({
-      name: `${RS_ID}`,
+      name: RS_ID,
       required: true,
       description: `rs_id<br>ex)00000015`,
       schema: {
@@ -342,7 +342,7 @@ export const getCFurl = () =>
       description: `Prewarming에 사용하기 위한 Media Store의 CloudFront prefix 주소를 반환한다.`,
     }),
     ApiParam({
-      name: `${EVENT_ID}`,
+      name: EVENT_ID,
       required: true,
       description: `4DML-M에서 전달된 초기 이벤트 ID 값<br>ex)0001A0001`,
       schema: {
