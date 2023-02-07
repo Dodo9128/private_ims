@@ -1,0 +1,21 @@
+{
+  "result": "ok",
+  "iTotalRecords": 1,
+  "data": [
+    {
+      "node_type": "CM0408",
+      "updated_at": "2021-11-04T05:58:43.000+00:00",
+      "registered_at": "2021-11-04T05:58:43.000+00:00",
+      "system_id": "0001A",
+      "session": 600,
+      "name": "Rule for 4DML",
+      "description": "Rule for 4DML",
+      "max_instances": 2,
+      "id": "0001A021",
+      "region": "ap-northeast-2",
+      "node_type_name": "4dml"
+    }
+  ],
+  "iTotalDisplayRecords": 1,
+  "message": "SUCCESS"
+}

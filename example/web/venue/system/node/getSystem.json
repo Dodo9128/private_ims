@@ -1,0 +1,18 @@
+{
+  "result": "ok",
+  "data": {
+    "is_extra": "N",
+    "subinfo_updated_at": "2021-11-04T08:10:53.000+00:00",
+    "updated_at": null,
+    "registered_at": "2021-11-04T05:58:43.000+00:00",
+    "name": "System for KBO_고척_Stduio_D",
+    "fps": 29.97,
+    "width": 1920,
+    "description": "System for KBO_고척_Stduio_D",
+    "comment": "",
+    "id": "0001A",
+    "venue_id": "0001",
+    "height": 1080
+  },
+  "message": "SUCCESS"
+}

@@ -1,0 +1,29 @@
+{
+  "result": "ok",
+  "iTotalRecords": 1,
+  "data": [
+    {
+      "scale_on": "false",
+      "registered_at": "2021-11-04T05:58:44.000+00:00",
+      "scale_in_resource": 40,
+      "system_id": "0001A",
+      "scale_out_resource": 70,
+      "scale_ss_name": "BC-OR-4DSS-SCALE-",
+      "scale_image_id": "ami-0af6b8774fc9bc189",
+      "scale_security_group_ids": "sg-0fc99361a793f1c10,sg-0b258852324aaca30,sg-0ef45d38d52bd040d,sg-0883ec41f45b0da2b,sg-0094a1ce092eff232",
+      "scale_group_count": 2,
+      "scale_key_name": "4DReplay-Korea",
+      "scale_instance_type2": "g4dn.12xlarge",
+      "scale_monitoring_tag_name": "Monitoring",
+      "updated_at": "2021-11-04T05:58:44.000+00:00",
+      "scale_subnet_ids": "subnet-007e1381fd647da85,subnet-0d9b1a8b7f935cdfc",
+      "id": "0001A018",
+      "scale_monitoring_tag_value": "node, grok",
+      "scale_instance_type": "m5a.8xlarge",
+      "region": "ap-northeast-2",
+      "scale_out_limit_time": 150
+    }
+  ],
+  "iTotalDisplayRecords": 1,
+  "message": "SUCCESS"
+}

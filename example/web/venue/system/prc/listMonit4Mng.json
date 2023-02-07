@@ -1,0 +1,53 @@
+{
+  "result": "ok",
+  "iTotalRecords": 3,
+  "data": [
+    {
+      "registered_at": "2022-08-19T09:02:44.000+00:00",
+      "system_id": "0001A",
+      "node_name": "GCK-4DMLD-KR-01",
+      "message": "I/O error on POST request for \"http://172.31.0.187%20:2812/_status\": 172.31.0.187%20; nested exception is java.net.UnknownHostException: 172.31.0.187%20",
+      "private_ip": "172.31.0.187 ",
+      "node_type": "CM0408",
+      "private_port": 5001,
+      "action": "status",
+      "id": "0001A003",
+      "region": "ap-northeast-2",
+      "node_type_name": "4dml",
+      "node_id": "0001A303",
+      "status": "fail"
+    },
+    {
+      "registered_at": "2022-08-19T09:02:40.000+00:00",
+      "system_id": "0001A",
+      "node_name": "GCK-4DMLD-KR-01",
+      "message": "I/O error on POST request for \"http://172.31.0.187%20:2812/_status\": 172.31.0.187%20; nested exception is java.net.UnknownHostException: 172.31.0.187%20",
+      "private_ip": "172.31.0.187 ",
+      "node_type": "CM0408",
+      "private_port": 5001,
+      "action": "status",
+      "id": "0001A002",
+      "region": "ap-northeast-2",
+      "node_type_name": "4dml",
+      "node_id": "0001A303",
+      "status": "fail"
+    },
+    {
+      "registered_at": "2022-08-19T09:02:28.000+00:00",
+      "system_id": "0001A",
+      "node_name": "GCK-4DMLC-KR-01",
+      "message": "I/O error on POST request for \"http://172.31.0.187%20:2812/_status\": 172.31.0.187%20; nested exception is java.net.UnknownHostException: 172.31.0.187%20",
+      "private_ip": "172.31.0.187 ",
+      "node_type": "CM0408",
+      "private_port": 5002,
+      "action": "status",
+      "id": "0001A001",
+      "region": "ap-northeast-2",
+      "node_type_name": "4dml",
+      "node_id": "0001A304",
+      "status": "fail"
+    }
+  ],
+  "iTotalDisplayRecords": 3,
+  "message": "SUCCESS"
+}
