@@ -385,7 +385,7 @@ export const setChannelStatus = () =>
   applyDecorators(
     ApiOperation({
       summary: "카메라 사용 유무 설정",
-      description: `카메라의 사용 유무값을 설정합니다.<p><img src="/resources/img/api_doc/01_4DPD_setChannelStatus.png`,
+      description: `카메라의 사용 유무값을 설정합니다.<p><img src="/resources/img/api_doc/01_4DPD_setChannelStatus.png" /></p>`,
     }),
     ApiParam({
       name: "system_id",
@@ -562,6 +562,36 @@ export const makeHlsContent = () =>
       schema: {
         type: "string",
         example: makeContentExample,
+      },
+    }),
+    ApiOkResponse({
+      description: "OK !!",
+      schema: {
+        type: "string",
+      },
+    }),
+    ApiResponse({
+      status: 400,
+      description: "BAD REQUEST !!",
+      schema: {
+        type: "string",
+      },
+    }),
+  );
+
+export const getNode4DRS = () =>
+  applyDecorators(
+    ApiOperation({
+      summary: `시스템 설정 조회`,
+      description: `4DRS에서 시스템 설정하기 위한 정보들을 조회한다.\n<p><img src="/resources/img/api_doc/02_4DRS_getSystemFor4DRS.png" /></p>`,
+    }),
+    ApiParam({
+      name: "system_id",
+      required: true,
+      description: "IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A",
+      schema: {
+        type: "string",
+        example: "0001A",
       },
     }),
     ApiOkResponse({
