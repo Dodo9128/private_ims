@@ -2,7 +2,6 @@ import { applyDecorators } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse } from "@nestjs/swagger";
 import {
   DOMAIN,
-  EVENT_ID,
   INITIAL_STATE,
   INSTANCE_ID,
   NODE_ID,
@@ -11,7 +10,6 @@ import {
   PUBLIC_IP,
   PUBLIC_PORT,
   REGION,
-  RS_ID,
   SYSTEM_ID,
 } from "../../global/constant";
 
@@ -21,7 +19,7 @@ export const nodeIp = () =>
   applyDecorators(
     ApiOperation({
       summary: `본인 노드 정보 조회`,
-      description: `4DML에서 시스템 설정하기 위해 자기 자신의 node 정보들을 조회한다.`,
+      description: `4DLS에서 시스템 설정하기 위해 자기 자신의 node 정보들을 조회한다. <p><img src="/resources/img/api_doc/04_4DLS_nodeIp.png" /></p>`,
     }),
     ApiParam({
       name: SYSTEM_ID,
@@ -47,41 +45,11 @@ export const nodeIp = () =>
     }),
   );
 
-export const getSystemFor4DML = () =>
+export const get4DSS = () =>
   applyDecorators(
     ApiOperation({
-      summary: `시스템 설정 조회`,
-      description: `4DML에서 시스템 설정하기 위한 정보들을 조회한다.`,
-    }),
-    ApiParam({
-      name: SYSTEM_ID,
-      required: true,
-      description: `IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A`,
-      schema: {
-        type: "string",
-        example: "0001A",
-      },
-    }),
-    ApiOkResponse({
-      description: "OK !!",
-      schema: {
-        type: "string",
-      },
-    }),
-    ApiResponse({
-      status: 400,
-      description: "BAD REQUEST !!",
-      schema: {
-        type: "string",
-      },
-    }),
-  );
-
-export const get4DML = () =>
-  applyDecorators(
-    ApiOperation({
-      summary: `4DML 설정 조회`,
-      description: `4DMLM에서 시스템 설정하기 위한 4DML 정보들을 조회한다.`,
+      summary: `4DSS 정보 조회`,
+      description: `4DLS에서 시스템 설정하기 위해 4DSS 정보를 조회한다. <p><img src="/resources/img/api_doc/04_4DLS_get4DSS.png" /></p>`,
     }),
     ApiParam({
       name: SYSTEM_ID,
@@ -111,12 +79,12 @@ export const getScale = () =>
   applyDecorators(
     ApiOperation({
       summary: `Scale 정보 조회`,
-      description: `IMS에서 설정한 Scale out 정보를 조회한다.`,
+      description: `IMS에서 설정한 Scale out 정보를 조회한다. <p><img src="/resources/img/api_doc/04_4DLS_getScale.png" /></p>`,
     }),
     ApiParam({
       name: SYSTEM_ID,
       required: true,
-      description: `<p><strong>[4DLS > IMS]</strong></p>\nIMS에서 전달된 초기 시스템 ID 값<br>ex)0001A`,
+      description: `IMS에서 전달된 초기 시스템 ID 값<br>ex)0001A`,
       schema: {
         type: "string",
         example: "0001A",
@@ -137,11 +105,11 @@ export const getScale = () =>
     }),
   );
 
-export const scaleOut4DML = () =>
+export const scaleOut4DSS = () =>
   applyDecorators(
     ApiOperation({
       summary: `Scale Out`,
-      description: `4DMLM이 4DML Scale Out 요청한다.`,
+      description: `4DLS가 4DSS Scale Out 요청한다. <p><img src="/resources/img/api_doc/04_4DLS_scaleOut4DSS.png" /></p>`,
     }),
     ApiParam({
       name: SYSTEM_ID,
@@ -175,8 +143,8 @@ export const scaleOut4DML = () =>
       required: true,
       description: `private_port<br>ex)8553`,
       schema: {
-        type: "string",
-        example: "8553",
+        type: "number",
+        example: 8553,
       },
     }),
     ApiQuery({
@@ -212,11 +180,11 @@ export const scaleOut4DML = () =>
     }),
   );
 
-export const scaleOut4DMLOk = () =>
+export const scaleOut4DSSOk = () =>
   applyDecorators(
     ApiOperation({
       summary: `Scale Out OK`,
-      description: `Scale Out이 정상적으로 running일 경우, IP, PORT, domain 정보 업데이트 한다.`,
+      description: `Scale Out이 정상적으로 running일 경우, IP, PORT, domain 정보 업데이트 한다. <p><img src="/resources/img/api_doc/04_4DLS_scaleOut4DSSOk.png" /></p>`,
     }),
     ApiParam({
       name: SYSTEM_ID,
@@ -231,15 +199,6 @@ export const scaleOut4DMLOk = () =>
       name: NODE_ID,
       required: true,
       description: `node_id<br>ex)00000015`,
-      schema: {
-        type: "string",
-        example: "00000015",
-      },
-    }),
-    ApiParam({
-      name: RS_ID,
-      required: true,
-      description: `rs_id<br>ex)00000015`,
       schema: {
         type: "string",
         example: "00000015",
@@ -287,11 +246,11 @@ export const scaleOut4DMLOk = () =>
     }),
   );
 
-export const scaleIn4DML = () =>
+export const scaleIn4DSS = () =>
   applyDecorators(
     ApiOperation({
       summary: `Scale In`,
-      description: `4DMLM이 4DML Scale In 요청한다.`,
+      description: `4DLS가 4DSS Scale In 요청한다. <p><img src="/resources/img/api_doc/04_4DLS_scaleIn4DSS.png" /></p>`,
     }),
     ApiParam({
       name: SYSTEM_ID,
@@ -309,45 +268,6 @@ export const scaleIn4DML = () =>
       schema: {
         type: "string",
         example: "00000015",
-      },
-    }),
-    ApiParam({
-      name: RS_ID,
-      required: true,
-      description: `rs_id<br>ex)00000015`,
-      schema: {
-        type: "string",
-        example: "00000015",
-      },
-    }),
-    ApiOkResponse({
-      description: "OK !!",
-      schema: {
-        type: "string",
-      },
-    }),
-    ApiResponse({
-      status: 400,
-      description: "BAD REQUEST !!",
-      schema: {
-        type: "string",
-      },
-    }),
-  );
-
-export const getCFurl = () =>
-  applyDecorators(
-    ApiOperation({
-      summary: `Media Store의 CloudFront 주소 조회`,
-      description: `Prewarming에 사용하기 위한 Media Store의 CloudFront prefix 주소를 반환한다.`,
-    }),
-    ApiParam({
-      name: EVENT_ID,
-      required: true,
-      description: `4DML-M에서 전달된 초기 이벤트 ID 값<br>ex)0001A0001`,
-      schema: {
-        type: "string",
-        example: "0001A0001",
       },
     }),
     ApiOkResponse({

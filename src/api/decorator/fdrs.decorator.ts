@@ -4,7 +4,7 @@ import { SYSTEM_ID } from "../../global/constant";
 
 // TODO: API decorator swagger return params create / add
 
-export const getNode4DRS = () =>
+export const getNode = () =>
   applyDecorators(
     ApiOperation({
       summary: `시스템 설정 조회`,

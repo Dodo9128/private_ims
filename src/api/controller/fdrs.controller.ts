@@ -1,7 +1,7 @@
 import { Controller, Get, HttpStatus, Param, Res } from "@nestjs/common";
 import { ApiExcludeController, ApiExcludeEndpoint, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
-import { getNode4DRS } from "../decorator/fdrs.decorator";
+import { getNode } from "../decorator/fdrs.decorator";
 import { IResultReturn } from "../../global/interface";
 import { SYSTEM_ID } from "../../global/constant";
 
@@ -19,8 +19,8 @@ export class FdrsController {
 
   // 노출 안되는 API는 ApiExcludeEndpoint() 로 가리거나, 컨트롤러 자체를 ApiExcludeController()로 가린다
   @Get(`/:${SYSTEM_ID}/getNodes`)
-  @getNode4DRS()
-  async getNode4DRS(@Param(SYSTEM_ID) systemId: string, @Res() res: Response) {
+  @getNode()
+  async getNode(@Param(SYSTEM_ID) systemId: string, @Res() res: Response) {
     const result: IResultReturn = {
       result: "OK",
       message: "SUCCESS",

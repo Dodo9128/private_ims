@@ -15,6 +15,7 @@ import { FdmlController } from "./api/controller/fdml.controller";
 import { CmsController } from "./api/controller/cms.controller";
 import { CommonController } from "./api/controller/common.controller";
 import { FdssController } from "./api/controller/fdss.controller";
+import { FdlsController } from "./api/controller/fdls.controller";
 
 const node_env = process.env.NODE_ENV || "development";
 
@@ -68,5 +69,6 @@ export class AppModule implements NestModule {
     consumer.apply(LoggerMiddleware).forRoutes(CmsController);
     consumer.apply(LoggerMiddleware).forRoutes(CommonController);
     consumer.apply(LoggerMiddleware).forRoutes(FdssController);
+    consumer.apply(LoggerMiddleware).forRoutes(FdlsController);
   }
 }
