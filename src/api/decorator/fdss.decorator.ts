@@ -1,14 +1,14 @@
 import { applyDecorators } from "@nestjs/common";
-import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse } from "@nestjs/swagger";
+import { ApiOkResponse, ApiOperation, ApiParam, ApiResponse } from "@nestjs/swagger";
 import { SYSTEM_ID } from "../../global/constant";
 
 // TODO: API decorator swagger return params create / add
 
-export const getNode4DRS = () =>
+export const getNode4DSS = () =>
   applyDecorators(
     ApiOperation({
       summary: `시스템 설정 조회`,
-      description: `4DRS에서 시스템 설정하기 위한 정보들을 조회한다.\n<p><img src="/resources/img/api_doc/02_4DRS_getSystemFor4DRS.png" /></p>`,
+      description: `4DSS에서 시스템 설정하기 위한 정보들을 조회한다.\n<p><img src="/resources/img/api_doc/03_4DSS_getSystemFor4DSS.png" /></p>`,
     }),
     ApiParam({
       name: SYSTEM_ID,
