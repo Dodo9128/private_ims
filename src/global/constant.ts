@@ -1,0 +1,17 @@
+export const SYSTEM_ID = "system_id";
+export const EVENT_ID = "event_id";
+export const STATUS = "status";
+export const LIVE_INDEX = "live_index";
+export const INSTANCE_ID = "instance_id";
+export const PRIVATE_IP = "private_ip";
+export const PRIVATE_PORT = "private_port";
+export const INITIAL_STATE = "initial_state";
+export const REGION = "region";
+export const NODE_ID = "node_id";
+export const RS_ID = "rs_id";
+export const PUBLIC_IP = "public_ip";
+export const PUBLIC_PORT = "public_port";
+export const DOMAIN = "domain";
+export const SCHEDULED_AT = "scheduled_at";
+export const PARAM = "param";
+export const CONTENT_ID = "content_id";

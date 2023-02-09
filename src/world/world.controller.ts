@@ -1,12 +1,13 @@
 import { WorldService } from "./world.service";
 import { Controller, Res, HttpStatus, Query, Post, Get } from "@nestjs/common";
-import { ApiExcludeController, ApiTags } from "@nestjs/swagger";
-import { IResultReturn } from "../libs/utils/functionReturn";
+import { ApiExcludeController, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import { listWorldCity, listWorldCountry, listWorldState } from "../api/decorator/world.decorator";
+import { IResultReturn } from "../global/interface";
 
 // @ApiExcludeController()
-@Controller("worldCountry")
+@Controller({ path: "worldCountry", version: ["v1"] })
+// @Controller({ path: "4dpd", version: ["v1"], durable: true })
 @ApiTags("WorldCountry / WorldState / WorldCity")
 export class WorldController {
   constructor(private readonly worldService: WorldService) {}

@@ -8,6 +8,14 @@ import { DatabaseModule } from "./database/database.module";
 import { AppController } from "./app.controller";
 import { WorldModule } from "./world/world.module";
 import { WorldController } from "./world/world.controller";
+import { ApiModule } from "./api/api.module";
+import { FdpdController } from "./api/controller/fdpd.controller";
+import { FdrsController } from "./api/controller/fdrs.controller";
+import { FdmlController } from "./api/controller/fdml.controller";
+import { CmsController } from "./api/controller/cms.controller";
+import { CommonController } from "./api/controller/common.controller";
+import { FdssController } from "./api/controller/fdss.controller";
+import { FdlsController } from "./api/controller/fdls.controller";
 
 const node_env = process.env.NODE_ENV || "development";
 
@@ -41,6 +49,7 @@ console.log(`Environment Path is: ${envPath}`);
     }),
     DatabaseModule,
     WorldModule,
+    ApiModule,
   ],
   controllers: [AppController],
   providers: [
@@ -54,5 +63,12 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     // consumer.apply(LoggerMiddleware).forRoutes("*");
     consumer.apply(LoggerMiddleware).forRoutes(WorldController);
+    consumer.apply(LoggerMiddleware).forRoutes(FdpdController);
+    consumer.apply(LoggerMiddleware).forRoutes(FdrsController);
+    consumer.apply(LoggerMiddleware).forRoutes(FdmlController);
+    consumer.apply(LoggerMiddleware).forRoutes(CmsController);
+    consumer.apply(LoggerMiddleware).forRoutes(CommonController);
+    consumer.apply(LoggerMiddleware).forRoutes(FdssController);
+    consumer.apply(LoggerMiddleware).forRoutes(FdlsController);
   }
 }
