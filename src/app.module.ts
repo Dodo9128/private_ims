@@ -16,6 +16,8 @@ import { CmsController } from "./api/controller/cms.controller";
 import { CommonController } from "./api/controller/common.controller";
 import { FdssController } from "./api/controller/fdss.controller";
 import { FdlsController } from "./api/controller/fdls.controller";
+import { ExcelModule } from "./excel/excel.module";
+import { ExcelController } from "./excel/excel.controller";
 
 const node_env = process.env.NODE_ENV || "development";
 
@@ -50,6 +52,7 @@ console.log(`Environment Path is: ${envPath}`);
     DatabaseModule,
     WorldModule,
     ApiModule,
+    ExcelModule,
   ],
   controllers: [AppController],
   providers: [
@@ -70,5 +73,6 @@ export class AppModule implements NestModule {
     consumer.apply(LoggerMiddleware).forRoutes(CommonController);
     consumer.apply(LoggerMiddleware).forRoutes(FdssController);
     consumer.apply(LoggerMiddleware).forRoutes(FdlsController);
+    consumer.apply(LoggerMiddleware).forRoutes(ExcelController);
   }
 }

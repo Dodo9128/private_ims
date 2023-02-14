@@ -15,3 +15,4 @@ export const DOMAIN = "domain";
 export const SCHEDULED_AT = "scheduled_at";
 export const PARAM = "param";
 export const CONTENT_ID = "content_id";
+export const VENUE_ID = "venue_id";
