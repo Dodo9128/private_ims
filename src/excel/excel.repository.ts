@@ -10,6 +10,11 @@ import { CodeCommon } from "../entities/codeCommon.entity";
 import { WorldCountry } from "../entities/worldCountry.entity";
 import { WorldState } from "../entities/worldState.entity";
 import { WorldCity } from "../entities/worldCity.entity";
+import { Channel } from "../entities/channel.entity";
+import { Groups } from "../entities/group.entity";
+import { Video } from "../entities/video.entity";
+import { Audio } from "../entities/audio.entity";
+import { AdaptiveStreaming } from "../entities/adaptiveStreaming.entity";
 
 @Injectable()
 export class ExcelRepository {
@@ -23,38 +28,6 @@ export class ExcelRepository {
       )
       .where("id = :venue_id", { venue_id: venueId })
       .getRawOne();
-
-    // return await this.dataSource
-    //   .getRepository(Venue)
-    //   .createQueryBuilder("V")
-    //   .select(
-    //     `V.id as id, WC.name as country_id, WS.name as state_id, WCITY.name as city_id, V.event_name as event_name, SUBSTRING_INDEX(V.event_code, '-', 1) as event_yymm, V.name as name, V.description as description, V.timezone_name as timezone_name, V.timezone_offset as timezone_offset, V.comment as comment from venue as V left join world_country as WC on V.country_id = WC.id left join world_state as WS on V.state_id = WS.id left join world_city as WCITY on V.city_id = WCITY.id`,
-    //   )
-    //   .where("id = :venue_id", { venue_id: venueId })
-    //   .getRawOne();
-
-    // return await this.dataSource
-    //   .getRepository(Venue)
-    //   .createQueryBuilder("V")
-    //   .select("V.id", "id")
-    //   .leftJoinAndSelect("V.country_id", "country_id")
-    //   .leftJoinAndSelect("V.state_id", "state_id")
-    //   .leftJoinAndSelect("V.city_id", "city_id")
-    //   .select("V.event_name", "event_name")
-    //   .select("SUBSTRING_INDEX(V.event_code, '-', 1)", "eveny_yymm")
-    //   .select("V.name", "name")
-    //   .select("V.description", "description")
-    //   .select("V.timezone_name", "timezone_name")
-    //   .select("V.timezone_offset", "timezone_offset")
-    //   .select("V.comment", "comment")
-    //   .where("id = :venue_id", { venue_id: venueId })
-    //   .getRawOne();
-
-    // return await this.dataSource
-    //   .getRepository(Venue)
-    //   .query(
-    //     `V.id as id, WC.name as country_id, WS.name as state_id, WCITY.name as city_id, V.event_name as event_name, SUBSTRING_INDEX(V.event_code, '-', 1) as event_yymm, V.name as name, V.description as description, V.timezone_name as timezone_name, V.timezone_offset as timezone_offset, V.comment as comment from venue as V left join world_country as WC on V.country_id = WC.id left join world_state as WS on V.state_id = WS.id left join world_city as WCITY on V.city_id = WCITY.id where V.id = '${venueId}'`,
-    //   );
   }
 
   async getWorldCountryName(countryId: number) {
@@ -132,5 +105,64 @@ export class ExcelRepository {
 
   async getFncCodeName(elem: string) {
     return await this.dataSource.getRepository(CodeCommon).query(`SELECT FNC_CODENAME('${elem}')`);
+  }
+
+  async getExcelExportNodeForCameraGroup(systemId: string) {
+    return await this.dataSource
+      .getRepository(Node)
+      .createQueryBuilder()
+      .select(`public_ip, domain, node_type`)
+      .where(`node_type IN (:...node_type)`, { node_type: ["CM0407", "CM0410"] })
+      .andWhere(`system_id = :system_id`, { system_id: systemId })
+      .getRawMany();
+  }
+
+  async getExcelExportChannel(systemId: string) {
+    return await this.dataSource
+      .getRepository(Channel)
+      .createQueryBuilder()
+      .select(
+        `live_index as channel_index, camera_ip, name, status, media_type, gimbal_ip, is_gimbal_reset as gimbal_preset, server_ip, server_port, pdview_master_index`,
+      )
+      .where(`system_id = :system_id`, { system_id: systemId })
+      .getRawMany();
+  }
+
+  async getExcelExportGroup(systemId: string) {
+    return await this.dataSource
+      .getRepository(Groups)
+      .createQueryBuilder("groups")
+      .select(
+        `group_index as group_id, name, view_type, description, type, is_external_group as external_group, default_channel_index as default_video_channel_index, default_audio_index as default_audio_channel_index, is_default_group as default_group, is_interactive as interactive, is_replay as replay, is_timemachine as timemachine, is_pdview as pdview`,
+      )
+      .where(`system_id = :system_id`, { system_id: systemId })
+      .getRawMany();
+  }
+
+  async getExcelExportVideo(systemId: string) {
+    return await this.dataSource
+      .getRepository(Video)
+      .createQueryBuilder()
+      .select(`group_id, codec, width, height, bitrate, gop, fps, is_input`)
+      .where(`group_id LIKE :system_id`, { system_id: `%${systemId}%` })
+      .getRawMany();
+  }
+
+  async getExcelExportAudio(systemId: string) {
+    return await this.dataSource
+      .getRepository(Audio)
+      .createQueryBuilder()
+      .select(`group_id, channel_type, codec, sample_rate, sample_bit, is_input`)
+      .where(`group_id LIKE :system_id`, { system_id: `%${systemId}%` })
+      .getRawMany();
+  }
+
+  async getExcelExportAdaptiveStreaming(systemId: string) {
+    return await this.dataSource
+      .getRepository(AdaptiveStreaming)
+      .createQueryBuilder()
+      .select(`group_id, is_input, codec, width, height, bitrate, gop, fps`)
+      .where(`group_id LIKE :system_id`, { system_id: `%${systemId}%` })
+      .getRawMany();
   }
 }

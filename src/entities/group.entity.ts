@@ -13,7 +13,7 @@ import { IsBoolean, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 
 @Entity()
-export class Group {
+export class Groups {
   @PrimaryColumn()
   id: string;
 

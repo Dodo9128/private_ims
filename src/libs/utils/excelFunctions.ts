@@ -1,3 +1,31 @@
+export const downloadFileNameMakerForVenue = systemId => {
+  const currentDate = new Date();
+  const timeHour =
+    currentDate.getHours().toString().length === 2 ? currentDate.getHours() : "0" + currentDate.getHours();
+  const timeMinute =
+    currentDate.getMinutes().toString().length === 2 ? currentDate.getMinutes() : "0" + currentDate.getMinutes();
+
+  const currentTime = `${currentDate.getFullYear()}-${
+    currentDate.getMonth() + 1
+  }-${currentDate.getDate()}_${timeHour}${timeMinute}`;
+
+  return `${process.env.HOSTNAME}_${systemId}_INFO_${currentTime}`;
+};
+
+export const downloadFileNameMakerForCameraGroup = systemId => {
+  const currentDate = new Date();
+  const timeHour =
+    currentDate.getHours().toString().length === 2 ? currentDate.getHours() : "0" + currentDate.getHours();
+  const timeMinute =
+    currentDate.getMinutes().toString().length === 2 ? currentDate.getMinutes() : "0" + currentDate.getMinutes();
+
+  const currentTime = `${currentDate.getFullYear()}-${
+    currentDate.getMonth() + 1
+  }-${currentDate.getDate()}_${timeHour}${timeMinute}`;
+
+  return `${process.env.HOSTNAME}_${systemId}_CAMERA_GROUP_INFO_${currentTime}`;
+};
+
 export const venueExportVenueDataAdd = (venueData, row) => {
   row.getCell(1).value = "VENUE";
   row.getCell(2).value = "O";
@@ -94,4 +122,98 @@ export const venueExportNodeDataAdd = (nodeData, devWorkSheet) => {
     row.getCell(66).value = currentNode.instance_id;
     row.getCell(67).value = currentNode.initial_state.toLowerCase();
   }
+};
+
+export const cameraGroupExportStarter = (dataSet, channelWorkSheet, adaptiveStreamingWorkSheet) => {
+  const systemId = dataSet.systemId;
+  const node = dataSet.node;
+  const channel = dataSet.channel;
+  const group = dataSet.group;
+  const video = dataSet.video;
+  const audio = dataSet.audio;
+  const adaptiveStreaming = dataSet.adaptiveStreaming;
+
+  // node 관련
+  for (const elem of node) {
+    if (elem.node_type === "IMS") {
+      channelWorkSheet.getRow(1).getCell(14).value = elem.public_ip;
+      channelWorkSheet.getRow(1).getCell(20).value = elem.domain;
+      channelWorkSheet.getRow(2).getCell(14).value = systemId;
+    }
+    if (elem.node_type === "CMS") {
+      channelWorkSheet.getRow(2).getCell(20).value = elem.domain;
+    }
+  }
+
+  // 그룹채널정보 정보 등록 row number
+  const startIdx = 13;
+
+  // channel 관련
+  let channelStartIdx = startIdx;
+  for (const elem of channel) {
+    channelWorkSheet.getRow(channelStartIdx).getCell(1).value = elem.channel_index;
+    channelWorkSheet.getRow(channelStartIdx).getCell(2).value = elem.camera_ip;
+    channelWorkSheet.getRow(channelStartIdx).getCell(3).value = elem.name;
+    channelWorkSheet.getRow(channelStartIdx).getCell(4).value = elem.status;
+    channelWorkSheet.getRow(channelStartIdx).getCell(5).value = elem.media_type;
+    channelWorkSheet.getRow(channelStartIdx).getCell(6).value = elem.gimbal_ip;
+    channelWorkSheet.getRow(channelStartIdx).getCell(7).value = elem.gimbal_preset;
+    channelWorkSheet.getRow(channelStartIdx).getCell(8).value = elem.server_ip;
+    channelWorkSheet.getRow(channelStartIdx).getCell(9).value = elem.server_port;
+    channelWorkSheet.getRow(channelStartIdx).getCell(10).value = elem.pdview_master_index;
+    channelStartIdx++;
+  }
+
+  const groupIdxArr = [];
+  // group 관련
+  for (const elem of group) {
+    const groupStartIdx = elem.default_video_channel_index + startIdx - 1;
+    channelWorkSheet.getRow(groupStartIdx).getCell(12).value = elem.group_id;
+    channelWorkSheet.getRow(groupStartIdx).getCell(13).value = elem.name;
+    channelWorkSheet.getRow(groupStartIdx).getCell(14).value = elem.view_type;
+    channelWorkSheet.getRow(groupStartIdx).getCell(15).value = elem.description;
+    channelWorkSheet.getRow(groupStartIdx).getCell(16).value = elem.type;
+    channelWorkSheet.getRow(groupStartIdx).getCell(17).value = elem.external_group;
+    channelWorkSheet.getRow(groupStartIdx).getCell(18).value = elem.default_video_channel_index;
+    channelWorkSheet.getRow(groupStartIdx).getCell(19).value = elem.default_audio_channel_index;
+    channelWorkSheet.getRow(groupStartIdx).getCell(20).value = elem.default_group;
+    channelWorkSheet.getRow(groupStartIdx).getCell(21).value = elem.interactive;
+    channelWorkSheet.getRow(groupStartIdx).getCell(22).value = elem.replay;
+    channelWorkSheet.getRow(groupStartIdx).getCell(23).value = elem.timemachine;
+    channelWorkSheet.getRow(groupStartIdx).getCell(24).value = elem.pdview;
+    groupIdxArr.push(groupStartIdx);
+  }
+
+  // video 관련
+  for (let key in video) {
+    const videoInsertIdx = groupIdxArr[`${Number(key) - 1}`];
+    channelWorkSheet.getRow(videoInsertIdx).getCell(26).value = video[key][0].codec;
+    channelWorkSheet.getRow(videoInsertIdx).getCell(27).value = video[key][0].width;
+    channelWorkSheet.getRow(videoInsertIdx).getCell(28).value = video[key][0].height;
+    channelWorkSheet.getRow(videoInsertIdx).getCell(29).value = video[key][0].bitrate;
+    channelWorkSheet.getRow(videoInsertIdx).getCell(30).value = video[key][0].gop;
+    channelWorkSheet.getRow(videoInsertIdx).getCell(31).value = video[key][0].fps;
+    channelWorkSheet.getRow(videoInsertIdx).getCell(32).value = video[key][1].codec;
+    channelWorkSheet.getRow(videoInsertIdx).getCell(33).value = video[key][1].width;
+    channelWorkSheet.getRow(videoInsertIdx).getCell(34).value = video[key][1].height;
+    channelWorkSheet.getRow(videoInsertIdx).getCell(35).value = video[key][1].bitrate;
+    channelWorkSheet.getRow(videoInsertIdx).getCell(36).value = video[key][1].gop;
+    channelWorkSheet.getRow(videoInsertIdx).getCell(37).value = video[key][1].fps;
+  }
+
+  // audio 관련
+  for (let key in audio) {
+    const audioInsertIdx = groupIdxArr[`${Number(key) - 1}`];
+    channelWorkSheet.getRow(audioInsertIdx).getCell(39).value = audio[key][0].channel_type;
+    channelWorkSheet.getRow(audioInsertIdx).getCell(40).value = audio[key][0].codec;
+    channelWorkSheet.getRow(audioInsertIdx).getCell(41).value = audio[key][0].sample_rate;
+    channelWorkSheet.getRow(audioInsertIdx).getCell(42).value = audio[key][0].sample_bit;
+    channelWorkSheet.getRow(audioInsertIdx).getCell(43).value = audio[key][1].channel_type;
+    channelWorkSheet.getRow(audioInsertIdx).getCell(44).value = audio[key][1].codec;
+    channelWorkSheet.getRow(audioInsertIdx).getCell(45).value = audio[key][1].sample_rate;
+    channelWorkSheet.getRow(audioInsertIdx).getCell(46).value = audio[key][1].sample_bit;
+  }
+
+  // adaptive 관련
+  // TODO: insert Adaptive_streaming insert logic
 };
