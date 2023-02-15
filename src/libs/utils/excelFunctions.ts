@@ -191,21 +191,26 @@ export const cameraGroupExportStarter = (dataSet, channelWorkSheet, adaptiveStre
 
   // group 관련
   const groupIdxArr = [];
-  for (const elem of group) {
-    const groupStartIdx = elem.default_video_channel_index + startIdx - 1;
-    channelWorkSheet.getRow(groupStartIdx).getCell(12).value = elem.group_id;
-    channelWorkSheet.getRow(groupStartIdx).getCell(13).value = elem.name;
-    channelWorkSheet.getRow(groupStartIdx).getCell(14).value = elem.view_type;
-    channelWorkSheet.getRow(groupStartIdx).getCell(15).value = elem.description;
-    channelWorkSheet.getRow(groupStartIdx).getCell(16).value = elem.type;
-    channelWorkSheet.getRow(groupStartIdx).getCell(17).value = elem.external_group;
-    channelWorkSheet.getRow(groupStartIdx).getCell(18).value = elem.default_video_channel_index;
-    channelWorkSheet.getRow(groupStartIdx).getCell(19).value = elem.default_audio_channel_index;
-    channelWorkSheet.getRow(groupStartIdx).getCell(20).value = elem.default_group;
-    channelWorkSheet.getRow(groupStartIdx).getCell(21).value = elem.interactive;
-    channelWorkSheet.getRow(groupStartIdx).getCell(22).value = elem.replay;
-    channelWorkSheet.getRow(groupStartIdx).getCell(23).value = elem.timemachine;
-    channelWorkSheet.getRow(groupStartIdx).getCell(24).value = elem.pdview;
+  for (let i = 0; i < group.length; i++) {
+    let groupStartIdx;
+    if (i === 0) {
+      groupStartIdx = 13;
+    } else {
+      groupStartIdx = group[i].default_video_channel_index + startIdx - 1;
+    }
+    channelWorkSheet.getRow(groupStartIdx).getCell(12).value = group[i].group_id;
+    channelWorkSheet.getRow(groupStartIdx).getCell(13).value = group[i].name;
+    channelWorkSheet.getRow(groupStartIdx).getCell(14).value = group[i].view_type;
+    channelWorkSheet.getRow(groupStartIdx).getCell(15).value = group[i].description;
+    channelWorkSheet.getRow(groupStartIdx).getCell(16).value = group[i].type;
+    channelWorkSheet.getRow(groupStartIdx).getCell(17).value = group[i].external_group;
+    channelWorkSheet.getRow(groupStartIdx).getCell(18).value = group[i].default_video_channel_index;
+    channelWorkSheet.getRow(groupStartIdx).getCell(19).value = group[i].default_audio_channel_index;
+    channelWorkSheet.getRow(groupStartIdx).getCell(20).value = group[i].default_group;
+    channelWorkSheet.getRow(groupStartIdx).getCell(21).value = group[i].interactive;
+    channelWorkSheet.getRow(groupStartIdx).getCell(22).value = group[i].replay;
+    channelWorkSheet.getRow(groupStartIdx).getCell(23).value = group[i].timemachine;
+    channelWorkSheet.getRow(groupStartIdx).getCell(24).value = group[i].pdview;
     groupIdxArr.push(groupStartIdx);
   }
 
