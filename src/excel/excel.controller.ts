@@ -24,7 +24,8 @@ export class ExcelController {
   @Post(`/cameraGroupExport/:${SYSTEM_ID}`)
   @exportCameraGroupExcel()
   async exportCameraGroupExcel(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
-    const result = await this.excelService.exportCameraGroupExcel(systemId, res);
-    return result;
+    // const result = await this.excelService.exportCameraGroupExcel(systemId, res);
+    // return result;
+    await this.excelService.exportCameraGroupExcel(systemId, res);
   }
 }

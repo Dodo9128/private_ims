@@ -134,14 +134,39 @@ export const cameraGroupExportStarter = (dataSet, channelWorkSheet, adaptiveStre
   const adaptiveStreaming = dataSet.adaptiveStreaming;
 
   // node 관련
-  for (const elem of node) {
-    if (elem.node_type === "IMS") {
-      channelWorkSheet.getRow(1).getCell(14).value = elem.public_ip;
-      channelWorkSheet.getRow(1).getCell(20).value = elem.domain;
-      channelWorkSheet.getRow(2).getCell(14).value = systemId;
+  // Bell은 ims ip가 두개 들어가야 해서 환경 변수에 따라 분기해야 함
+  if (
+    process.env.NODE_ENV.includes("bell") ||
+    process.env.NODE_ENV.includes("Bell") ||
+    process.env.NODE_ENV.includes("BELL")
+  ) {
+    let ims;
+    let cms;
+    const imsIpArr = [];
+    for (const elem of node) {
+      if (elem.node_type === "IMS") {
+        imsIpArr.push(elem.public_ip);
+        ims = elem;
+      }
+      if (elem.node_type === "CMS") {
+        cms = elem;
+      }
     }
-    if (elem.node_type === "CMS") {
-      channelWorkSheet.getRow(2).getCell(20).value = elem.domain;
+    channelWorkSheet.getRow(1).getCell(14).value = imsIpArr.join(" or ");
+    channelWorkSheet.getRow(1).getCell(21).value = ims.domain;
+    channelWorkSheet.getRow(2).getCell(14).value = systemId;
+    channelWorkSheet.getRow(2).getCell(21).value = cms.domain;
+  } else {
+    // Bell 이외 베뉴
+    for (const elem of node) {
+      if (elem.node_type === "IMS") {
+        channelWorkSheet.getRow(1).getCell(14).value = elem.public_ip;
+        channelWorkSheet.getRow(1).getCell(21).value = elem.domain;
+        channelWorkSheet.getRow(2).getCell(14).value = systemId;
+      }
+      if (elem.node_type === "CMS") {
+        channelWorkSheet.getRow(2).getCell(21).value = elem.domain;
+      }
     }
   }
 
@@ -164,8 +189,8 @@ export const cameraGroupExportStarter = (dataSet, channelWorkSheet, adaptiveStre
     channelStartIdx++;
   }
 
-  const groupIdxArr = [];
   // group 관련
+  const groupIdxArr = [];
   for (const elem of group) {
     const groupStartIdx = elem.default_video_channel_index + startIdx - 1;
     channelWorkSheet.getRow(groupStartIdx).getCell(12).value = elem.group_id;
@@ -185,8 +210,9 @@ export const cameraGroupExportStarter = (dataSet, channelWorkSheet, adaptiveStre
   }
 
   // video 관련
-  for (let key in video) {
-    const videoInsertIdx = groupIdxArr[`${Number(key) - 1}`];
+  for (const key in video) {
+    const videoInsertIdx = Number(key) === 0 ? groupIdxArr[`${Number(key)}`] : groupIdxArr[`${Number(key) - 1}`];
+
     channelWorkSheet.getRow(videoInsertIdx).getCell(26).value = video[key][0].codec;
     channelWorkSheet.getRow(videoInsertIdx).getCell(27).value = video[key][0].width;
     channelWorkSheet.getRow(videoInsertIdx).getCell(28).value = video[key][0].height;
@@ -202,8 +228,8 @@ export const cameraGroupExportStarter = (dataSet, channelWorkSheet, adaptiveStre
   }
 
   // audio 관련
-  for (let key in audio) {
-    const audioInsertIdx = groupIdxArr[`${Number(key) - 1}`];
+  for (const key in audio) {
+    const audioInsertIdx = Number(key) === 0 ? groupIdxArr[`${Number(key)}`] : groupIdxArr[`${Number(key) - 1}`];
     channelWorkSheet.getRow(audioInsertIdx).getCell(39).value = audio[key][0].channel_type;
     channelWorkSheet.getRow(audioInsertIdx).getCell(40).value = audio[key][0].codec;
     channelWorkSheet.getRow(audioInsertIdx).getCell(41).value = audio[key][0].sample_rate;
@@ -214,6 +240,197 @@ export const cameraGroupExportStarter = (dataSet, channelWorkSheet, adaptiveStre
     channelWorkSheet.getRow(audioInsertIdx).getCell(46).value = audio[key][1].sample_bit;
   }
 
+  // groupId 에 매칭되는 row의 정보가 들어있는 객체 반환
+  const asGroupMatchingInfo = {};
+  for (let i = 0; i <= groupIdxArr.length - 1; i++) {
+    asGroupMatchingInfo[i] = { [video[i + 1][0].group_id]: groupIdxArr[i] };
+  }
+
   // adaptive 관련
-  // TODO: insert Adaptive_streaming insert logic
+  /**
+   * if Object.keys(adaptiveStreamingGroups).length === 1 이면
+   * 모든 그룹의 AS_No는 1
+   * else
+   * Object.keys(adaptiveStreamingGroups).length 만큼의 그룹 갯수가 있음
+   * group_*의 group_id를 검색해 group_1외의 그룹들은 해당 group_id의 adaptive_streaming ID,
+   * 나머지는 모두 group_1과 같은 AS_group id를 부여하면 됨
+   */
+  let adaptiveStreamingGroupIdx = 1;
+  let adaptiveStreamingStartIdx = startIdx;
+  const adaptiveStreamingGroupCount = Object.keys(adaptiveStreaming).length;
+  const adaptiveStreamingGroupIdArr = [];
+  for (const keyKey in adaptiveStreaming) {
+    adaptiveStreamingGroupIdArr.push(adaptiveStreaming[keyKey][0].group_id);
+  }
+  const lastAsGroupGroupId = adaptiveStreaming[adaptiveStreamingGroupCount][0].group_id;
+
+  for (const key in adaptiveStreaming) {
+    const adaptiveStreamingGroupLength = Object.keys(adaptiveStreaming).length;
+
+    // AS 그룹이 하나인 경우
+    if (adaptiveStreamingGroupLength === 1) {
+      // AS group 1개, 모든 그룹이 동일한 AS group
+      // camera group 만큼 insert 해야 함
+      for (const insertIdx of groupIdxArr) {
+        channelWorkSheet.getRow(insertIdx).getCell(48).value = 1;
+      }
+
+      for (let i = 1; i <= adaptiveStreaming[key].length; i++) {
+        // 첫번째만 AS_No, input, output insert
+        if (i === 1 && Number(key) === i) {
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(1).value = 1;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(2).value =
+            adaptiveStreaming[key][0].codec;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(3).value =
+            adaptiveStreaming[key][0].width;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(4).value =
+            adaptiveStreaming[key][0].height;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(5).value =
+            adaptiveStreaming[key][0].bitrate;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(6).value = adaptiveStreaming[key][0].gop;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(7).value = adaptiveStreaming[key][0].fps;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(8).value =
+            adaptiveStreaming[key][1].codec;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(9).value =
+            adaptiveStreaming[key][1].width;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(10).value =
+            adaptiveStreaming[key][1].height;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(11).value =
+            adaptiveStreaming[key][1].bitrate;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(12).value =
+            adaptiveStreaming[key][1].gop;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(13).value =
+            adaptiveStreaming[key][1].fps;
+          adaptiveStreamingStartIdx++;
+        } else {
+          // 첫번째 줄 아닌 입력값들_output 2 ~ until end
+          if (i === adaptiveStreaming[key].length) {
+            // 반복문 마지막의 adaptiveStreaming[key][i] 값은 없음
+            continue;
+          }
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(1).value = 1;
+
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(8).value =
+            adaptiveStreaming[key][i].codec;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(9).value =
+            adaptiveStreaming[key][i].width;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(10).value =
+            adaptiveStreaming[key][i].height;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(11).value =
+            adaptiveStreaming[key][i].bitrate;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(12).value =
+            adaptiveStreaming[key][i].gop;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(13).value =
+            adaptiveStreaming[key][i].fps;
+          adaptiveStreamingStartIdx++;
+        }
+      }
+    } else {
+      /**
+       * AS group 1개 이상
+       * 카메라 그룹 정보 입력 엑셀 AS_no는
+       * AS_group 내부 마지막 그룹의 [0]의 group_id와
+       * 같은 group_id를 가진 카메라 그룹은 AS_no 2,
+       * 나머지 그룹은 모두 1
+       */
+
+      for (const idx in asGroupMatchingInfo) {
+        const currentGroupId = Object.keys(asGroupMatchingInfo[Number(idx)])[0];
+        if (Number(idx) === 0) {
+          // 첫 idx 는 무조건 adaptiveStreaming의 첫번째 객체의 정보다
+          channelWorkSheet.getRow(asGroupMatchingInfo[Number(idx)][currentGroupId]).getCell(48).value =
+            adaptiveStreamingGroupIdx;
+        } else {
+          // groupId indexof '판별
+          if (adaptiveStreamingGroupIdArr.indexOf(currentGroupId) === -1) {
+            // 2번째그룹부터 이후 adaptive 세팅되어있는 그룹 ID와 비교,
+            // indexOf가 -1(없을시) 일때, 이전에 이미 등록한 groupId로 판별
+            channelWorkSheet.getRow(asGroupMatchingInfo[Number(idx)][currentGroupId]).getCell(48).value =
+              adaptiveStreamingGroupIdx;
+          } else if (adaptiveStreamingGroupIdArr.indexOf(currentGroupId) !== -1 && Number(key) !== 1) {
+            // 다음 adaptiveStreaming group의 groupId와 매칭이 되었음
+            // adaptiveStreamingGroupIdx를 하나 업
+
+            adaptiveStreamingGroupIdx++;
+            channelWorkSheet.getRow(asGroupMatchingInfo[Number(idx)][currentGroupId]).getCell(48).value =
+              adaptiveStreamingGroupIdx;
+          }
+        }
+      }
+
+      // AS_NO 먼저 채우고
+      let adaptiveStreamingAsNoIdx = 1;
+      let startIndexForAsNoAdd = 13;
+      for (let i = 0; i < adaptiveStreamingGroupIdArr.length; i++) {
+        for (let j = 1; j < adaptiveStreaming[key].length; j++) {
+          adaptiveStreamingWorkSheet.getRow(startIndexForAsNoAdd).getCell(1).value = adaptiveStreamingAsNoIdx;
+          startIndexForAsNoAdd++;
+        }
+        adaptiveStreamingAsNoIdx++;
+      }
+
+      // 데이터셋 채우기
+      for (let i = 1; i <= adaptiveStreaming[key].length; i++) {
+        if (i === 1 && Number(key) === i) {
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(2).value =
+            adaptiveStreaming[key][0].codec;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(3).value =
+            adaptiveStreaming[key][0].width;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(4).value =
+            adaptiveStreaming[key][0].height;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(5).value =
+            adaptiveStreaming[key][0].bitrate;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(6).value = adaptiveStreaming[key][0].gop;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(7).value = adaptiveStreaming[key][0].fps;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(8).value =
+            adaptiveStreaming[key][1].codec;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(9).value =
+            adaptiveStreaming[key][1].width;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(10).value =
+            adaptiveStreaming[key][1].height;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(11).value =
+            adaptiveStreaming[key][1].bitrate;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(12).value =
+            adaptiveStreaming[key][1].gop;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(13).value =
+            adaptiveStreaming[key][1].fps;
+          adaptiveStreamingStartIdx++;
+        } else {
+          // 첫번째 줄 아닌 입력값들_output 2 ~ until end
+          if (i === adaptiveStreaming[key].length) {
+            // 반복문 마지막의 adaptiveStreaming[key][i] 값은 없음
+            continue;
+          }
+
+          if ((adaptiveStreamingStartIdx - 13) % 6 === 0) {
+            adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(2).value =
+              adaptiveStreaming[key][0].codec;
+            adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(3).value =
+              adaptiveStreaming[key][0].width;
+            adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(4).value =
+              adaptiveStreaming[key][0].height;
+            adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(5).value =
+              adaptiveStreaming[key][0].bitrate;
+            adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(6).value =
+              adaptiveStreaming[key][0].gop;
+            adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(7).value =
+              adaptiveStreaming[key][0].fps;
+          }
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(8).value =
+            adaptiveStreaming[key][i].codec;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(9).value =
+            adaptiveStreaming[key][i].width;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(10).value =
+            adaptiveStreaming[key][i].height;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(11).value =
+            adaptiveStreaming[key][i].bitrate;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(12).value =
+            adaptiveStreaming[key][i].gop;
+          adaptiveStreamingWorkSheet.getRow(adaptiveStreamingStartIdx).getCell(13).value =
+            adaptiveStreaming[key][i].fps;
+          adaptiveStreamingStartIdx++;
+        }
+      }
+    }
+  }
 };

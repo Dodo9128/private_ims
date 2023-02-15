@@ -22,17 +22,6 @@ export class ExcelService {
 
   async exportVenueExcel(venueId: string, systemId: string, res) {
     try {
-      /**
-       * TODO: Excel Export Query Making
-       * Pseudo Code
-       * --------------------------------
-       * 1. ~~ repository에 excel에 들어가야 할 정보들(venue, system, rule, scale, node) 에 대한 쿼리를 짠다 ~~
-       * 2. ~~ 스켈레톤 excel 파일 복사한 가상의 workbook 생성 ~~
-       * 3. ~~ 새롭게 만들어낸 파일에 Get해온 자료를 위치에 맞게 write ~~
-       * 4. ~~ 새롭게 만들어낸 파일 response ~~
-       */
-      let pseudoCode;
-
       const exportVenue = await this.excelRepository.getExcelExportVenue(venueId);
       const venueCountryId = await this.excelRepository.getWorldCountryName(exportVenue.country_id);
       const venueStateId = await this.excelRepository.getWorldStateName(exportVenue.state_id);
@@ -126,17 +115,6 @@ export class ExcelService {
 
   async exportCameraGroupExcel(systemId: string, res) {
     try {
-      /**
-       * TODO: Excel Export Query Making
-       * Pseudo Code
-       * --------------------------------
-       * 1. repository에 excel에 들어가야 할 정보들(node, channel, group, video, audio, adaptive_streaming) 에 대한 쿼리를 짠다
-       * 2. 스켈레톤 excel 파일 복사한 가상의 workbook 생성
-       * 3. 새롭게 만들어낸 파일에 Get해온 자료를 위치에 맞게 write
-       * 4. 새롭게 만들어낸 파일 response
-       */
-      let pseudoCode;
-
       const exportNode = await this.excelRepository.getExcelExportNodeForCameraGroup(systemId);
       for (const elem of exportNode) {
         const newNodeType = await this.excelRepository.getFncCodeDesc(elem.node_type);
@@ -202,31 +180,59 @@ export class ExcelService {
 
       const exportVideo = await this.excelRepository.getExcelExportVideo(systemId);
       const videoData = {};
-      for (const elem of exportVideo) {
+      let videoGroupIdx = 1;
+      let lastVideoGroupId;
+
+      for (let i = 0; i < exportVideo.length; i++) {
+        const elem = exportVideo[i];
+
+        if (!lastVideoGroupId) {
+          lastVideoGroupId = elem.group_id;
+        }
+
         const newIsInput = await this.excelRepository.getFncCodeDesc(elem.is_input);
         elem.is_input = newIsInput[0][`${Object.keys(newIsInput[0])}`];
+        elem.fps = Number(elem.fps).toFixed(2);
 
-        const groupId = elem.group_id.slice(elem.group_id.length - 1);
-        if (videoData[`${groupId}`] !== undefined) {
-          videoData[`${groupId}`].push(elem);
+        const groupId = elem.group_id;
+        if (lastVideoGroupId === groupId && i === 0) {
+          videoData[`${videoGroupIdx}`] = [elem];
+        } else if (lastVideoGroupId === groupId) {
+          videoData[`${videoGroupIdx}`].push(elem);
         } else {
-          videoData[`${groupId}`] = [elem];
+          videoGroupIdx++;
+          videoData[`${videoGroupIdx}`] = [elem];
+          lastVideoGroupId = groupId;
         }
       }
 
+      let audioGroupIdx = 1;
+      let lastAudioGroupId;
+
       const exportAudio = await this.excelRepository.getExcelExportAudio(systemId);
       const audioData = {};
-      for (const elem of exportAudio) {
+
+      for (let i = 0; i < exportAudio.length; i++) {
+        const elem = exportAudio[i];
+
+        if (!lastAudioGroupId) {
+          lastAudioGroupId = elem.group_id;
+        }
+
         const newChannelType = await this.excelRepository.getFncCodeDesc(elem.channel_type);
         elem.channel_type = newChannelType[0][`${Object.keys(newChannelType[0])}`];
         const newIsInput = await this.excelRepository.getFncCodeDesc(elem.is_input);
         elem.is_input = newIsInput[0][`${Object.keys(newIsInput[0])}`];
 
-        const groupId = elem.group_id.slice(elem.group_id.length - 1);
-        if (audioData[`${groupId}`] !== undefined) {
-          audioData[`${groupId}`].push(elem);
+        const groupId = elem.group_id;
+        if (lastAudioGroupId === groupId && i === 0) {
+          audioData[`${audioGroupIdx}`] = [elem];
+        } else if (lastAudioGroupId === groupId) {
+          audioData[`${audioGroupIdx}`].push(elem);
         } else {
-          audioData[`${groupId}`] = [elem];
+          audioGroupIdx++;
+          audioData[`${audioGroupIdx}`] = [elem];
+          lastAudioGroupId = groupId;
         }
       }
 
@@ -234,7 +240,7 @@ export class ExcelService {
 
       // adaptive streaming 정보가 없으면 return 해버린다
       if (Object.keys(exportAdaptiveStreaming).length === 0) {
-        return res.status(200).json({ result: "fail" });
+        return res.status(200).json({ result: "FAIL", message: "There is no info in DB", data: null });
       }
 
       const adaptiveStreamingData = {};
@@ -242,9 +248,7 @@ export class ExcelService {
       let adaptiveStreamingGroupIndex = 1;
       let lastGroupId;
 
-      // console.log(exportAdaptiveStreaming);
-
-      for (let i = 0; i < exportAdaptiveStreaming.length - 1; i++) {
+      for (let i = 0; i < exportAdaptiveStreaming.length; i++) {
         const elem = exportAdaptiveStreaming[i];
 
         if (!lastGroupId) {
@@ -253,15 +257,16 @@ export class ExcelService {
 
         const newIsInput = await this.excelRepository.getFncCodeDesc(elem.is_input);
         elem.is_input = newIsInput[0][`${Object.keys(newIsInput[0])}`];
+        elem.fps = Number(elem.fps).toFixed(2);
 
         const groupId = elem.group_id;
         if (lastGroupId === groupId && i === 0) {
-          adaptiveStreamingData[`group_${adaptiveStreamingGroupIndex}`] = [elem];
+          adaptiveStreamingData[`${adaptiveStreamingGroupIndex}`] = [elem];
         } else if (lastGroupId === groupId) {
-          adaptiveStreamingData[`group_${adaptiveStreamingGroupIndex}`].push(elem);
+          adaptiveStreamingData[`${adaptiveStreamingGroupIndex}`].push(elem);
         } else {
           adaptiveStreamingGroupIndex++;
-          adaptiveStreamingData[`group_${adaptiveStreamingGroupIndex}`] = [elem];
+          adaptiveStreamingData[`${adaptiveStreamingGroupIndex}`] = [elem];
           lastGroupId = groupId;
         }
       }
@@ -273,15 +278,15 @@ export class ExcelService {
        */
 
       const adaptiveStreamingGroups = {};
-      adaptiveStreamingGroups["group_1"] = adaptiveStreamingData["group_1"];
-      const firstGroupCodec = adaptiveStreamingGroups["group_1"][0].codec;
+      adaptiveStreamingGroups["1"] = adaptiveStreamingData["1"];
+      const firstGroupCodec = adaptiveStreamingGroups["1"][0].codec;
       let firstGroupIndex = 1;
 
       for (let i = 1; i <= Object.keys(adaptiveStreamingData).length; i++) {
-        for (let j = 0; j < adaptiveStreamingData[`group_${i}`].length; j++) {
-          if (adaptiveStreamingData[`group_${i}`][j].is_input === "Y") {
-            if (adaptiveStreamingData[`group_${i}`][j].codec !== firstGroupCodec) {
-              adaptiveStreamingGroups[`group_${firstGroupIndex + 1}`] = adaptiveStreamingData[`group_${i}`];
+        for (let j = 0; j < adaptiveStreamingData[`${i}`].length; j++) {
+          if (adaptiveStreamingData[`${i}`][j].is_input === "Y") {
+            if (adaptiveStreamingData[`${i}`][j].codec !== firstGroupCodec) {
+              adaptiveStreamingGroups[`${firstGroupIndex + 1}`] = adaptiveStreamingData[`${i}`];
               firstGroupIndex++;
             }
           }
@@ -302,8 +307,8 @@ export class ExcelService {
       const loadWorkbook = await newWorkbook.xlsx.readFile(preFileName);
 
       // 편집할 IMS_그룹_채널정보_St sheet load
-      const channelWorkSheet = await newWorkbook.getWorksheet("IMS_CHANNEL_GROUP_INFO");
-      const adaptiveStreamingWorkSheet = await newWorkbook.getWorksheet("Adaptive_Streaming");
+      const channelWorkSheet = await newWorkbook.getWorksheet("IMS_Group_Channel_Data");
+      const adaptiveStreamingWorkSheet = await newWorkbook.getWorksheet("Adaptive Streaming");
 
       // console.log(channelWorkSheet);
       // console.log(adaptiveStreamingWorkSheet);
@@ -319,10 +324,12 @@ export class ExcelService {
 
       cameraGroupExportStarter(dataSet, channelWorkSheet, adaptiveStreamingWorkSheet);
 
-      // TODO: newWorkbook send to browser with xlsx.file format
-      await newWorkbook.xlsx.writeFile(`./src/database/seeds/${downloadFileName}.xlsx`);
+      // controller 말고 여기서 직접 file send 하는 것으로 마무리
+      res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      res.setHeader("Content-Disposition", "attachment; filename=" + `${downloadFileName}.xlsx`);
 
-      return res.status(200).json(dataSet);
+      await newWorkbook.xlsx.write(res);
+      res.end();
     } catch (e) {
       const errorInfo = makeErrorInfoObjForHttpException(ExcelService.name, "exportCameraGroupExcel", e);
       throw new HttpException(errorInfo, 200);
