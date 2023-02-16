@@ -18,6 +18,11 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new HttpExceptionFilter());
+  /**
+   * Cors 설정
+   * TODO: 추후 acceptable domain 추가 필요
+   */
+  app.enableCors();
 
   const serverStart = await app.listen(process.env.SERVER_PORT);
   if (serverStart) {
