@@ -9,7 +9,7 @@ export const downloadFileNameMakerForVenue = systemId => {
     currentDate.getMonth() + 1
   }-${currentDate.getDate()}_${timeHour}${timeMinute}`;
 
-  return `${process.env.HOSTNAME}_${systemId}_INFO_${currentTime}`;
+  return `${process.env.HOSTNAME}_${systemId}_VENUE_INFO_${currentTime}`;
 };
 
 export const downloadFileNameMakerForCameraGroup = systemId => {
@@ -47,7 +47,7 @@ export const venueExportSystemDataAdd = (systemData, row) => {
   row.getCell(2).value = "O";
   row.getCell(16).value = systemData.name;
   row.getCell(17).value = systemData.description;
-  row.getCell(18).value = systemData.fps;
+  row.getCell(18).value = Number(systemData.fps).toFixed(2);
   row.getCell(19).value = systemData.width;
   row.getCell(20).value = systemData.height;
   row.getCell(21).value = systemData.is_extra;
@@ -94,7 +94,7 @@ export const venueExportNodeDataAdd = (nodeData, devWorkSheet) => {
     row.getCell(1).value = "NODE";
     row.getCell(2).value = "O";
 
-    row.getCell(51).value = String(i - 8).length === 2 ? `ID-${i - 8}` : `ID-0${i - 8}`;
+    row.getCell(51).value = String(i - 7).length === 2 ? `ID-${i - 7}` : `ID-0${i - 7}`;
     row.getCell(53).value = currentNode.name;
 
     // cms_w 는 바꿔줘야함
