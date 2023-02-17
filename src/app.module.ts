@@ -40,6 +40,7 @@ switch (node_env) {
     envPath = ".env.development";
 }
 
+console.log(`Node Version: ${process.version}`);
 console.log(`Environment Path is: ${envPath}`);
 
 @Module({
