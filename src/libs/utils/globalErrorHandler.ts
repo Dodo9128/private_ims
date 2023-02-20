@@ -94,10 +94,18 @@ export class HttpExceptionFilter implements ExceptionFilter {
   }
 }
 
-export function makeErrorInfoObjForHttpException(service: string, name: string, errorObj: object) {
+/**
+ * error 객체 생성하는 함수
+ * @param {string} service 에러가 발생한 서비스 이름
+ * @param {string} name 에러가 발생한 서비스 내부 함수 이름
+ * @param {object} errorObj 에러 객체 (error 객체의 stack이 들어 있다)
+ * @param {string} message 존재할 시 해당 Error의 Error Message를 커스텀한다
+ */
+export function makeErrorInfoObjForHttpException(service: string, name: string, errorObj: object, message?: string) {
   return {
     service: service,
     name: name,
     error: errorObj,
+    message: message,
   };
 }

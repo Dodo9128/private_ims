@@ -22,6 +22,21 @@ export class ExcelService {
 
   async exportVenueExcel(venueId: string, systemId: string, res) {
     try {
+      // 입력받은 systemId가 venue에 속해 있지 않을 경우 (return 불가능)
+      if (!systemId.includes(venueId)) {
+        // // custom Error 만드는 법
+        // const systemIdVenueIdMatchingErr = new Error();
+        // const errMsg = "venueId & systemId matching Fail";
+        // const errorInfo = makeErrorInfoObjForHttpException(
+        //   ExcelService.name,
+        //   "exportVenueExcel",
+        //   systemIdVenueIdMatchingErr,
+        //   errMsg,
+        // );
+        // throw new HttpException(errorInfo, 200);
+
+        return res.status(200).json({ result: "FAIL", message: "venueId & systemId matching Fail", data: null });
+      }
       const exportVenue = await this.excelRepository.getExcelExportVenue(venueId);
       const venueCountryId = await this.excelRepository.getWorldCountryName(exportVenue.country_id);
       const venueStateId = await this.excelRepository.getWorldStateName(exportVenue.state_id);
@@ -310,8 +325,6 @@ export class ExcelService {
       const channelWorkSheet = await newWorkbook.getWorksheet("IMS_Group_Channel_Data");
       const adaptiveStreamingWorkSheet = await newWorkbook.getWorksheet("Adaptive Streaming");
 
-      // console.log(channelWorkSheet);
-      // console.log(adaptiveStreamingWorkSheet);
       const dataSet = {
         systemId: systemId,
         node: exportNode,
