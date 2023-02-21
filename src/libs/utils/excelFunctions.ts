@@ -125,13 +125,7 @@ export const venueExportNodeDataAdd = (nodeData, devWorkSheet) => {
 };
 
 export const cameraGroupExportStarter = (dataSet, channelWorkSheet, adaptiveStreamingWorkSheet) => {
-  const systemId = dataSet.systemId;
-  const node = dataSet.node;
-  const channel = dataSet.channel;
-  const group = dataSet.group;
-  const video = dataSet.video;
-  const audio = dataSet.audio;
-  const adaptiveStreaming = dataSet.adaptiveStreaming;
+  const { systemId, node, channel, group, video, audio, adaptiveStreaming } = dataSet;
 
   // node 관련
   // Bell은 ims ip가 두개 들어가야 해서 환경 변수에 따라 분기해야 함
@@ -248,22 +242,26 @@ export const cameraGroupExportStarter = (dataSet, channelWorkSheet, adaptiveStre
   // groupId 에 매칭되는 row의 정보가 들어있는 객체 반환
   const asGroupMatchingInfo = {};
   for (let i = 0; i <= groupIdxArr.length - 1; i++) {
-    asGroupMatchingInfo[i] = { [video[i + 1][0].group_id]: groupIdxArr[i] };
+    asGroupMatchingInfo[i + 1] = { [video[i + 1][0].group_id]: groupIdxArr[i] };
+  }
+
+  for (const key in video) {
+    const firstCodec = video[key][1].codec;
+    for (const keykey in adaptiveStreaming) {
+      const secondCodec = adaptiveStreaming[keykey][0].codec;
+      if (firstCodec === secondCodec) {
+        asGroupMatchingInfo[key].asGroup = keykey;
+      }
+    }
   }
 
   // adaptive 관련
-  /**
-   * if Object.keys(adaptiveStreamingGroups).length === 1 이면
-   * 모든 그룹의 AS_No는 1
-   * else
-   * Object.keys(adaptiveStreamingGroups).length 만큼의 그룹 갯수가 있음
-   * group_*의 group_id를 검색해 group_1외의 그룹들은 해당 group_id의 adaptive_streaming ID,
-   * 나머지는 모두 group_1과 같은 AS_group id를 부여하면 됨
-   */
-  let adaptiveStreamingGroupIdx = 1;
   let adaptiveStreamingStartIdx = startIdx;
   const adaptiveStreamingGroupCount = Object.keys(adaptiveStreaming).length;
   const adaptiveStreamingGroupIdArr = [];
+  // console.log("ADAPTIVESTREAMING START OBJ: ", adaptiveStreaming);
+  // console.log("VIDEO: ", video);
+
   for (const keyKey in adaptiveStreaming) {
     adaptiveStreamingGroupIdArr.push(adaptiveStreaming[keyKey][0].group_id);
   }
@@ -341,26 +339,9 @@ export const cameraGroupExportStarter = (dataSet, channelWorkSheet, adaptiveStre
 
       for (const idx in asGroupMatchingInfo) {
         const currentGroupId = Object.keys(asGroupMatchingInfo[Number(idx)])[0];
-        if (Number(idx) === 0) {
-          // 첫 idx 는 무조건 adaptiveStreaming의 첫번째 객체의 정보다
-          channelWorkSheet.getRow(asGroupMatchingInfo[Number(idx)][currentGroupId]).getCell(48).value =
-            adaptiveStreamingGroupIdx;
-        } else {
-          // groupId indexof '판별
-          if (adaptiveStreamingGroupIdArr.indexOf(currentGroupId) === -1) {
-            // 2번째그룹부터 이후 adaptive 세팅되어있는 그룹 ID와 비교,
-            // indexOf가 -1(없을시) 일때, 이전에 이미 등록한 groupId로 판별
-            channelWorkSheet.getRow(asGroupMatchingInfo[Number(idx)][currentGroupId]).getCell(48).value =
-              adaptiveStreamingGroupIdx;
-          } else if (adaptiveStreamingGroupIdArr.indexOf(currentGroupId) !== -1 && Number(key) !== 1) {
-            // 다음 adaptiveStreaming group의 groupId와 매칭이 되었음
-            // adaptiveStreamingGroupIdx를 하나 업
 
-            adaptiveStreamingGroupIdx++;
-            channelWorkSheet.getRow(asGroupMatchingInfo[Number(idx)][currentGroupId]).getCell(48).value =
-              adaptiveStreamingGroupIdx;
-          }
-        }
+        channelWorkSheet.getRow(asGroupMatchingInfo[Number(idx)][currentGroupId]).getCell(48).value =
+          asGroupMatchingInfo[Number(idx)].asGroup;
       }
 
       // AS_NO 먼저 채우고
