@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Channel">
+	<sql id="initPrifix">
+		/* SQL_QUERY */</sql>
+	<sql id="pagingPreFix"><include refid="initPrifix" />
+		<if test='pageNo !=null and !pageNo.equals("")'>SELECT A.* FROM
+			(</if></sql>
+	<sql id="orderby"><if test='sortColStr !=null and sortColStr !=""'>ORDER BY <foreach collection="sortColStr" item="item" index="index" separator=",">${item}</foreach></if></sql>
+	<sql id="pagingPostFix"><if test = 'pageNo !=null and !pageNo.equals("")'>LIMIT #{pageSize, jdbcType=INTEGER} OFFSET #{pageOffset, jdbcType=INTEGER}
+		) A</if></sql>
+	<sql id="selectCount"><include refid="initPrifix" />
+		SELECT	COUNT(1)</sql>
+	<select id="getMaxChannelId" parameterType="Map" resultType="Integer">
+		SELECT CAST( IFNULL( MAX( RIGHT( id, 3 ) ), '000' ) AS UNSIGNED INTEGER ) + 1 FROM channel WHERE id LIKE #{system_id}
+	</select>
+	
+    <!--=======================================
+    	목록 조회
+     =======================================-->
+	<sql id="listChannelFromWhere">
+		FROM 	channel C
+		WHERE	1=1
+		<if	test='id !=null and id !=""'>
+			AND C.id = #{id}
+		</if>
+		<if	test='system_id !=null and system_id !=""'>
+			AND C.system_id = #{system_id}
+		</if>
+		<if	test='group_id !=null and group_id !=""'>
+			AND C.group_id = #{group_id}
+		</if>
+	</sql>
+	
+	<select id="listChannelCount" parameterType="Map" resultType="Integer">
+		<include refid="selectCount" />
+		<include refid="listChannelFromWhere" />
+    </select>
+
+    <select id="listChannel4Mng" resultType="Map">
+		<include refid="pagingPreFix" />
+		SELECT 	
+			C.id
+			, C.name
+			, C.system_id
+			, C.group_id
+			, C.description
+			, C.live_index
+			, C.pdview_master_index
+			, C.camera_ip
+			, C.server_ip
+			, C.server_port
+			, C.status
+			, FNC_CODENAME(C.status) AS status_name
+			, C.media_type
+			, FNC_CODENAME(C.media_type) AS media_type_name
+			, C.gimbal_ip
+			, C.is_gimbal_reset AS is_gimbal_preset
+			, FNC_CODENAME(C.is_gimbal_reset) AS is_gimbal_preset_name
+			, C.updated_at
+			, C.registered_at
+		<include refid="listChannelFromWhere" />
+		<include refid="orderby" />
+		<include refid="pagingPostFix" />
+    </select>
+
+    <select id="listChannel" resultType="Map">
+		<include refid="pagingPreFix" />
+		SELECT 	
+			C.id
+			, C.name
+			, C.system_id
+			, C.group_id
+			, C.description
+			, C.live_index
+			, C.pdview_master_index
+			, C.camera_ip
+			, C.server_ip
+			, C.server_port
+			, FNC_CODENAME(C.status) AS status
+			, FNC_CODENAME(C.media_type) AS media_type
+			, FNC_CODEDESC(C.media_type) AS media_type_name
+			, C.gimbal_ip
+			, FNC_CODENAME(C.is_gimbal_reset) AS is_gimbal_preset
+			, C.updated_at
+			, C.registered_at
+		<include refid="listChannelFromWhere" />
+		<include refid="orderby" />
+		<include refid="pagingPostFix" />
+    </select>
+
+    <select id="getChannel" resultType="Map">
+		SELECT 	
+			C.id
+			, C.name
+			, C.system_id
+			, C.group_id
+			, C.description
+			, C.live_index
+			, C.pdview_master_index
+			, C.camera_ip
+			, C.server_ip
+			, C.server_port
+			, FNC_CODENAME(C.status) AS status
+			, FNC_CODENAME(C.media_type) AS media_type
+			, C.gimbal_ip
+			, FNC_CODENAME(C.is_gimbal_reset) AS is_gimbal_preset
+			, C.updated_at
+			, C.registered_at
+		<include refid="listChannelFromWhere" />
+    </select>
+    
+    <insert id="insertChannel" parameterType="Map">
+		INSERT INTO channel
+		(
+			id
+			, name
+			, system_id
+			, group_id
+			, description
+			, live_index
+			, pdview_master_index
+			, camera_ip
+			, server_ip
+			, server_port
+			, status
+			, media_type
+			, gimbal_ip
+			, is_gimbal_reset
+			, updated_at
+			, registered_at
+		)
+		VALUES
+		(
+			#{id}
+			, #{name}
+			, #{systemId}
+			, #{groupId}
+			, #{description}
+			, #{liveIndex}
+			, #{pdviewMasterIndex}
+			, #{cameraIp}
+			, #{serverIp}
+			, #{serverPort}
+			, #{status}
+			, #{mediaType}
+			, #{gimbalIp}
+			, #{isGimbalReset}
+			, #{updatedAt}
+			, #{registeredAt}
+		)
+		on DUPLICATE key update
+			name = #{name}
+			, system_id = #{systemId}
+			, group_id = #{groupId}
+			, description = #{description}
+			, live_index = #{liveIndex}
+			, pdview_master_index = #{pdviewMasterIndex}
+			, camera_ip = #{cameraIp}
+			, server_ip = #{serverIp}
+			, server_port = #{serverPort}
+			, status = #{status}
+			, media_type = #{mediaType}
+			, gimbal_ip = #{gimbalIp}
+			, is_gimbal_reset = #{isGimbalReset}
+			, updated_at = #{updatedAt}
+			, registered_at = #{registeredAt}
+	</insert>
+
+    <select id="listChannelFor4DPD" resultType="Map">
+		SELECT
+			C.id
+			, C.live_index 
+			, C.pdview_master_index 
+			, C.camera_ip 
+			, C.server_ip 
+			, C.server_port 
+			, FNC_CODENAME(C.status) AS status 
+			, C.group_id
+			, (SELECT group_index FROM groups WHERE id = C.group_id) AS group_index  
+			, FNC_CODENAME(C.media_type) AS media_type 
+			, C.gimbal_ip
+			, FNC_CODENAME(C.is_gimbal_reset) AS is_gimbal_preset
+			, (SELECT FNC_CODENAME(is_external_group) FROM groups WHERE id = C.group_id) AS is_external_media 
+		FROM
+			channel C
+		WHERE 	1=1
+			AND C.system_id = #{systemId}
+		ORDER BY C.live_index ASC
+    </select>
+
+    <select id="listChannelFor4DSS" resultType="Map">
+		SELECT
+			C.id
+			, C.live_index 
+			, C.name 
+			, FNC_CODENAME(C.status) AS status 
+			, C.group_id
+			, (SELECT group_index FROM groups WHERE id = C.group_id) AS group_index
+			, FNC_CODENAME(C.media_type) AS media_type
+			, C.gimbal_ip
+			, FNC_CODENAME(C.is_gimbal_reset) AS is_gimbal_preset
+			, (SELECT FNC_CODENAME(is_external_group) FROM groups WHERE id = C.group_id) AS is_external_media 
+			, (SELECT codec FROM video WHERE group_id = C.group_id AND is_input = 'CM01N') AS vcodec
+			, CASE WHEN C.media_type = 'CM1101' THEN '' ELSE (SELECT codec FROM audio WHERE group_id = C.group_id AND is_input = 'CM01N') END AS acodec
+		FROM
+			channel C
+		WHERE 	1=1
+			AND C.system_id = #{systemId}
+		<if	test='serverIp !=null and serverIp !=""'>
+			AND C.server_ip = #{serverIp}
+		</if>
+		ORDER BY C.live_index ASC
+    </select>
+
+    <select id="listChannelFor4DRS" resultType="Map">
+		SELECT
+			C.id
+			, C.live_index 
+			, C.name 
+			, FNC_CODENAME(C.status) AS status 
+			, (SELECT codec FROM video WHERE group_id = C.group_id AND is_input = 'CM01N') AS vcodec
+			, CASE WHEN C.media_type = 'CM1101' THEN '' ELSE (SELECT codec FROM audio WHERE group_id = C.group_id AND is_input = 'CM01N') END AS acodec
+		FROM
+			channel C
+		WHERE 	1=1
+			AND C.system_id = #{systemId}
+		<if	test='serverIp !=null and serverIp !=""'>
+			AND C.server_ip = #{serverIp}
+		</if>
+		ORDER BY C.live_index ASC
+    </select>
+    
+    <select id="listChannelFor4DML" resultType="Map">
+		SELECT 
+			A.id
+			, CASE 
+				WHEN codec_type = 'YN' THEN 1
+				WHEN codec_type = 'NN' THEN 2
+				WHEN codec_type = 'NY' THEN 3
+				ELSE 4
+			END AS codec_preset_index
+			, A.status
+		FROM (
+				SELECT
+					C.id
+					, FNC_CODENAME(C.status) AS status 
+					, (SELECT CONCAT(FNC_CODENAME(is_interactive),FNC_CODENAME(is_external_group)) FROM groups WHERE id = C.group_id) AS codec_type
+				FROM
+					channel C
+				WHERE 	1=1
+					AND C.system_id = #{systemId}
+			) A
+		ORDER BY A.id ASC
+    </select>
+</mapper>

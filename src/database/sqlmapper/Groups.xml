@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Groups">
+	<sql id="initPrifix">
+		/* SQL_QUERY */</sql>
+	<sql id="pagingPreFix"><include refid="initPrifix" />
+		<if test='pageNo !=null and !pageNo.equals("")'>SELECT A.* FROM
+			(</if></sql>
+	<sql id="orderby"><if test='sortColStr !=null and sortColStr !=""'>ORDER BY <foreach collection="sortColStr" item="item" index="index" separator=",">${item}</foreach></if></sql>
+	<sql id="pagingPostFix"><if test = 'pageNo !=null and !pageNo.equals("")'>LIMIT #{pageSize, jdbcType=INTEGER} OFFSET #{pageOffset, jdbcType=INTEGER}
+		) A</if></sql>
+	<sql id="selectCount"><include refid="initPrifix" />
+		SELECT	COUNT(1)</sql>
+	<select id="getMaxGroupsId" parameterType="Map" resultType="Integer">
+		SELECT CAST( IFNULL( MAX( RIGHT( id, 3 ) ), '000' ) AS UNSIGNED INTEGER ) + 1 FROM groups WHERE id LIKE #{system_id}
+	</select>
+    <!--=======================================
+    	목록 조회
+     =======================================-->
+	<sql id="listGroupsFromWhere">
+		FROM 	groups G
+		WHERE	1=1
+		<if	test='id !=null and id !=""'>
+			AND G.id = #{id}
+		</if>
+		<if	test='system_id !=null and system_id !=""'>
+			AND G.system_id = #{system_id}
+		</if>
+	</sql>
+	
+	<select id="listGroupsCount" parameterType="Map" resultType="Integer">
+		<include refid="selectCount" />
+		<include refid="listGroupsFromWhere" />
+    </select>
+
+    <select id="listGroups" resultType="Map">
+		<include refid="pagingPreFix" />
+		SELECT 	
+			G.id
+			, G.name
+			, G.system_id
+			, G.description
+			, FNC_CODENAME(G.type) AS type
+			, FNC_CODENAME(G.is_external_group) AS is_external_group
+			, FNC_CODENAME(G.is_replay) AS is_replay
+			, FNC_CODENAME(G.is_pdview) AS is_pdview
+			, FNC_CODENAME(G.is_interactive) AS is_interactive
+			, FNC_CODENAME(G.is_timemachine) AS is_timemachine
+			, IFNULL(G.default_channel_index, 0) AS default_channel_index
+			, IFNULL(G.default_audio_index, 0) AS default_audio_index
+			, FNC_CODENAME(G.is_default_group) AS is_default_group
+			, G.group_index
+			, FNC_CODENAME(G.view_type) AS view_type
+			, G.updated_at
+			, G.registered_at
+		<include refid="listGroupsFromWhere" />
+		<include refid="orderby" />
+		<include refid="pagingPostFix" />
+    </select>
+    
+    <select id="listGroups4Mng" resultType="Map">
+		<include refid="pagingPreFix" />
+		SELECT 	
+			G.id
+			, G.name
+			, G.system_id
+			, G.description
+			, G.type
+			, FNC_CODENAME(G.type) AS type_name
+			, G.is_external_group
+			, FNC_CODENAME(G.is_external_group) AS is_external_group_name
+			, G.is_replay
+			, FNC_CODENAME(G.is_replay) AS is_replay_name
+			, G.is_pdview
+			, FNC_CODENAME(G.is_pdview) AS is_pdview_name
+			, G.is_interactive
+			, FNC_CODENAME(G.is_interactive) AS is_interactive_name
+			, G.is_timemachine
+			, FNC_CODENAME(G.is_timemachine) AS is_timemachine_name
+			, IFNULL(G.default_channel_index, 0) AS default_channel_index
+			, IFNULL(G.default_audio_index, 0) AS default_audio_index
+			, G.is_default_group
+			, FNC_CODENAME(G.is_default_group) AS is_default_group_name
+			, G.group_index
+			, G.view_type
+			, FNC_CODENAME(G.view_type) AS view_type_name
+			, G.updated_at
+			, G.registered_at
+		<include refid="listGroupsFromWhere" />
+		<include refid="orderby" />
+		<include refid="pagingPostFix" />
+    </select>
+
+    <select id="getGroups4Mng" resultType="Map">
+		SELECT 	
+			G.id
+			, G.name
+			, G.system_id
+			, G.description
+			, G.type
+			, FNC_CODENAME(G.type) AS type_name
+			, G.is_external_group
+			, FNC_CODENAME(G.is_external_group) AS is_external_group_name
+			, G.is_replay
+			, FNC_CODENAME(G.is_replay) AS is_replay_name
+			, G.is_pdview
+			, FNC_CODENAME(G.is_pdview) AS is_pdview_name
+			, G.is_interactive
+			, FNC_CODENAME(G.is_interactive) AS is_interactive_name
+			, G.is_timemachine
+			, FNC_CODENAME(G.is_timemachine) AS is_timemachine_name
+			, IFNULL(G.default_channel_index, 0) AS default_channel_index
+			, IFNULL(G.default_audio_index, 0) AS default_audio_index
+			, G.is_default_group
+			, FNC_CODENAME(G.is_default_group) AS is_default_group_name
+			, G.group_index
+			, G.view_type
+			, FNC_CODENAME(G.view_type) AS view_type_name
+			, G.updated_at
+			, G.registered_at
+		<include refid="listGroupsFromWhere" />
+    </select>
+
+    <select id="getGroups" resultType="Map">
+		SELECT 	
+			G.id
+			, G.name
+			, G.system_id
+			, G.description
+			, FNC_CODENAME(G.type) AS type
+			, FNC_CODEDESC(G.type) AS type_name
+			, FNC_CODENAME(G.is_external_group) AS is_external_group
+			, FNC_CODENAME(G.is_replay) AS is_replay
+			, FNC_CODENAME(G.is_pdview) AS is_pdview
+			, FNC_CODENAME(G.is_interactive) AS is_interactive
+			, FNC_CODENAME(G.is_timemachine) AS is_timemachine
+			, IFNULL(G.default_channel_index, 0) AS default_channel_index
+			, IFNULL(G.default_audio_index, 0) AS default_audio_index
+			, FNC_CODENAME(G.is_default_group) AS is_default_group
+			, G.group_index
+			, FNC_CODENAME(G.view_type) AS view_type
+			, G.updated_at
+			, G.registered_at
+		<include refid="listGroupsFromWhere" />
+    </select>
+    
+    <insert id="insertGroups" parameterType="Map">
+		INSERT INTO groups
+		(
+			id
+			, name
+			, system_id
+			, description
+			, type
+			, is_external_group
+			, is_replay
+			, is_pdview
+			, is_interactive
+			, is_timemachine
+			, default_channel_index
+			, default_audio_index
+			, is_default_group
+			, group_index
+			, view_type
+			, updated_at
+			, registered_at
+		)
+		VALUES
+		(
+			#{id}
+			, #{name}
+			, #{systemId}
+			, #{description}
+			, #{type}
+			, #{isExternalGroup}
+			, #{isReplay}
+			, #{isPdview}
+			, #{isInteractive}
+			, #{isTimemachine}
+			, #{defaultChannelIndex}
+			, #{defaultAudioIndex}
+			, #{isDefaultGroup}
+			, #{groupIndex}
+			, #{viewType}
+			, #{updatedAt}
+			, #{registeredAt}
+		)
+		on DUPLICATE key update
+			name = #{name}
+			, system_id = #{systemId}
+			, description = #{description}
+			, type = #{type}
+			, is_external_group = #{isExternalGroup}
+			, is_replay = #{isReplay}
+			, is_pdview = #{isPdview}
+			, is_interactive = #{isInteractive}
+			, is_timemachine = #{isTimemachine}
+			, default_channel_index = #{defaultChannelIndex}
+			, default_audio_index = #{defaultAudioIndex}
+			, is_default_group = #{isDefaultGroup}
+			, group_index = #{groupIndex}
+			, view_type = #{viewType}
+			, updated_at = #{updatedAt}
+			, registered_at = #{registeredAt}
+	</insert>
+
+    <select id="listGroupsFor4DPD" resultType="Map">
+		SELECT 
+			G.id
+			, G.name 
+			, G.description 
+			, FNC_CODENAME(G.type) AS type
+			, FNC_CODENAME(G.is_external_group) AS is_external_group
+			, FNC_CODENAME(G.is_replay) AS is_replay
+			, FNC_CODENAME(G.is_pdview) AS is_pdview
+			, FNC_CODENAME(G.is_interactive) AS is_interactive
+			, FNC_CODENAME(G.is_timemachine) AS is_timemachine
+			, IFNULL(G.default_channel_index, 0) AS default_channel_index
+			, IFNULL(G.default_audio_index, 0) AS default_audio_index
+			, FNC_CODENAME(G.is_default_group) AS is_default_group
+			, G.group_index
+		FROM
+			groups G 
+		WHERE 	1=1
+			AND system_id = #{system_id}
+		ORDER BY id ASC
+    </select>
+    
+    <select id="listGroupsFor4DML" resultType="Map">
+		SELECT 
+			G.id
+			, G.description
+		FROM
+			groups G 
+		WHERE 	1=1
+			AND system_id = #{system_id}
+		ORDER BY id ASC
+    </select>
+    
+    <select id="listGroupsFor4DMLCodecPreset" resultType="Map">
+		SELECT 
+			MAX(G.id) AS id
+			, G.is_interactive
+			, G.is_external_group 
+		FROM
+			groups G
+		WHERE 	1=1
+			AND G.system_id = #{system_id}
+		GROUP BY G.is_external_group
+		ORDER BY G.is_interactive DESC, G.is_external_group ASC
+    </select>
+    
+    <update id="deleteGroupsBySystemId" parameterType="Map">
+		<include refid="initPrifix" />
+		DELETE FROM groups
+		WHERE system_id = #{system_id}
+	</update>
+
+    <select id="listGroupsForMobile" resultType="Map">
+		SELECT 
+			G.id
+			, G.name 
+			, G.description 
+			, FNC_CODENAME(G.type) AS type
+			, FNC_CODENAME(G.is_external_group) AS is_external_group
+			, FNC_CODENAME(G.is_replay) AS is_replay
+			, FNC_CODENAME(G.is_pdview) AS is_pdview
+			, FNC_CODENAME(G.is_interactive) AS is_interactive
+			, FNC_CODENAME(G.is_timemachine) AS is_timemachine
+			, IFNULL(G.default_channel_index, 0) AS default_channel_index
+			, IFNULL(G.default_audio_index, 0) AS default_audio_index
+			, FNC_CODENAME(G.is_default_group) AS is_default_group
+			, G.group_index
+			, FNC_CODENAME(G.view_type) AS view_type
+		FROM
+			groups G 
+		WHERE 	1=1
+			AND system_id = #{system_id}
+		ORDER BY id ASC
+    </select>
+    
+    <select id="listDefaultGroups" resultType="Map">
+		SELECT 
+			G.id
+			, G.name 
+			, G.description 
+			, FNC_CODENAME(G.type) AS type
+			, FNC_CODENAME(G.is_external_group) AS is_external_group
+			, FNC_CODENAME(G.is_replay) AS is_replay
+			, FNC_CODENAME(G.is_pdview) AS is_pdview
+			, FNC_CODENAME(G.is_interactive) AS is_interactive
+			, FNC_CODENAME(G.is_timemachine) AS is_timemachine
+			, IFNULL(G.default_channel_index, 0) AS default_channel_index
+			, IFNULL(G.default_audio_index, 0) AS default_audio_index
+			, FNC_CODENAME(G.is_default_group) AS is_default_group
+			, G.group_index
+		FROM
+			groups G 
+		WHERE 	1=1
+			AND G.system_id = #{system_id}
+			AND G.is_default_group = 'CM01Y'
+		ORDER BY id ASC
+    </select>
+</mapper>

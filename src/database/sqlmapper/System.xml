@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="System">
+	<sql id="initPrifix">
+		/* SQL_QUERY */</sql>
+	<sql id="pagingPreFix"><include refid="initPrifix" />
+		<if test='pageNo !=null and !pageNo.equals("")'>SELECT A.* FROM
+			(</if></sql>
+	<sql id="orderby"><if test='sortColStr !=null and sortColStr !=""'>ORDER BY <foreach collection="sortColStr" item="item" index="index" separator=",">${item}</foreach></if></sql>
+	<sql id="pagingPostFix"><if test = 'pageNo !=null and !pageNo.equals("")'>LIMIT #{pageSize, jdbcType=INTEGER} OFFSET #{pageOffset, jdbcType=INTEGER}
+		) A</if></sql>
+	<sql id="selectCount"><include refid="initPrifix" />
+		SELECT	COUNT(1)</sql>
+
+	<select id="getMaxSystemId" parameterType="Map" resultType="String">
+		SELECT CHARACTER ( IFNULL ( ASCII ( MAX( RIGHT( id, 1 ) ) ) + 1, '65')) FROM system WHERE id LIKE #{venue_id}
+	</select>
+	
+    <!--=======================================
+    	목록 조회
+     =======================================-->
+	<sql id="listSystemFromWhere">
+		FROM 	system S
+		WHERE 	1=1
+		<if	test="id !=null and id !=''">
+			AND S.id = #{id}
+		</if>
+		<if	test="venue_id !=null and venue_id !=''">
+			AND S.venue_id = #{venue_id}
+		</if>
+	</sql>
+	
+	<select id="listSystemCount" parameterType="Map" resultType="Integer">
+		<include refid="selectCount" />
+		<include refid="listSystemFromWhere" />
+    </select>
+
+    <select id="listSystem" resultType="Map">
+		<include refid="pagingPreFix" />
+		SELECT 	
+			S.id
+			, S.name
+			, S.description
+			, S.venue_id
+			, S.fps
+			, S.width
+			, S.height
+			, FNC_CODENAME(S.is_extra) AS is_extra
+			, S.comment
+			, S.subinfo_updated_at
+			, S.updated_at
+			, S.registered_at
+		<include refid="listSystemFromWhere" />
+		<include refid="orderby" />
+		<include refid="pagingPostFix" />
+    </select>
+    
+    <select id="getSystem" resultType="Map">
+		SELECT 	
+			S.id
+			, S.name
+			, S.description
+			, S.venue_id
+			, S.fps
+			, S.width
+			, S.height
+			, FNC_CODENAME(S.is_extra) AS is_extra
+			, S.comment
+			, S.subinfo_updated_at
+			, S.updated_at
+			, S.registered_at
+		<include refid="listSystemFromWhere" />
+    </select>
+	
+	<update id="updateSubinfoUpdatedAt" parameterType="Map">
+		<include refid="initPrifix" />
+		UPDATE system 
+		SET	subinfo_updated_at = #{subinfo_updated_at}
+		WHERE id = #{id}
+	</update>
+</mapper>

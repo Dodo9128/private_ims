@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Rule">
+	<sql id="initPrifix">
+		/* SQL_QUERY */</sql>
+	<sql id="pagingPreFix"><include refid="initPrifix" />
+		<if test='pageNo !=null and !pageNo.equals("")'>SELECT A.* FROM
+			(</if></sql>
+	<sql id="orderby"><if test='sortColStr !=null and sortColStr !=""'>ORDER BY <foreach collection="sortColStr" item="item" index="index" separator=",">${item}</foreach></if></sql>
+	<sql id="pagingPostFix"><if test = 'pageNo !=null and !pageNo.equals("")'>LIMIT #{pageSize, jdbcType=INTEGER} OFFSET #{pageOffset, jdbcType=INTEGER}
+		) A</if></sql>
+	<sql id="selectCount"><include refid="initPrifix" />
+		SELECT	COUNT(1)</sql>
+
+	<select id="getMaxRuleId" parameterType="Map" resultType="Integer">
+		SELECT CAST( IFNULL( MAX( RIGHT( id, 3 ) ), '000' ) AS UNSIGNED INTEGER ) + 1 FROM rule WHERE id LIKE #{system_id}
+	</select>
+    <!--=======================================
+    	목록 조회
+     =======================================-->
+	<sql id="listRuleFromWhere">
+		FROM 	rule R
+		WHERE	1=1
+		<if	test='id !=null and id !=""'>
+			AND R.id = #{id}
+		</if>
+		<if	test='system_id !=null and system_id !=""'>
+			AND R.system_id = #{system_id}
+		</if>
+	</sql>
+	
+	<select id="listRuleCount" parameterType="Map" resultType="Integer">
+		<include refid="selectCount" />
+		<include refid="listRuleFromWhere" />
+    </select>
+
+    <select id="listRule" resultType="Map">
+		<include refid="pagingPreFix" />
+		SELECT 	
+			R.id
+			, R.system_id
+			, R.name
+			, R.description
+			, R.node_type
+			, FNC_CODENAME(R.node_type) AS node_type_name
+			, R.session
+			, R.max_instances
+			, R.region
+			, R.updated_at
+			, R.registered_at
+		<include refid="listRuleFromWhere" />
+		<include refid="orderby" />
+		<include refid="pagingPostFix" />
+    </select>
+
+    <select id="getRule" resultType="Map">
+		SELECT 	
+			R.id
+			, R.system_id
+			, R.name
+			, R.description
+			, FNC_CODENAME(R.node_type) AS node_type
+			, R.session
+			, R.max_instances
+			, R.region
+			, R.updated_at
+			, R.registered_at
+		<include refid="listRuleFromWhere" />
+    </select>
+    
+    <insert id="insertRule" parameterType="Map">
+		INSERT INTO rule
+		(
+			id
+			, system_id
+			, name
+			, description
+			, node_type
+			, session
+			, max_instances
+			, region
+			, updated_at
+			, registered_at
+		)
+		VALUES
+		(
+			#{id}
+			, #{systemId}
+			, #{name}
+			, #{description}
+			, #{nodeType}
+			, #{session}
+			, #{maxInstances}
+			, #{region}
+			, #{updatedAt}
+			, #{registeredAt}
+		)
+		on DUPLICATE key update
+			system_id = #{systemId}
+			, name = #{name}
+			, description = #{description}
+			, node_type = #{nodeType}
+			, session = #{session}
+			, max_instances = #{maxInstances}
+			, region = #{region}
+			, updated_at = #{updatedAt}
+			, registered_at = #{registeredAt}
+	</insert>
+    
+    <select id="getRuleForNodeType" resultType="Map">
+		SELECT 
+			R.id
+			, R.name
+			, R.description
+			, FNC_CODENAME(R.node_type) AS node_type
+			, R.session
+			, R.max_instances
+			, R.region
+		FROM 	
+			rule R 
+		WHERE 	1=1
+			AND R.system_id = #{systemId}
+			AND R.node_type = #{nodeType}
+		<if	test='region !=null and region !=""'>
+			AND R.region = #{region}
+		</if>
+    </select>
+</mapper>

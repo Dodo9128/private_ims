@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fdreplay.ims.video.Video">
+	<select id="getMaxVideoId" parameterType="Map" resultType="Integer">
+		SELECT CAST( IFNULL( MAX( RIGHT( id, 3 ) ), '000' ) AS UNSIGNED INTEGER ) + 1 FROM video WHERE id LIKE #{system_id}
+	</select>
+    <!--=======================================
+    	목록 조회
+     =======================================-->
+	<sql id="listVideoFromWhere">
+		FROM 	video V
+		WHERE	1=1
+		<if	test='id !=null and id !=""'>
+			AND V.id = #{id}
+		</if>
+	</sql>
+	
+	<select id="listVideoCount" parameterType="Map" resultType="Integer">
+		<include refid="CommonSQL.selectCount" />
+		<include refid="listVideoFromWhere" />
+    </select>
+
+    <select id="listVideo" resultType="Map">
+		<include refid="CommonSQL.pagingPreFix" />
+		SELECT 	
+			V.id
+			, V.group_id
+			, V.codec
+			, V.width
+			, V.height
+			, V.bitrate
+			, V.gop
+			, V.fps
+			FNC_CODENAME(V.is_input) AS is_input
+		<include refid="listVideoFromWhere" />
+		<include refid="CommonSQL.orderby" />
+		<include refid="CommonSQL.pagingPostFix" />
+    </select>
+
+    <select id="listVideoForGroups" resultType="Map">
+		SELECT 
+			V.codec
+			, V.width
+			, V.height
+			, V.bitrate
+			, V.gop
+			, V.fps
+			, V.is_input
+		FROM
+			video V 
+		WHERE 	1=1
+			AND V.group_id = #{groupId}
+		ORDER BY V.id ASC
+    </select>
+    
+    <insert id="insertVideo" parameterType="Map">
+		INSERT INTO video
+		(
+			id
+			, group_id
+			, codec
+			, width
+			, height
+			, bitrate
+			, gop
+			, fps
+			, is_input
+		)
+		VALUES
+		(
+			#{id}
+			, #{groupId}
+			, #{codec}
+			, #{width}
+			, #{height}
+			, #{bitrate}
+			, #{gop}
+			, #{fps}
+			, #{isInput}
+		)
+		on DUPLICATE key update
+			group_id = #{groupId}
+			, codec = #{codec}
+			, width = #{width}
+			, height = #{height}
+			, bitrate = #{bitrate}
+			, gop = #{gop}
+			, fps = #{fps}
+			, is_input = #{isInput}
+	</insert>
+</mapper>
