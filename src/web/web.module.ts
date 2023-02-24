@@ -3,7 +3,6 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { CustomTypeOrmModule } from "../database/typeorm.module"
 import { WebController } from "./web.controller";
 import { WebService } from "./web.service";
-import { ConnectionService } from "../database/connection.service";
 import { VenueController } from "./venue/venue.controller";
 import { VenueService } from "./venue/venue.service";
 import { SystemController } from "./system/system.controller";
@@ -105,7 +104,6 @@ import { MonitRepository } from "../repository/monit.repository";
     ChannelService,
     EventService,
     MonitService,
-    ConnectionService,
   ],
 })
 export class WebModule {}

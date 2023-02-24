@@ -21,8 +21,12 @@ export class SystemRepository extends Repository<System> {
     return true;
   }
 
-  async getSystemInfo(id: string): Promise<any> {
-    return id;
+  async listSystem(query: string) {
+    return await this.query(query);
+  }
+
+  async getSystem(query: string) {
+    return await this.query(query);
   }
 
   async listChannelFor4DPD(query: string): Promise<Map<string,object>> {

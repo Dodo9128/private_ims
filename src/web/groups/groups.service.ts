@@ -5,14 +5,13 @@ import { CreateGroupsDto, UpdateGroupsDto } from "./groups.dto";
 import { Group } from '../../entities/group.entity';
 
 import * as MybatisMapper from "mybatis-mapper";
-import { ConnectionService } from "../../database/connection.service";
+
 import {GroupsRepository} from "../../repository/groups.repository";
 
 MybatisMapper.createMapper(['./src/database/sqlmapper/System.xml', './src/database/sqlmapper/Groups.xml', './src/database/sqlmapper/Channel.xml']);
 @Injectable()
 export class GroupsService {
   constructor(
-    private  connectionService: ConnectionService,
     @InjectRepository(SystemRepository)
     private groupsRepository: GroupsRepository,
   ) {

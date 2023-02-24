@@ -5,13 +5,11 @@ import { CreateSystemDto, UpdateSystemDto } from "./system.dto";
 import { System } from '../../entities/system.entity';
 
 import * as MybatisMapper from "mybatis-mapper";
-import { ConnectionService } from "../../database/connection.service";
 
 MybatisMapper.createMapper(['./src/database/sqlmapper/System.xml', './src/database/sqlmapper/Groups.xml', './src/database/sqlmapper/Channel.xml']);
 @Injectable()
 export class SystemService {
   constructor(
-    private connectionService: ConnectionService,
     @InjectRepository(SystemRepository)
     private systemRepository: SystemRepository,
   ) {
@@ -24,7 +22,7 @@ export class SystemService {
     };
 
     const query = MybatisMapper.getStatement('System', 'getSystem', param, {language: 'sql', indent: ' '});
-    const [data, field] = await this.connectionService.CP.query(query);
+    const data = await this.systemRepository.getSystem(query);
 
     return {
       data,
@@ -37,7 +35,7 @@ export class SystemService {
     };
 
     const query = MybatisMapper.getStatement('System', 'listSystem', param, {language: 'sql', indent: ' '})
-    const data: any = await this.connectionService.CP.query(query);
+    const data: any = await this.systemRepository.listSystem(query);
 
     return {
       iTotalDisplayRecords: data[0].length,
@@ -55,12 +53,6 @@ export class SystemService {
     const channelMap = new Map<string, object>();
     const groupMap = new Map<string, object>();
 
-    const systemInfo = this.systemRepository.getSystemInfo(system_id)
-    const qChannel = MybatisMapper.getStatement('Channel', 'listChannelFor4DPD', {systemId:system_id}, {language: 'sql'});
-
-    const channelList = await this.systemRepository.listChannelFor4DPD(qChannel);
-    //retMap.set("subchannel_count");
-    retMap.set("subChannelList", channelList);
 
     return retMap;
   }

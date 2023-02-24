@@ -2,7 +2,7 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { setupSwagger } from "./libs/utils/swagger/swagger";
 import { ValidationPipe } from "@nestjs/common";
-import { HttpExceptionFilter } from "./libs/utils/globalErrorHandler";
+//import { HttpExceptionFilter } from "./libs/utils/globalErrorHandler";
 
 async function bootstrap() {
   const startTime = process.hrtime();
@@ -17,7 +17,7 @@ async function bootstrap() {
       stopAtFirstError: true,
     }),
   );
-  app.useGlobalFilters(new HttpExceptionFilter());
+  //app.useGlobalFilters(new HttpExceptionFilter());
 
   const serverStart = await app.listen(process.env.SERVER_PORT);
   if (serverStart) {

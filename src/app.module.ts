@@ -16,6 +16,7 @@ import { CmsController } from "./api/controller/cms.controller";
 import { CommonController } from "./api/controller/common.controller";
 import { FdssController } from "./api/controller/fdss.controller";
 import { FdlsController } from "./api/controller/fdls.controller";
+import { WebModule } from "./web/web.module";
 
 const node_env = process.env.NODE_ENV || "development";
 
@@ -47,9 +48,11 @@ console.log(`Environment Path is: ${envPath}`);
       load: [configuration],
       envFilePath: `${envPath}`,
     }),
+    //TypeOrmModule.forRoot(typeormConfig),
     DatabaseModule,
     WorldModule,
     ApiModule,
+    WebModule,
   ],
   controllers: [AppController],
   providers: [
@@ -58,6 +61,7 @@ console.log(`Environment Path is: ${envPath}`);
       useClass: ValidationPipe,
     },
   ],
+
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
@@ -70,5 +74,6 @@ export class AppModule implements NestModule {
     consumer.apply(LoggerMiddleware).forRoutes(CommonController);
     consumer.apply(LoggerMiddleware).forRoutes(FdssController);
     consumer.apply(LoggerMiddleware).forRoutes(FdlsController);
+    //consumer.apply(LoggerMiddleware).forRoutes(WebController);
   }
 }
