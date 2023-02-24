@@ -14,4 +14,8 @@ export class GroupsRepository extends Repository<Group> {
   async setGroup(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
 
   }
+
+  async getList4Mng(query: string) {
+    return await this.query(query);
+  }
 }

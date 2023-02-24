@@ -6,7 +6,7 @@ import { Video } from '../entities/video.entity';
 import { Row } from "exceljs";
 
 @CustomRepository(Video)
-export class GroupsRepository extends Repository<Video> {
+export class VideoRepository extends Repository<Video> {
   async setVideo(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
 
   }

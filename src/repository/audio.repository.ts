@@ -6,7 +6,7 @@ import { Audio } from '../entities/audio.entity';
 import { Row } from "exceljs";
 
 @CustomRepository(Audio)
-export class GroupsRepository extends Repository<Audio> {
+export class AudioRepository extends Repository<Audio> {
   async setAudio(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
 
   }
