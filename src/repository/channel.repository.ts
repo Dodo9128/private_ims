@@ -10,4 +10,8 @@ export class ChannelRepository extends Repository<Channel> {
   async setChannel(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
 
   }
+
+  async lstChannel4Mng(query) {
+    return await this.query(query);
+  }
 }
