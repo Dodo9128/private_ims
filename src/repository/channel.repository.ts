@@ -7,7 +7,7 @@ import { Row } from "exceljs";
 
 @CustomRepository(Channel)
 export class ChannelRepository extends Repository<Channel> {
-  async setAudio(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
+  async setChannel(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
 
   }
 }
