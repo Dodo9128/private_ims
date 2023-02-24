@@ -26,7 +26,7 @@ export class System {
   @Column()
   venue_id: string;
 
-  @Column()
+  @Column('decimal', { precision: 20, scale: 15 }) //db 타입과 정밀도 등을 맞춰야 한다. 그렇지 않으면 정수만 입력된다.
   fps: number;
 
   @Column()

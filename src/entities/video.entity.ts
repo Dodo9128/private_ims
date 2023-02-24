@@ -35,7 +35,7 @@ export class Video {
   @Column()
   gop: number;
 
-  @Column()
+  @Column('decimal', { precision: 20, scale: 15 })
   fps: number;
 
   @Column()
