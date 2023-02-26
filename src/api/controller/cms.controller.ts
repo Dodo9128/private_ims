@@ -9,17 +9,16 @@ import {
   getGroupChannelForMobile,
   updateContentIdByEventId,
 } from "../decorator/cms.decorator";
+import { EventService } from "../../web/event/event.service";
+import { GroupsService } from "../../web/groups/groups.service";
 
 @Controller({ path: "cms", version: ["v1"] })
 @ApiTags("06. CMS >>> IMS")
 export class CmsController {
   // TODO: add eventService, groupService on constructor;
-  constructor() {}
+  // constructor() {}
 
-  // constructor(
-  //   private readonly eventService: EventService;
-  //   private readonly groupService: GroupService;
-  // ) {}
+  constructor(private readonly eventService: EventService, private readonly groupService: GroupsService) {}
 
   @Get(`/:${SYSTEM_ID}/getGroupChannelForMobile`)
   @getGroupChannelForMobile()
