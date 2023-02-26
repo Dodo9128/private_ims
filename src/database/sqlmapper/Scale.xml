@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Scale">
+	<sql id="initPrifix">
+		/* SQL_QUERY */</sql>
+	<sql id="pagingPreFix"><include refid="initPrifix" />
+		<if test='pageNo !=null and !pageNo.equals("")'>SELECT A.* FROM
+			(</if></sql>
+	<sql id="orderby"><if test='sortColStr !=null and sortColStr !=""'>ORDER BY <foreach collection="sortColStr" item="item" index="index" separator=",">${item}</foreach></if></sql>
+	<sql id="pagingPostFix"><if test = 'pageNo !=null and !pageNo.equals("")'>LIMIT #{pageSize, jdbcType=INTEGER} OFFSET #{pageOffset, jdbcType=INTEGER}
+		) A</if></sql>
+	<sql id="selectCount"><include refid="initPrifix" />
+		SELECT	COUNT(1)</sql>
+	<select id="getMaxScaleId" parameterType="Map" resultType="Integer">
+		SELECT CAST( IFNULL( MAX( RIGHT( id, 3 ) ), '000' ) AS UNSIGNED INTEGER ) + 1 FROM scale WHERE id LIKE #{system_id}
+	</select>
+    <!--=======================================
+    	목록 조회
+     =======================================-->
+	<sql id="listScaleFromWhere">
+		FROM 	scale S
+		WHERE	1=1
+		<if	test='id !=null and id !=""'>
+			AND S.id = #{id}
+		</if>
+		<if	test='system_id !=null and system_id !=""'>
+			AND S.system_id = #{system_id}
+		</if>
+	</sql>
+	
+	<select id="listScaleCount" parameterType="Map" resultType="Integer">
+		<include refid="selectCount" />
+		<include refid="listScaleFromWhere" />
+    </select>
+
+    <select id="listScale" resultType="Map">
+		<include refid="pagingPreFix" />
+		SELECT 	
+			S.id
+			, S.system_id
+			, S.scale_group_count
+			, S.scale_image_id
+			, S.scale_instance_type
+			, S.scale_instance_type2
+			, S.scale_security_group_ids
+			, S.scale_subnet_ids
+			, S.scale_monitoring_tag_name
+			, S.scale_monitoring_tag_value
+			, S.scale_on
+			, S.scale_out_resource
+			, S.scale_in_resource
+			, S.scale_out_limit_time
+			, S.scale_ss_name
+			, S.scale_key_name
+			, S.region
+			, S.updated_at
+			, S.registered_at
+		<include refid="listScaleFromWhere" />
+		<include refid="orderby" />
+		<include refid="pagingPostFix" />
+    </select>
+
+    <select id="getScale" resultType="Map">
+		SELECT 	
+			S.id
+			, S.system_id
+			, S.scale_group_count
+			, S.scale_image_id
+			, S.scale_instance_type
+			, S.scale_instance_type2
+			, S.scale_security_group_ids
+			, S.scale_subnet_ids
+			, S.scale_monitoring_tag_name
+			, S.scale_monitoring_tag_value
+			, S.scale_on
+			, S.scale_out_resource
+			, S.scale_in_resource
+			, S.scale_out_limit_time
+			, S.scale_ss_name
+			, S.scale_key_name
+			, S.region
+			, S.updated_at
+			, S.registered_at
+		<include refid="listScaleFromWhere" />
+    </select>
+    
+    <insert id="insertScale" parameterType="Map">
+		INSERT INTO scale
+		(
+			id
+			, system_id
+			, scale_group_count
+			, scale_image_id
+			, scale_instance_type
+			, scale_instance_type2
+			, scale_security_group_ids
+			, scale_subnet_ids
+			, scale_monitoring_tag_name
+			, scale_monitoring_tag_value
+			, scale_on
+			, scale_out_resource
+			, scale_in_resource
+			, scale_out_limit_time
+			, scale_ss_name
+			, scale_key_name
+			, region
+			, updated_at
+			, registered_at
+		)
+		VALUES
+		(
+			#{id}
+			, #{systemId}
+			, #{scaleGroupCount}
+			, #{scaleImageId}
+			, #{scaleInstanceType}
+			, #{scaleInstanceType2}
+			, #{scaleSecurityGroupIds}
+			, #{scaleSubnetIds}
+			, #{scaleMonitoringTagName}
+			, #{scaleMonitoringTagValue}
+			, #{scaleOn}
+			, #{scaleOutResource}
+			, #{scaleInResource}
+			, #{scaleOutLimitTime}
+			, #{scaleSsName}
+			, #{scaleKeyName}
+			, #{region}
+			, #{updatedAt}
+			, #{registeredAt}
+		)
+		on DUPLICATE key update
+			system_id = #{systemId}
+			, scale_group_count = #{scaleGroupCount}
+			, scale_image_id = #{scaleImageId}
+			, scale_instance_type = #{scaleInstanceType}
+			, scale_instance_type2 = #{scaleInstanceType2}
+			, scale_security_group_ids = #{scaleSecurityGroupIds}
+			, scale_subnet_ids = #{scaleSubnetIds}
+			, scale_monitoring_tag_name = #{scaleMonitoringTagName}
+			, scale_monitoring_tag_value = #{scaleMonitoringTagValue}
+			, scale_on = #{scaleOn}
+			, scale_out_resource = #{scaleOutResource}
+			, scale_in_resource = #{scaleInResource}
+			, scale_out_limit_time = #{scaleOutLimitTime}
+			, scale_ss_name = #{scaleSsName}
+			, scale_key_name = #{scaleKeyName}
+			, region = #{region}
+			, updated_at = #{updatedAt}
+			, registered_at = #{registeredAt}
+	</insert>
+    
+    <select id="getScaleBySystemId" resultType="Map">
+		SELECT 
+			S.id
+			, S.system_id
+			, S.scale_group_count
+			, S.scale_image_id
+			, S.scale_instance_type
+			, S.scale_instance_type2
+			, S.scale_security_group_ids
+			, S.scale_subnet_ids
+			, S.scale_monitoring_tag_name
+			, S.scale_monitoring_tag_value
+			, S.scale_on
+			, S.scale_out_resource
+			, S.scale_in_resource
+			, S.scale_out_limit_time
+			, S.scale_ss_name
+			, S.scale_key_name
+			, S.region
+		FROM 	
+			scale S
+		WHERE 	1=1
+			AND S.system_id = #{systemId}
+		<if	test='region !=null and region !=""'>
+			AND S.region = #{region}
+		</if>
+    </select>
+    
+    <select id="getScaleInstanceType" resultType="Map">
+		SELECT 
+			scale_instance_type AS code
+			, scale_instance_type AS name
+		FROM scale 
+		WHERE system_id = #{system_id}
+		GROUP BY scale_instance_type
+    </select>
+</mapper>

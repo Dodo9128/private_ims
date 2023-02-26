@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Venue">
+	<sql id="initPrifix">
+		/* SQL_QUERY */</sql>
+	<sql id="pagingPreFix"><include refid="initPrifix" />
+		<if test='pageNo !=null and !pageNo.equals("")'>SELECT A.* FROM
+			(</if></sql>
+	<sql id="orderby"><if test='sortColStr !=null and sortColStr !=""'>ORDER BY <foreach collection="sortColStr" item="item" index="index" separator=",">${item}</foreach></if></sql>
+	<sql id="pagingPostFix"><if test = 'pageNo !=null and !pageNo.equals("")'>LIMIT #{pageSize, jdbcType=INTEGER} OFFSET #{pageOffset, jdbcType=INTEGER}
+		) A</if></sql>
+	<sql id="selectCount"><include refid="initPrifix" />
+		SELECT	COUNT(1)</sql>
+
+	<select id="getMaxVenueId" parameterType="Map" resultType="Integer">
+		SELECT CAST( IFNULL( MAX( id ), '0000' ) AS UNSIGNED INTEGER ) + 1 as venueId FROM venue
+	</select>
+
+    <!--=======================================
+    	목록 조회
+     =======================================-->
+	<sql id="listVenueFromWhere">
+		FROM 	venue V
+			LEFT JOIN world_country WC on V.country_id = WC.id 
+			LEFT JOIN world_state WS on V.state_id = WS.id
+			LEFT JOIN world_city WC2 on V.city_id = WC2.id 
+		WHERE	1=1
+		<if	test="id !=null and id !=''">
+			AND V.id = #{id}
+		</if>
+	</sql>
+	
+	<select id="listVenueCount" parameterType="Map" resultType="Integer">
+		<include refid="selectCount" />
+		<include refid="listVenueFromWhere" />
+    </select>
+
+    <select id="listVenue" resultType="Map">
+		<include refid="pagingPreFix" />
+		SELECT
+			V.id
+			, V.country_id
+			, WC.name as country_name
+			, WC.iso2 as country_code 
+			, V.state_id
+			, WS.name as state_name
+			, V.city_id
+			, WC2.name as city_name
+			, WC2.latitude as city_latitude
+			, WC2.longitude as city_longitude
+			, V.event_name
+			, V.event_code			
+			, V.name
+			, V.description
+			, V.timezone_name
+			, V.timezone_offset
+			, V.comment
+			, V.updated_at
+			, V.registered_at
+		<include refid="listVenueFromWhere" />
+		<include refid="orderby" />
+		<include refid="pagingPostFix" />
+    </select>
+    
+     <select id="getVenue" resultType="Map">
+		SELECT 	
+			V.id
+			, V.country_id
+			, WC.name as country_name
+			, WC.iso2 as country_code 
+			, V.state_id
+			, WS.name as state_name
+			, V.city_id
+			, WC2.name as city_name
+			, WC2.latitude as city_latitude
+			, WC2.longitude as city_longitude
+			, V.event_name
+			, V.event_code			
+			, V.name
+			, V.description
+			, V.timezone_name
+			, V.timezone_offset
+			, V.comment
+			, V.updated_at
+			, V.registered_at
+		<include refid="listVenueFromWhere" />
+    </select>
+</mapper>

@@ -18,6 +18,7 @@ import { FdssController } from "./api/controller/fdss.controller";
 import { FdlsController } from "./api/controller/fdls.controller";
 import { ExcelModule } from "./excel/excel.module";
 import { ExcelController } from "./excel/excel.controller";
+import { WebModule } from "./web/web.module";
 
 const node_env = process.env.NODE_ENV || "development";
 
@@ -50,10 +51,12 @@ console.log(`Environment Path is: ${envPath}`);
       load: [configuration],
       envFilePath: `${envPath}`,
     }),
+    //TypeOrmModule.forRoot(typeormConfig),
     DatabaseModule,
     WorldModule,
     ApiModule,
     ExcelModule,
+    WebModule,
   ],
   controllers: [AppController],
   providers: [
@@ -62,6 +65,7 @@ console.log(`Environment Path is: ${envPath}`);
       useClass: ValidationPipe,
     },
   ],
+
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
@@ -75,5 +79,6 @@ export class AppModule implements NestModule {
     consumer.apply(LoggerMiddleware).forRoutes(FdssController);
     consumer.apply(LoggerMiddleware).forRoutes(FdlsController);
     consumer.apply(LoggerMiddleware).forRoutes(ExcelController);
+    //consumer.apply(LoggerMiddleware).forRoutes(WebController);
   }
 }

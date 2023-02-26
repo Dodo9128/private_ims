@@ -60,7 +60,7 @@ export class Node {
   is_auto_scale_out: string;
 
   @Column()
-  is_type: string;
+  ls_type: string; //is_type 없음 오타
 
   @Column()
   ml_type: string;
