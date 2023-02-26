@@ -2,8 +2,8 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { setupSwagger } from "./libs/utils/swagger/swagger";
 import { ValidationPipe } from "@nestjs/common";
-//import { HttpExceptionFilter } from "./libs/utils/globalErrorHandler";
-
+import { HttpExceptionFilter } from "./libs/utils/globalErrorHandler";
+import { IncomingWebhook } from "ms-teams-webhook";
 async function bootstrap() {
   const startTime = process.hrtime();
   const app = await NestFactory.create(AppModule, {});
@@ -17,7 +17,14 @@ async function bootstrap() {
       stopAtFirstError: true,
     }),
   );
-  //app.useGlobalFilters(new HttpExceptionFilter());
+  const teamsWebhook = await new IncomingWebhook(`${process.env.WEBHOOK_URL}`);
+
+  app.useGlobalFilters(new HttpExceptionFilter(teamsWebhook));
+  /**
+   * Cors 설정
+   * TODO: 추후 acceptable domain 추가 필요
+   */
+  app.enableCors();
 
   const serverStart = await app.listen(process.env.SERVER_PORT);
   if (serverStart) {

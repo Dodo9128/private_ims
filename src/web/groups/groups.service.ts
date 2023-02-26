@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
 import { SystemRepository } from "../../repository/system.repository";
 import { CreateGroupsDto, UpdateGroupsDto } from "./groups.dto";
-import { Group } from '../../entities/group.entity';
+import { Groups } from '../../entities/group.entity';
 
 import * as MybatisMapper from "mybatis-mapper";
 

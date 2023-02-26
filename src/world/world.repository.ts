@@ -4,10 +4,7 @@ import { AppDataSource } from "../database/dataSource";
 import { WorldCountry } from "../entities/worldCountry.entity";
 import { WorldState } from "../entities/worldState.entity";
 import { WorldCity } from "../entities/worldCity.entity";
-
-export interface IWorldCount {
-  totalCount: number;
-}
+import { IWorldCount } from "../global/interface";
 
 @Injectable()
 export class WorldCountryRepository {

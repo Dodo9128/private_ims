@@ -2,11 +2,15 @@ import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from
 import { Request, Response } from "express";
 import { currentTimeMaker, sendFail } from "./functionReturn";
 import { LoggerService } from "../../../config/winstonConfiguration";
+import { IncomingWebhook } from "ms-teams-webhook";
+import * as ip from "ip";
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
+  constructor(private readonly webHook: IncomingWebhook) {}
+
   logger = new LoggerService("globalException");
-  catch(exception: HttpException, host: ArgumentsHost) {
+  async catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
@@ -37,6 +41,39 @@ export class HttpExceptionFilter implements ExceptionFilter {
       errorObj = exceptionObj["error"];
     }
 
+    const myIp = ip.address();
+
+    await this.webHook.send({
+      "@type": "MessageCard",
+      "@context": "https://schema.org/extensions",
+      summary: "Notice Error To PF-Backend Teams Channel",
+      themeColor: "#D30000",
+      title: `!!! ERROR !!!`,
+      sections: [
+        {
+          activityTitle: `${process.env.HOSTNAME} (${myIp})`,
+          activitySubtitle: timestamp,
+          // activityImage: `https://png.pngtree.com/element_our/20190528/ourlarge/pngtree-error-icon-image_1127796.jpg`,
+          activityImage: `https://png.pngtree.com/png-vector/20220831/ourlarge/pngtree-error-failed-png-image_6130189.png`,
+          facts: [
+            {
+              name: "Service",
+              value: `${exceptionObj["service"]}`,
+            },
+            {
+              name: "Func",
+              value: `${exceptionObj["name"]}`,
+            },
+            {
+              name: "Error Message",
+              value: `${errorObj["message"]}`,
+            },
+          ],
+          markdown: true,
+        },
+      ],
+    });
+
     this.logger.httpException(serviceName, serviceFunc, errorObj, status, timestamp);
 
     // seperate to global endpoint exception
@@ -50,18 +87,25 @@ export class HttpExceptionFilter implements ExceptionFilter {
         // });
         .json(sendFail(errorObj.message, null));
     } else {
+      response.status(HttpStatus.NOT_FOUND).json(sendFail(errorObj.message, null));
       // global endpoint exception redirect to home
-      response
-        .status(HttpStatus.PERMANENT_REDIRECT)
-        .redirect(308, `${process.env.MY_ADDRESS}:${process.env.SERVER_PORT}`);
+      // .redirect(308, `${process.env.MY_ADDRESS}:${process.env.SERVER_PORT}`);
     }
   }
 }
 
-export function makeErrorInfoObjForHttpException(service: string, name: string, errorObj: object) {
+/**
+ * error 객체 생성하는 함수
+ * @param {string} service 에러가 발생한 서비스 이름
+ * @param {string} name 에러가 발생한 서비스 내부 함수 이름
+ * @param {object} errorObj 에러 객체 (error 객체의 stack이 들어 있다)
+ * @param {string} message 존재할 시 해당 Error의 Error Message를 커스텀한다
+ */
+export function makeErrorInfoObjForHttpException(service: string, name: string, errorObj: object, message?: string) {
   return {
     service: service,
     name: name,
     error: errorObj,
+    message: message,
   };
 }
