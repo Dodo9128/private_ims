@@ -107,7 +107,7 @@ export class VenueRepository extends Repository<Venue> {
 
     const venue = await this.update({id}, tmpData);
     if (venue.affected !== 1) {
-      throw new NotFoundException('베뉴 정보가 없ㅅ브니다.');
+      throw new NotFoundException('베뉴 정보가 없습니다.');
     }
 
     return venue;
