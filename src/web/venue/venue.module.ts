@@ -4,7 +4,7 @@ import { CustomTypeOrmModule } from "../../database/typeorm.module"
 import { VenueRepository } from "../../repository/venue.repository";
 import { VenueController } from "./venue.controller";
 import { VenueService } from "./venue.service";
-import { ConnectionService } from "../../database/connection.service";
+// import { ConnectionService } from "../../database/connection.service";
 import { Venue } from "../../entities/venue.entity"
 
 @Module({
@@ -13,6 +13,6 @@ import { Venue } from "../../entities/venue.entity"
     CustomTypeOrmModule.forCustomRepository([VenueRepository]),
   ],
   controllers: [VenueController],
-  providers: [VenueService, ConnectionService],
+  providers: [VenueService],
 })
 export class VenueModule {}

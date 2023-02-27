@@ -32,7 +32,7 @@ import { System } from "../entities/system.entity";
 import { Rule } from "../entities/rule.entity";
 import { Scale } from "../entities/scale.entity";
 import { Node } from "../entities/node.entity";
-import { Group } from "../entities/group.entity";
+import { Groups } from "../entities/group.entity";
 import { Video } from "../entities/video.entity";
 import { Audio } from "../entities/audio.entity";
 import { Channel } from "../entities/channel.entity";
@@ -60,7 +60,7 @@ import { MonitRepository } from "../repository/monit.repository";
       Rule,
       Scale,
       Node,
-      Group,
+      Groups,
       Video, Audio, Channel, Event, Monit
     ]),
     CustomTypeOrmModule.forCustomRepository([

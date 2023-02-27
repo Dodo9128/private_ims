@@ -30,3 +30,7 @@ export interface IMakeContent {
   end_frame_no: number;
   channel_list: number[];
 }
+
+export interface IWorldCount {
+  totalCount: number;
+}

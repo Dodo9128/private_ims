@@ -4,8 +4,8 @@ import { makeErrorInfoObjForHttpException } from "../libs/utils/globalErrorHandl
 import { WorldCountry } from "../entities/worldCountry.entity";
 import { WorldState } from "../entities/worldState.entity";
 import { WorldCity } from "../entities/worldCity.entity";
-import { WorldCountryRepository, WorldStateRepository, WorldCityRepository, IWorldCount } from "./world.repository";
-import {IResultReturn} from "../global/interface";
+import { WorldCountryRepository, WorldStateRepository, WorldCityRepository } from "./world.repository";
+import { IResultReturn, IWorldCount } from "../global/interface";
 
 interface IWorldData {
   totalCount: number;

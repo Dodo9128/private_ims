@@ -2,11 +2,11 @@ import { HttpStatus, HttpException, ForbiddenException, NotFoundException } from
 import { CreateGroupsDto, UpdateGroupsDto } from "../web/groups/groups.dto";
 import { CustomRepository } from "../api/decorator/typeorm.decorator";
 import { Repository } from "typeorm";
-import { Group } from '../entities/group.entity';
+import { Groups } from '../entities/group.entity';
 import {Row} from "exceljs";
 
-@CustomRepository(Group)
-export class GroupsRepository extends Repository<Group> {
+@CustomRepository(Groups)
+export class GroupsRepository extends Repository<Groups> {
   async getGroupChannelFor4DPD(query: string): Promise<Map<string, object>> {
     return await this.query(query);
   }
