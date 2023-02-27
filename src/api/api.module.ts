@@ -6,11 +6,12 @@ import { CmsController } from "./controller/cms.controller";
 import { CommonController } from "./controller/common.controller";
 import { FdssController } from "./controller/fdss.controller";
 import { FdlsController } from "./controller/fdls.controller";
+import { WebModule } from "../web/web.module";
 
 @Module({
   // TODO: import other modules what need
-  // imports: [ChannelModule, SystemModule, VenueModule, EventModule, NodeModule, ScaleModule,],
-  imports: [],
+  imports: [WebModule],
+  // imports: [],
   controllers: [
     FdpdController,
     FdrsController,
@@ -20,5 +21,6 @@ import { FdlsController } from "./controller/fdls.controller";
     CmsController,
     CommonController,
   ],
+
 })
 export class ApiModule {}

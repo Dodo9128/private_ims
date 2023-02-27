@@ -15,6 +15,7 @@ import { Groups } from "../entities/group.entity";
 import { Video } from "../entities/video.entity";
 import { Audio } from "../entities/audio.entity";
 import { AdaptiveStreaming } from "../entities/adaptiveStreaming.entity";
+import { PdviewIndex } from "../entities/pdviewIndex.entity";
 
 @Injectable()
 export class ExcelRepository {
@@ -163,6 +164,15 @@ export class ExcelRepository {
       .createQueryBuilder()
       .select(`group_id, is_input, codec, width, height, bitrate, gop, fps`)
       .where(`group_id LIKE :system_id`, { system_id: `%${systemId}%` })
+      .getRawMany();
+  }
+
+  async getExcelExportPdviewIndex(systemId: string) {
+    return await this.dataSource
+      .getRepository(PdviewIndex)
+      .createQueryBuilder("PI")
+      .select(`PI.pdview_index`)
+      .where(`PI.system_id LIKE :system_id`, { system_id: `%${systemId}%` })
       .getRawMany();
   }
 }

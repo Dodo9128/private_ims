@@ -125,7 +125,7 @@ export const venueExportNodeDataAdd = (nodeData, devWorkSheet) => {
 };
 
 export const cameraGroupExportStarter = (dataSet, channelWorkSheet, adaptiveStreamingWorkSheet) => {
-  const { systemId, node, channel, group, video, audio, adaptiveStreaming } = dataSet;
+  const { systemId, node, channel, group, video, audio, adaptiveStreaming, pdviewIndex } = dataSet;
 
   // node 관련
   // Bell은 ims ip가 두개 들어가야 해서 환경 변수에 따라 분기해야 함
@@ -419,4 +419,7 @@ export const cameraGroupExportStarter = (dataSet, channelWorkSheet, adaptiveStre
       }
     }
   }
+
+  // pdview_index
+  channelWorkSheet.getRow(startIdx).getCell(50).value = pdviewIndex;
 };
