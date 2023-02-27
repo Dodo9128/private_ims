@@ -18,6 +18,8 @@ export class Node {
   id: string;
 
   @Column()
+  name: string;
+  @Column()
   system_id: string;
 
   @Column()
