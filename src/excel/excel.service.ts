@@ -147,11 +147,16 @@ export class ExcelService {
           .slice(1)
           .toLowerCase()}`;
 
-        const mediaType = `${newMediaType[0][`${Object.keys(newMediaType[0])}`][0]}${newMediaType[0][
-          `${Object.keys(newMediaType[0])}`
-        ]
-          .slice(1)
-          .toLowerCase()}`;
+        const mediaTypeStrFirstSpell = `${newMediaType[0][`${Object.keys(newMediaType[0])}`][0]}`;
+        const mediaTypeStr = `${newMediaType[0][`${Object.keys(newMediaType[0])}`]}`;
+
+        let mediaType;
+
+        if (mediaTypeStr === "ALL") {
+          mediaType = mediaTypeStr;
+        } else {
+          mediaType = `${mediaTypeStrFirstSpell}${mediaTypeStr.slice(1).toLowerCase()}`;
+        }
 
         const gimbalPreset = newGimbalPreset[0][`${Object.keys(newGimbalPreset[0])}`];
 
