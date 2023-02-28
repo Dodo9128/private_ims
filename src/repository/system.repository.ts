@@ -60,7 +60,7 @@ export class SystemRepository extends Repository<System> {
     Object.assign(tmpData, {
       name, description, "fps": parseFloat(String(fps)), width, height, comment, is_extra, venue_id: venueId
     })
-
+    console.log(tmpData);
     const result = (newOne) ? await this.save(tmpData) : await this.update({id: systemId}, tmpData);
 
     return result;

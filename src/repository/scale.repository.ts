@@ -75,7 +75,7 @@ export class ScaleRepository extends Repository<Scale> {
       scale_monitoring_tag_name: scaleMonitoringTagName,
       scale_monitoring_tag_value: scaleMonitoringTagValue,
       scale_on: scaleOn,
-     scale_out_resource: scaleOutResource,
+      scale_out_resource: scaleOutResource,
       scale_in_resource: scaleInResource,
       scale_out_limit_time: scaleOutLimitTIme,
       scale_ss_name: scaleSsName,

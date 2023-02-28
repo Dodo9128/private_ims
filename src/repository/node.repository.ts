@@ -65,7 +65,7 @@ export class NodeRepository extends Repository<Node> {
     }
 
     Object.assign(tmpData, {
-      name,
+      name: name,
       system_id: systemId,
       public_ip,
       public_port,
@@ -81,8 +81,9 @@ export class NodeRepository extends Repository<Node> {
       ml_type,
 
     });
-
+    console.log(tmpData)
     const result = (newOne) ? await this.save(tmpData) : await this.update({id: nid}, tmpData);
+    //console.log(result);
 
     return result;
   }

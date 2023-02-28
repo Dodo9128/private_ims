@@ -33,7 +33,7 @@ export class VenueController {
     });
   }
 
-  @Get('/listVenue')
+  @Post('/listVenue')
   listVenue(@Res() res: Response) {
     return this.venueService.listVenue().then(rst => {
       res.status(HttpStatus.OK).json({
@@ -43,13 +43,17 @@ export class VenueController {
       })
     });
   }
-  @Get('/listVenue4Mng')
-  listVenue4Mng(@Res() res: Response) {
-    return this.venueService.listVenue().then(rst => {
+  @Post('/listVenue4Mng')
+  async listVenue4Mng(@Res() res: Response) {
+    const TotalCount = await this.venueService.getTotalCount();
+
+    return this.venueService.listVenue().then(data => {
       res.status(HttpStatus.OK).json({
-        data: rst,
         result: "ok",
-        message: "SUCCESS"
+        message: "SUCCESS",
+        iTotalDisplayRecords: TotalCount,
+        iTotalRecords: TotalCount,
+        data,
       })
     });
   }
@@ -112,7 +116,7 @@ export class VenueController {
   @Post('/uploadIMSExcel')
   @UseInterceptors(FilesInterceptor('files', null, multerMemoryOptions))
   @Bind(UploadedFiles())
-  uploadFileMemory(
+  async uploadFileMemory(
     files: File[],
     @Body('venue_id') venue_id: string,
     @Body('system_id') system_id: string,
@@ -121,9 +125,13 @@ export class VenueController {
   ) {
     //const fileName = this.venueService.uploadFileMemory(venue_id, system_id, venue_delete, files)
     //console.log(fileName[0])
+    this.venueService.uploadFileMemory(venue_id, system_id, venue_delete, files)
+      .then(result => {
+        //console.log(result)
+      });
 
     res.status(HttpStatus.OK).json({
-      data: this.venueService.uploadFileMemory(venue_id, system_id, venue_delete, files),
+      data: "",
       result: "ok",
       message: "SUCCESS"
     })

@@ -55,7 +55,7 @@ export class RuleRepository extends Repository<Rule> {
       description,
       node_type,
       session,
-      max_instance: maxInstance,
+      max_instances: maxInstance,
       region
     });
 

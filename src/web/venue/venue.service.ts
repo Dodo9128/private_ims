@@ -47,10 +47,10 @@ export class VenueService {
   async listVenue(): Promise<object> {
     let param = {
       id: "",
-      pageNo: null,
+      pageNo: 1,
       sortColStr: ["id asc"],
-      pageSize: "10",
-      pageOffset: "10",
+      pageSize: 9999,
+      pageOffset: 0,
     };
 
     const query = MybatisMapper.getStatement('Venue', 'listVenue', param, {language: 'sql'});
@@ -58,6 +58,10 @@ export class VenueService {
     return  await this.venueRepository.findAll(query);
   }
 
+  async getTotalCount() {
+    const query = MybatisMapper.getStatement('Venue', 'listVenueCount', {}, {language: "sql"});
+    return await this.venueRepository.count();
+  }
   async getVenue(id: string): Promise<object> {
     let param = {id};
 
@@ -77,7 +81,7 @@ export class VenueService {
     return this.venueRepository.onDelete(id);
   }
 
-  uploadFileMemory(venue_id: string, system_id: string, venue_delete: string, files: File[]) {
+  async uploadFileMemory(venue_id: string, system_id: string, venue_delete: string, files: File[]): Promise<object> {
     const isVenueDel = (venue_delete === 'true');
 
     const uploadFilePath = `./uploads`;
@@ -85,7 +89,8 @@ export class VenueService {
       fs.mkdirSync(uploadFilePath);
     }
 
-    return files.map((file: any) => {
+    return files.map(async (file: any) => {
+      let Result;
       const fileName = `${file.originalname.split(".")[0]}_${Date.now()}${extname(file.originalname)}`;
       const uploadPath = `${uploadFilePath}/${fileName}`;
 
@@ -96,10 +101,10 @@ export class VenueService {
       }
 
       if (fs.existsSync(uploadPath)) {
-        this.IMSExcelInsert(uploadPath, venue_id, system_id);
+        Result = await this.IMSExcelInsert(uploadPath, venue_id, system_id);
+        //console.log(Result);
       }
-
-      return `${uploadPath}`
+      return Result;
     })
   }
 
@@ -122,7 +127,7 @@ export class VenueService {
     })
   }*/
 
-  async IMSExcelInsert(excelFile: string, venueId: string, systemId: string): Promise<string> {
+  async IMSExcelInsert(excelFile: string, venueId: string, systemId: string) {
     let newOne: boolean;
     (!venueId) ? newOne = true : newOne = false;
     (!venueId || venueId === null) ? venueId = await this.venueRepository.makeVenueId() : venueId = null;
@@ -131,7 +136,7 @@ export class VenueService {
     const wb = new Workbook();
     let cellIndexMap = new Map<string, number>();
 
-    wb.xlsx.readFile(excelFile).then(() => {
+    wb.xlsx.readFile(excelFile).then(async () => {
       const sheet = wb.worksheets[0];
 
       for (let i = 1; i < sheet.rowCount+1; i+=1) {
@@ -157,92 +162,75 @@ export class VenueService {
         if(temp === isExecute) {
           switch (type) {
             case Constant.TYPE_VENUE:
-              const result = this.setVenue(rows, cellIndexMap, venueId, newOne);
-              result.then(rst => {
-                console.log("Result:Venue: ", rst);
-              })
+              const rst1 = await this.setVenue(rows, cellIndexMap, venueId, newOne)
             case Constant.TYPE_SYSTEM:
-              if (!rows.getCell(cellIndexMap.get(Constant.COL_KEY_SYSTEM_NAME) as number).toString().trim()) return;
-              this.setSystem(rows, cellIndexMap, venueId, systemId, newOne).then(rst2 => {
-                console.log("Result:System: ",rst2);
-              });
+              if (!rows.getCell(cellIndexMap.get(Constant.COL_KEY_SYSTEM_NAME) as number).toString().trim()) continue;
+              const rst2 = await this.setSystem(rows, cellIndexMap, venueId, systemId, newOne);
               break;
             case Constant.TYPE_RULE:
-              this.setRule(rows, cellIndexMap, venueId, systemId, newOne).then(rst3 => {
-                console.log("Result:Rule: ", rst3);
-              });
+              const rst3 = await this.setRule(rows, cellIndexMap, venueId, systemId, newOne);
               break;
             case Constant.TYPE_SCALE:
-              this.setScale(rows, cellIndexMap, venueId, systemId, newOne).then(rst4 => {
-                console.log("Result:Scale: ", rst4);
-              });
+              const rst4 = await this.setScale(rows, cellIndexMap, venueId, systemId, newOne);
               break;
             case Constant.TYPE_NODE:
-              this.setNode(rows, cellIndexMap, venueId, systemId, newOne).then(rst5 => {
-                console.log("Result:Node: ", rst5)
-              });
+              const rst5 = await this.setNode(rows, cellIndexMap, venueId, systemId, newOne);
               break;
             case Constant.TYPE_GROUP:
-              this.setGroup(rows, cellIndexMap, venueId, systemId, newOne).then(rst6 => {
-                console.log("Result:Node: ", rst6)
-              });
+              const rst6 = await this.setGroup(rows, cellIndexMap, venueId, systemId, newOne);
               break;
             case Constant.TYPE_VIDEO:
-              this.setVideo(rows, cellIndexMap, venueId, systemId, newOne).then(rst7 => {
-                console.log("Result:Node: ", rst7)
-              });
+              const rst7 = await this.setVideo(rows, cellIndexMap, venueId, systemId, newOne);
               break;
             case Constant.TYPE_AUDIO:
-              this.setAudio(rows, cellIndexMap, venueId, systemId, newOne).then(rst8 => {
-                console.log("Result:Node: ", rst8)
-              });
+              const rst8 = await this.setAudio(rows, cellIndexMap, venueId, systemId, newOne);
               break;
             case Constant.TYPE_CHANNEL:
-              this.setChannel(rows, cellIndexMap, venueId, systemId, newOne).then(rst9 => {
-                console.log("Result:Node: ", rst9)
-              });
+              const rst9 = await this.setChannel(rows, cellIndexMap, venueId, systemId, newOne);
               break;
           }
         }
       }
     })
 
-    return "string";
+    return {
+      "system_id": systemId
+    };
   }
 
   async setVenue(rows: Row, cellIndexMap: Map<string, number>, venueId: string, newOne: boolean) {
-    return this.venueRepository.setVenue(rows, cellIndexMap, venueId, newOne);
+    const rst = await this.venueRepository.setVenue(rows, cellIndexMap, venueId, newOne);
   }
 
-  setSystem(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
-    return this.systemRepository.setSystem(rows, cellIndexMap, venueId, systemId, newOne);
+  async setSystem(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
+    const rst = await this.systemRepository.setSystem(rows, cellIndexMap, venueId, systemId, newOne);
   }
 
-  setNode(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
-    return this.nodeRepository.setNode(rows, cellIndexMap, venueId, systemId, newOne);
+  async setNode(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
+    const rst = await await this.nodeRepository.setNode(rows, cellIndexMap, venueId, systemId, newOne);
   }
 
-  setGroup(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
-    return this.groupRepository.setGroup(rows, cellIndexMap, venueId, systemId, newOne);
+  async setGroup(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
+    const rst = await await this.groupRepository.setGroup(rows, cellIndexMap, venueId, systemId, newOne);
   }
 
-  setRule(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
-    return this.ruleRepository.setRule(rows, cellIndexMap, venueId, systemId, newOne);
+  async setRule(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
+    const rst = await await this.ruleRepository.setRule(rows, cellIndexMap, venueId, systemId, newOne);
   }
 
-  setScale(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
-    return this.scaleRepository.setScale(rows, cellIndexMap, venueId, systemId, newOne)
+  async setScale(rows: Row, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
+    const rst = await await this.scaleRepository.setScale(rows, cellIndexMap, venueId, systemId, newOne)
   }
 
-  setVideo(rows: any, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
-    return this.videoRepository.setVideo(rows, cellIndexMap, venueId, systemId, newOne);
+  async setVideo(rows: any, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
+    const rst = await await this.videoRepository.setVideo(rows, cellIndexMap, venueId, systemId, newOne);
   }
 
-  setAudio(rows: any, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
-    return this.audioRepository.setAudio(rows, cellIndexMap, venueId, systemId, newOne);
+  async setAudio(rows: any, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
+    const rst = await await this.audioRepository.setAudio(rows, cellIndexMap, venueId, systemId, newOne);
   }
 
-  setChannel(rows: any, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
-    return this.channelRepository.setChannel(rows, cellIndexMap, venueId, systemId, newOne);
+  async setChannel(rows: any, cellIndexMap: Map<string, number>, venueId: string, systemId: string, newOne: boolean) {
+    const rst = await await this.channelRepository.setChannel(rows, cellIndexMap, venueId, systemId, newOne);
   }
 }
