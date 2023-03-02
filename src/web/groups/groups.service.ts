@@ -9,7 +9,7 @@ import * as MybatisMapper from "mybatis-mapper";
 import {GroupsRepository} from "../../repository/groups.repository";
 
 MybatisMapper.createMapper(['./src/database/sqlmapper/System.xml', './src/database/sqlmapper/Groups.xml', './src/database/sqlmapper/Channel.xml']);
-@Injectable()
+// @Injectable()
 export class GroupsService {
   constructor(
     @InjectRepository(SystemRepository)

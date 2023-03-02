@@ -147,11 +147,16 @@ export class ExcelService {
           .slice(1)
           .toLowerCase()}`;
 
-        const mediaType = `${newMediaType[0][`${Object.keys(newMediaType[0])}`][0]}${newMediaType[0][
-          `${Object.keys(newMediaType[0])}`
-        ]
-          .slice(1)
-          .toLowerCase()}`;
+        const mediaTypeStrFirstSpell = `${newMediaType[0][`${Object.keys(newMediaType[0])}`][0]}`;
+        const mediaTypeStr = `${newMediaType[0][`${Object.keys(newMediaType[0])}`]}`;
+
+        let mediaType;
+
+        if (mediaTypeStr === "ALL") {
+          mediaType = mediaTypeStr;
+        } else {
+          mediaType = `${mediaTypeStrFirstSpell}${mediaTypeStr.slice(1).toLowerCase()}`;
+        }
 
         const gimbalPreset = newGimbalPreset[0][`${Object.keys(newGimbalPreset[0])}`];
 
@@ -175,7 +180,8 @@ export class ExcelService {
         const viewType = newViewType[0][`${Object.keys(newViewType[0])}`];
         const type = `${newType[0][`${Object.keys(newType[0])}`][0]}${newType[0][`${Object.keys(newType[0])}`]
           .slice(1)
-          .toLowerCase()}`;
+          .toLowerCase()
+          .replace("view", "View")}`;
         const externalGroup = newExternalGroup[0][`${Object.keys(newExternalGroup[0])}`];
         const defaultGroup = newDefaultGroup[0][`${Object.keys(newDefaultGroup[0])}`];
         const interactive = newInteractive[0][`${Object.keys(newInteractive[0])}`];
@@ -308,6 +314,10 @@ export class ExcelService {
         }
       }
 
+      // pdview_index
+      const exportPdviewIndex = await this.excelRepository.getExcelExportPdviewIndex(systemId);
+      const pdviewIndexStr = exportPdviewIndex.map(item => item.pdview_index).join(", ");
+
       /**
        * Object.keys(adaptiveStreamingGroups).length 만큼의
        * adaptiveStreaming Group 이 있다.
@@ -333,6 +343,7 @@ export class ExcelService {
         video: videoData,
         audio: audioData,
         adaptiveStreaming: adaptiveStreamingGroups,
+        pdviewIndex: pdviewIndexStr,
       };
 
       cameraGroupExportStarter(dataSet, channelWorkSheet, adaptiveStreamingWorkSheet);

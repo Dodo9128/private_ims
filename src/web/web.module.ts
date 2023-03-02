@@ -105,5 +105,19 @@ import { MonitRepository } from "../repository/monit.repository";
     EventService,
     MonitService,
   ],
+  exports: [
+    WebService,
+    VenueService,
+    SystemService,
+    RuleService,
+    ScaleService,
+    NodeService,
+    GroupsService,
+    VideoService,
+    AudioService,
+    ChannelService,
+    EventService,
+    MonitService,
+  ]
 })
 export class WebModule {}
