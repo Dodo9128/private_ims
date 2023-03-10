@@ -14,6 +14,7 @@
 		) A</if></sql>
 	<sql id="selectCount"><include refid="initPrifix" />
 		SELECT	COUNT(1)</sql>
+
 	<select id="getMaxEventId" parameterType="Map" resultType="Integer">
 		SELECT CAST( IFNULL( MAX( RIGHT( id, 4 ) ), '0000' ) AS UNSIGNED INTEGER ) + 1 FROM event WHERE id LIKE #{system_id}
 	</select>
@@ -21,8 +22,8 @@
 	<select id="getNextEventId" parameterType="Map" resultType="String">
 		SELECT concat( #{system_id}, LPAD( CAST( IFNULL( RIGHT( id, 4 ), '0000' ) AS UNSIGNED INTEGER ) + 1, 4, '0') )  FROM event WHERE id = #{event_id};
 	</select>
-    <!--=======================================
-    	목록 조회
+	<!--=======================================
+        목록 조회
      =======================================-->
 	<sql id="listEventFromWhere">
 		FROM 	event E
@@ -34,61 +35,70 @@
 			AND E.system_id = #{system_id}
 		</if>
 	</sql>
-	
-	<select id="listEventCount" parameterType="Map" resultType="Integer">
-		<include refid="selectCount" />
-		<include refid="listEventFromWhere" />
-    </select>
 
-    <select id="listEvent" resultType="Map">
-		<include refid="pagingPreFix" />
-		SELECT 	
-			E.id
-			, E.content_id
-			, E.name
-			, E.description
-			, E.system_id
-			, E.scheduled_at
-			, E.live_status
-			, FNC_CODENAME(E.live_status) AS live_status_name
-			, E.is_public
-			, FNC_CODENAME(E.is_public) AS is_public_name
-			, E.status
-			, FNC_CODENAME(E.status) AS status_name
-			, E.banner
-			, E.updated_at
-			, E.registered_at
+	<select id="listEventCount" parameterType="Map" resultType="Integer">
+		<include refid="CommonSQL.selectCount" />
 		<include refid="listEventFromWhere" />
-		<include refid="orderby" />
-		<include refid="pagingPostFix" />
-    </select>
-    
-    <select id="getEvent4Mng" resultType="Map">
-		SELECT 	
-			E.id
-			, E.content_id
-			, E.name
-			, E.description
-			, E.system_id
-			, E.scheduled_at
-			, E.live_status
-			, FNC_CODENAME(E.live_status) AS live_status_name
-			, E.is_public
-			, FNC_CODENAME(E.is_public) AS is_public_name
-			, E.status
-			, FNC_CODENAME(E.status) AS status_name
-			, E.banner
-			, E.updated_at
-			, E.registered_at
+	</select>
+
+	<select id="listEvent" resultType="Map">
+		<include refid="CommonSQL.pagingPreFix" />
+		SELECT
+		E.id
+		, E.content_id
+		, E.name
+		, E.description
+		, E.system_id
+		, E.scheduled_at
+		, E.live_status
+		, FNC_CODENAME(E.live_status) AS live_status_name
+		, E.is_public
+		, FNC_CODENAME(E.is_public) AS is_public_name
+		, E.status
+		, FNC_CODENAME(E.status) AS status_name
+		, E.banner
+		, E.updated_at
+		, E.registered_at
 		<include refid="listEventFromWhere" />
-    </select>
-	
+		<include refid="CommonSQL.orderby" />
+		<include refid="CommonSQL.pagingPostFix" />
+	</select>
+
+	<select id="getEvent4Mng" resultType="Map">
+		SELECT
+		E.id
+		, E.content_id
+		, E.name
+		, E.description
+		, E.system_id
+		, E.scheduled_at
+		, E.live_status
+		, FNC_CODENAME(E.live_status) AS live_status_name
+		, E.is_public
+		, FNC_CODENAME(E.is_public) AS is_public_name
+		, E.status
+		, FNC_CODENAME(E.status) AS status_name
+		, E.banner
+		, E.updated_at
+		, E.registered_at
+		<include refid="listEventFromWhere" />
+	</select>
+
 	<update id="updateContentIdByEventId" parameterType="Map">
-		<include refid="initPrifix" />
-		UPDATE event 
-		SET	
-			content_id = #{content_id}
+		<include refid="CommonSQL.initPrifix" />
+		UPDATE event
+		SET
+		content_id = #{content_id}
 		WHERE id = #{event_id}
-			AND system_id = #{system_id}
+		AND system_id = #{system_id}
 	</update>
+
+	<select id="getSystemId" resultType="String">
+		SELECT
+		E.system_id
+		FROM
+		event E
+		WHERE	1=1
+		AND id = #{event_id}
+	</select>
 </mapper>

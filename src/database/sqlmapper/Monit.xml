@@ -13,7 +13,7 @@
 	<sql id="pagingPostFix"><if test = 'pageNo !=null and !pageNo.equals("")'>LIMIT #{pageSize, jdbcType=INTEGER} OFFSET #{pageOffset, jdbcType=INTEGER}
 		) A</if></sql>
 	<sql id="selectCount"><include refid="initPrifix" />
-		SELECT	COUNT(1)</sql>
+		SELECT	COUNT(1) as cnt</sql>
 	<select id="getMaxMonitId" parameterType="Map" resultType="Integer">
 		SELECT CAST( IFNULL( MAX( RIGHT( id, 3 ) ), '000' ) AS UNSIGNED INTEGER ) + 1 FROM monit WHERE id LIKE #{system_id}
 	</select>

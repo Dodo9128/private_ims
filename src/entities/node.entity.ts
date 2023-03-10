@@ -1,12 +1,7 @@
 import {
   Entity,
   Column,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  JoinColumn,
   PrimaryColumn,
 } from "typeorm";
 import { IsBoolean, IsNotEmpty, IsOptional, IsString } from "class-validator";

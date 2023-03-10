@@ -5,21 +5,39 @@
 
 <mapper namespace="Node">
 	<sql id="initPrifix">
-		/* SQL_QUERY */</sql>
-	<sql id="pagingPreFix"><include refid="initPrifix" />
-		<if test='pageNo !=null and !pageNo.equals("")'>SELECT A.* FROM
-			(</if></sql>
-	<sql id="orderby"><if test='sortColStr !=null and sortColStr !=""'>ORDER BY <foreach collection="sortColStr" item="item" index="index" separator=",">${item}</foreach></if></sql>
-	<sql id="pagingPostFix"><if test = 'pageNo !=null and !pageNo.equals("")'>LIMIT #{pageSize, jdbcType=INTEGER} OFFSET #{pageOffset, jdbcType=INTEGER}
-		) A</if></sql>
-	<sql id="selectCount"><include refid="initPrifix" />
-		SELECT	COUNT(1)</sql>
+		/* SQL_QUERY */
+	</sql>
+	<sql id="pagingPreFix">
+		<include refid="initPrifix" />
+		<if test='pageNo !=null and !pageNo.equals("")'>
+			SELECT A.* FROM
+			(
+		</if>
+	</sql>
+	<sql id="orderby">
+		<if test='sortColStr !=null and sortColStr !=""'>
+			ORDER BY
+			<foreach collection="sortColStr" item="item" index="index" separator=",">
+				${item}
+			</foreach>
+		</if>
+	</sql>
+	<sql id="pagingPostFix">
+		<if test = 'pageNo !=null and !pageNo.equals("")'>
+			LIMIT #{pageSize, jdbcType=INTEGER} OFFSET #{pageOffset, jdbcType=INTEGER}
+		) A
+		</if>
+	</sql>
+	<sql id="selectCount">
+		<include refid="initPrifix" />
+		SELECT	COUNT(1) as cnt
+	</sql>
 
 	<select id="getMaxNodeId" parameterType="Map" resultType="Integer">
 		SELECT CAST( IFNULL( MAX( RIGHT( id, 3 ) ), '000' ) AS UNSIGNED INTEGER ) + 1 FROM node WHERE id LIKE #{system_id}
 	</select>
-    <!--=======================================
-    	목록 조회
+	<!--=======================================
+        목록 조회
      =======================================-->
 	<sql id="listNodeFromWhere">
 		FROM 	node N
@@ -37,298 +55,334 @@
 			AND N.ml_type = #{mlType}
 		</if>
 	</sql>
-	
-	<select id="listNodeCount" parameterType="Map" resultType="Integer">
-		<include refid="1selectCount" />
-		<include refid="listNodeFromWhere" />
-    </select>
 
-    <select id="listNode" resultType="Map">
+	<select id="listNodeCount" parameterType="Map" resultType="Integer">
+		<include refid="selectCount" />
+		<include refid="listNodeFromWhere" />
+	</select>
+
+	<select id="listNode4Cms" resultType="Map">
 		<include refid="pagingPreFix" />
-		SELECT 	
-			N.id
-			, N.name
-			, N.system_id
-			, N.public_ip
-			, N.public_port
-			, N.private_ip
-			, N.private_port
-			, N.node_type
-			, FNC_CODENAME(N.node_type) AS node_type_name
-			, N.is_origin
-			, FNC_CODENAME(N.is_origin) AS is_origin_name
-			, N.domain
-			, N.region
-			, N.region_name
-			, N.instance_id
-			, N.initial_state
-			, FNC_CODENAME(N.initial_state) AS initial_state_name
-			, N.state
-			, FNC_CODENAME(N.state) AS state_name
-			, N.ls_type
-			, FNC_CODENAME(N.ls_type) AS ls_type_name
-			, N.ml_type
-			, FNC_CODEDESC(N.ml_type) AS ml_type_name
-			, N.deploy_type
-			, FNC_CODENAME(N.deploy_type) AS deploy_type_name
-			, N.parent_node_id
-			, N.updated_at
-			, N.registered_at
+		SELECT
+		N.id
+		, N.name
+		, N.system_id
+		, N.public_ip
+		, N.public_port
+		, N.private_ip
+		, N.private_port
+		, N.node_type AS node_type_code
+		, FNC_CODENAME(N.node_type) AS node_type
+		, N.is_origin AS is_origin_code
+		, FNC_CODENAME(N.is_origin) AS is_origin
+		, N.domain
+		, N.region
+		, N.region_name
+		, N.instance_id
+		, N.initial_state AS initial_state_code
+		, FNC_CODENAME(N.initial_state) AS initial_state
+		, N.state
+		, FNC_CODENAME(N.state) AS state_name
+		, N.ls_type
+		, FNC_CODENAME(N.ls_type) AS ls_type_name
+		, N.ml_type
+		, FNC_CODEDESC(N.ml_type) AS ml_type_name
+		, N.deploy_type
+		, FNC_CODENAME(N.deploy_type) AS deploy_type_name
+		, N.parent_node_id
+		, N.updated_at
+		, N.registered_at
 		<include refid="listNodeFromWhere" />
 		<include refid="orderby" />
 		<include refid="pagingPostFix" />
-    </select>
-    
-    <select id="getNode" resultType="Map">
-		SELECT 	
-			N.id
-			, N.name
-			, N.system_id
-			, N.public_ip
-			, N.public_port
-			, N.private_ip
-			, N.private_port
-			, FNC_CODENAME(N.node_type) AS node_type
-			, FNC_CODENAME(N.is_origin) AS is_origin
-			, N.domain
-			, N.region
-			, N.region_name
-			, N.instance_id
-			, FNC_CODENAME(N.initial_state) AS initial_state
-			, FNC_CODENAME(N.state) AS state
-			, FNC_CODENAME(N.ls_type) AS ls_type
-			, FNC_CODENAME(N.ml_type) AS ml_type
-			, FNC_CODENAME(N.deploy_type) AS deploy_type
-			, N.parent_node_id
-			, N.updated_at
-			, N.registered_at
+	</select>
+
+	<select id="listNode" resultType="Map">
+		<include refid="pagingPreFix" />
+		SELECT
+		N.id
+		, N.name
+		, N.system_id
+		, N.public_ip
+		, N.public_port
+		, N.private_ip
+		, N.private_port
+		, N.node_type
+		, FNC_CODENAME(N.node_type) AS node_type_name
+		, N.is_origin
+		, FNC_CODENAME(N.is_origin) AS is_origin_name
+		, N.domain
+		, N.region
+		, N.region_name
+		, N.instance_id
+		, N.initial_state
+		, FNC_CODENAME(N.initial_state) AS initial_state_name
+		, N.state
+		, FNC_CODENAME(N.state) AS state_name
+		, N.ls_type
+		, FNC_CODENAME(N.ls_type) AS ls_type_name
+		, N.ml_type
+		, FNC_CODEDESC(N.ml_type) AS ml_type_name
+		, N.deploy_type
+		, FNC_CODENAME(N.deploy_type) AS deploy_type_name
+		, N.parent_node_id
+		, N.updated_at
+		, N.registered_at
 		<include refid="listNodeFromWhere" />
-    </select>
-    
-    <select id="getNode4Mng" resultType="Map">
-		SELECT 	
-			N.id
-			, N.name
-			, N.system_id
-			, N.public_ip
-			, N.public_port
-			, N.private_ip
-			, N.private_port
-			, N.node_type
-			, FNC_CODENAME(N.node_type) AS node_type_name
-			, N.is_origin
-			, FNC_CODENAME(N.is_origin) AS is_origin_name
-			, N.domain
-			, N.region
-			, N.region_name
-			, N.instance_id
-			, N.initial_state
-			, FNC_CODENAME(N.initial_state) AS initial_state_name
-			, N.state
-			, FNC_CODENAME(N.state) AS state_name
-			, N.ls_type
-			, FNC_CODENAME(N.ls_type) AS ls_type_name
-			, N.ml_type
-			, FNC_CODENAME(N.ml_type) AS ml_type_name
-			, N.deploy_type
-			, FNC_CODENAME(N.deploy_type) AS deploy_type_name
-			, N.parent_node_id
-			, N.updated_at
-			, N.registered_at
+		<include refid="orderby" />
+		<include refid="pagingPostFix" />
+	</select>
+
+	<select id="getNode" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.system_id
+		, N.public_ip
+		, N.public_port
+		, N.private_ip
+		, N.private_port
+		, FNC_CODENAME(N.node_type) AS node_type
+		, FNC_CODENAME(N.is_origin) AS is_origin
+		, N.domain
+		, N.region
+		, N.region_name
+		, N.instance_id
+		, FNC_CODENAME(N.initial_state) AS initial_state
+		, FNC_CODENAME(N.state) AS state
+		, FNC_CODENAME(N.ls_type) AS ls_type
+		, FNC_CODENAME(N.ml_type) AS ml_type
+		, FNC_CODENAME(N.deploy_type) AS deploy_type
+		, N.parent_node_id
+		, N.updated_at
+		, N.registered_at
 		<include refid="listNodeFromWhere" />
-    </select>
-    
-    <insert id="insertNode" parameterType="Map">
+	</select>
+
+	<select id="getNode4Mng" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.system_id
+		, N.public_ip
+		, N.public_port
+		, N.private_ip
+		, N.private_port
+		, N.node_type
+		, FNC_CODENAME(N.node_type) AS node_type_name
+		, N.is_origin
+		, FNC_CODENAME(N.is_origin) AS is_origin_name
+		, N.domain
+		, N.region
+		, N.region_name
+		, N.instance_id
+		, N.initial_state
+		, FNC_CODENAME(N.initial_state) AS initial_state_name
+		, N.state
+		, FNC_CODENAME(N.state) AS state_name
+		, N.ls_type
+		, FNC_CODENAME(N.ls_type) AS ls_type_name
+		, N.ml_type
+		, FNC_CODENAME(N.ml_type) AS ml_type_name
+		, N.deploy_type
+		, FNC_CODENAME(N.deploy_type) AS deploy_type_name
+		, N.parent_node_id
+		, N.updated_at
+		, N.registered_at
+		<include refid="listNodeFromWhere" />
+	</select>
+
+	<insert id="insertNode" parameterType="Map">
 		INSERT INTO node
 		(
-			id
-			, name
-			, system_id
-			, public_ip
-			, public_port
-			, private_ip
-			, private_port
-			, node_type
-			, is_origin
-			, domain
-			, region
-			, region_name
-			, instance_id
-			, initial_state
-			, state
-			, is_auto_scale_out
-			, ls_type
-			, ml_type
-			, deploy_type
-			, parent_node_id
-			, updated_at
-			, registered_at
+		id
+		, name
+		, system_id
+		, public_ip
+		, public_port
+		, private_ip
+		, private_port
+		, node_type
+		, is_origin
+		, domain
+		, region
+		, region_name
+		, instance_id
+		, initial_state
+		, state
+		, is_auto_scale_out
+		, ls_type
+		, ml_type
+		, deploy_type
+		, parent_node_id
+		, updated_at
+		, registered_at
 		)
 		VALUES
 		(
-			#{id}
-			, #{name}
-			, #{systemId}
-			, #{publicIp}
-			, #{publicPort}
-			, #{privateIp}
-			, #{privatePort}
-			, #{nodeType}
-			, #{isOrigin}
-			, #{domain}
-			, #{region}
-			, #{regionName}
-			, #{instanceId}
-			, #{initialState}
-			, #{state}
-			, #{isAutoScaleOut}
-			, #{lsType}
-			, #{mlType}
-			, #{deployType}
-			, #{parentNodeId}
-			, #{updatedAt}
-			, #{registeredAt}
+		#{id}
+		, #{name}
+		, #{systemId}
+		, #{publicIp}
+		, #{publicPort}
+		, #{privateIp}
+		, #{privatePort}
+		, #{nodeType}
+		, #{isOrigin}
+		, #{domain}
+		, #{region}
+		, #{regionName}
+		, #{instanceId}
+		, #{initialState}
+		, #{state}
+		, #{isAutoScaleOut}
+		, #{lsType}
+		, #{mlType}
+		, #{deployType}
+		, #{parentNodeId}
+		, #{updatedAt}
+		, #{registeredAt}
 		)
 		on DUPLICATE key update
-			name = #{name}
-			, system_id = #{systemId}
-			, public_ip = #{publicIp}
-			, public_port = #{publicPort}
-			, private_ip = #{privateIp}
-			, private_port = #{privatePort}
-			, node_type = #{nodeType}
-			, is_origin = #{isOrigin}
-			, domain = #{domain}
-			, region = #{region}
-			, region_name = #{regionName}
-			, instance_id = #{instanceId}
-			, initial_state = #{initialState}
-			, state = #{state}
-			, is_auto_scale_out = #{isAutoScaleOut}
-			, ls_type = #{lsType}
-			, ml_type = #{mlType}
-			, deploy_type = #{deployType}
-			, parent_node_id = #{parentNodeId}
-			, updated_at = #{updatedAt}
-			, registered_at = #{registeredAt}
+		name = #{name}
+		, system_id = #{systemId}
+		, public_ip = #{publicIp}
+		, public_port = #{publicPort}
+		, private_ip = #{privateIp}
+		, private_port = #{privatePort}
+		, node_type = #{nodeType}
+		, is_origin = #{isOrigin}
+		, domain = #{domain}
+		, region = #{region}
+		, region_name = #{regionName}
+		, instance_id = #{instanceId}
+		, initial_state = #{initialState}
+		, state = #{state}
+		, is_auto_scale_out = #{isAutoScaleOut}
+		, ls_type = #{lsType}
+		, ml_type = #{mlType}
+		, deploy_type = #{deployType}
+		, parent_node_id = #{parentNodeId}
+		, updated_at = #{updatedAt}
+		, registered_at = #{registeredAt}
 	</insert>
 
-    <select id="listNodeFor4DRS" resultType="Map">
-		SELECT 
-			N.id
-			, N.name 
-			, N.region 
-			, N.region_name
-			, FNC_CODENAME(N.is_origin) AS is_origin
-			, N.private_ip 
-			, N.private_port 
-			, N.public_ip 
-			, N.public_port 
+	<select id="listNodeFor4DRS" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.region
+		, N.region_name
+		, FNC_CODENAME(N.is_origin) AS is_origin
+		, N.private_ip
+		, N.private_port
+		, N.public_ip
+		, N.public_port
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{systemId}
+		AND N.system_id = #{systemId}
 		<if	test='nodeType !=null and nodeType !=""'>
 			AND N.node_type = #{nodeType}
 		</if>
 		<if	test='serverIp !=null and serverIp !=""'>
 			AND (
-				N.private_ip = #{serverIp}
-				OR N.public_ip = #{serverIp}
+			N.private_ip = #{serverIp}
+			OR N.public_ip = #{serverIp}
 			)
 		</if>
 		ORDER BY N.is_origin DESC
-    </select>
+	</select>
 
-    <select id="listNodeFor4DSS" resultType="Map">
-		SELECT 
-			N.id
-			, N.name 
-			, N.region 
-			, N.region_name
-			, FNC_CODENAME(N.is_origin) AS is_origin
-			, N.private_ip 
-			, N.private_port 
-			, N.public_ip 
-			, N.public_port 
+	<select id="listNodeFor4DSS" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.region
+		, N.region_name
+		, FNC_CODENAME(N.is_origin) AS is_origin
+		, N.private_ip
+		, N.private_port
+		, N.public_ip
+		, N.public_port
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{systemId}
+		AND N.system_id = #{systemId}
 		<if	test='nodeType !=null and nodeType !=""'>
 			AND N.node_type = #{nodeType}
 		</if>
 		<if	test='serverIp !=null and serverIp !=""'>
 			AND (
-				N.private_ip = #{serverIp}
-				OR N.public_ip = #{serverIp}
+			N.private_ip = #{serverIp}
+			OR N.public_ip = #{serverIp}
 			)
 		</if>
 		<if	test='initialState !=null and initialState !=""'>
 			AND N.initial_state = #{initialState}
 		</if>
 		ORDER BY N.is_origin DESC
-    </select>
+	</select>
 
-    <select id="listNodeForRelay4DRS" resultType="Map">
-		SELECT 
-			N.id
-			, N.name 
-			, N.region 
-			, N.region_name
-			, FNC_CODENAME(N.is_origin) AS is_origin
-			, N.private_ip 
-			, N.private_port 
-			, N.public_ip 
-			, N.public_port 
+	<select id="listNodeForRelay4DRS" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.region
+		, N.region_name
+		, FNC_CODENAME(N.is_origin) AS is_origin
+		, N.private_ip
+		, N.private_port
+		, N.public_ip
+		, N.public_port
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{systemId}
-			AND N.parent_node_id = #{nodeId}
+		AND N.system_id = #{systemId}
+		AND N.parent_node_id = #{nodeId}
 		ORDER BY N.is_origin DESC
-    </select>
+	</select>
 
-    <select id="listNodeForCMS" resultType="Map">
-		SELECT 
-			N.id
-			, N.name 
-			, N.region 
-			, N.region_name
-			, FNC_CODENAME(N.is_origin) AS is_origin
-			, N.private_ip 
-			, N.private_port 
-			, N.public_ip 
-			, N.public_port 
-			, N.domain 
+	<select id="listNodeForCMS" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.region
+		, N.region_name
+		, FNC_CODENAME(N.is_origin) AS is_origin
+		, N.private_ip
+		, N.private_port
+		, N.public_ip
+		, N.public_port
+		, N.domain
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{systemId}
+		AND N.system_id = #{systemId}
 		<if	test='nodeType !=null and nodeType !=""'>
 			AND N.node_type = #{nodeType}
 		</if>
 		ORDER BY N.is_origin DESC
-    </select>
-    
-    <select id="listNodeFor4DLS" resultType="Map">
-		SELECT 
-			N.id
-			, N.name 
-			, N.region 
-			, N.private_ip 
-			, N.private_port 
-			, N.public_ip 
-			, N.public_port 
-			, N.instance_id 
-			, N.domain 
-			, FNC_CODENAME(N.node_type) AS node_type
-			, FNC_CODENAME(N.initial_state) AS initial_state
-			, FNC_CODENAME(N.ls_type) AS ls_type
+	</select>
+
+	<select id="listNodeFor4DLS" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.region
+		, N.private_ip
+		, N.private_port
+		, N.public_ip
+		, N.public_port
+		, N.instance_id
+		, N.domain
+		, FNC_CODENAME(N.node_type) AS node_type
+		, FNC_CODENAME(N.initial_state) AS initial_state
+		, FNC_CODENAME(N.ls_type) AS ls_type
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{systemId}
+		AND N.system_id = #{systemId}
 		<if	test='regionName !=null and regionName !=""'>
 			AND N.region_name = #{regionName}
 		</if>
@@ -342,26 +396,26 @@
 			AND N.initial_state = #{initialState}
 		</if>
 		ORDER BY N.name ASC
-    </select>
-    
-    <select id="listNodeForSelf" resultType="Map">
-		SELECT 
-			N.id
-			, N.name 
-			, N.region 
-			, N.region_name
-			, FNC_CODENAME(N.is_origin) AS is_origin
-			, N.private_ip 
-			, N.private_port 
-			, N.public_ip 
-			, N.public_port 
-			, FNC_CODENAME(N.ls_type) AS ls_type
-			, FNC_CODENAME(N.ml_type) AS ml_type
-			, FNC_CODENAME(N.deploy_type) AS deploy_type
+	</select>
+
+	<select id="listNodeForSelf" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.region
+		, N.region_name
+		, FNC_CODENAME(N.is_origin) AS is_origin
+		, N.private_ip
+		, N.private_port
+		, N.public_ip
+		, N.public_port
+		, FNC_CODENAME(N.ls_type) AS ls_type
+		, FNC_CODENAME(N.ml_type) AS ml_type
+		, FNC_CODENAME(N.deploy_type) AS deploy_type
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{systemId}
+		AND N.system_id = #{systemId}
 		<if	test='nodeType !=null and nodeType !=""'>
 			AND N.node_type = #{nodeType}
 		</if>
@@ -370,26 +424,28 @@
 		</if>
 		<if	test='serverIp !=null and serverIp !=""'>
 			AND (
-				N.private_ip = #{serverIp}
-				OR N.public_ip = #{serverIp}
+			N.private_ip = #{serverIp}
+			OR N.public_ip = #{serverIp}
 			)
 		</if>
 		ORDER BY N.is_origin DESC
-    </select>
+	</select>
 
-    <select id="listNodeForNodeType" resultType="Map">
-		SELECT 
-			N.id
-			, N.name 
-			, N.region 
-			, N.private_ip 
-			, N.private_port 
-			, N.public_ip 
-			, N.public_port 
+	<select id="listNodeForNodeType" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.region
+		, N.private_ip
+		, N.private_port
+		, N.public_ip
+		, N.public_port
+		, N.ml_type
+		, N.deploy_type
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{systemId}
+		AND N.system_id = #{systemId}
 		<if	test='regionName !=null and regionName !=""'>
 			AND N.region_name = #{regionName}
 		</if>
@@ -407,79 +463,79 @@
 		</if>
 		<if	test='ip !=null and ip !=""'>
 			AND (
-				N.public_ip = #{ip}
-				OR N.private_ip = #{ip}
+			N.public_ip = #{ip}
+			OR N.private_ip = #{ip}
 			)
 		</if>
 		ORDER BY N.name ASC
-    </select>
-    
-    <select id="getScaleOutInstanceMaxName" parameterType="Map" resultType="Map">
-		SELECT 
-			CONCAT( 
-				REPLACE( MAX( name ), RIGHT( MAX( name ), 2), '')
-				, LPAD( 
-					CAST( RIGHT( MAX( name ), 2) AS UNSIGNED INTEGER) + 1 
-					, 2
-					, '0'
-				)
-				, '-A'
-			) AS instance_max_name
-			, is_origin 
-		FROM
-			node
-		WHERE 	1=1
-			AND system_id = #{systemId}
-			AND region = #{region}
-			AND node_type = #{nodeType}
-		<if	test='mlType !=null and mlType !=""'>
-			AND ml_type = #{mlType}
-		</if>
-			AND is_auto_scale_out = 'CM01N'
-		UNION 
-		SELECT 
-			CONCAT( 
-				REPLACE( MAX( name ), RIGHT( MAX( name ), 4), '')
-				, LPAD( 
-					CAST( RIGHT( MAX( name ), 4) AS UNSIGNED INTEGER) + 1 
-					, 2
-					, '0'
-				)
-				, '-A'
-			) AS instance_max_name
-			, is_origin 
-		FROM
-			node
-		WHERE 	1=1
-			AND system_id = #{systemId}
-			AND region = #{region}
-			AND node_type = #{nodeType}
-		<if	test='mlType !=null and mlType !=""'>
-			AND ml_type = #{mlType}
-		</if>
-			AND is_auto_scale_out = 'CM01Y'
 	</select>
-	
+
+	<select id="getScaleOutInstanceMaxName" parameterType="Map" resultType="Map">
+		SELECT
+		CONCAT(
+		REPLACE( MAX( name ), RIGHT( MAX( name ), 2), '')
+		, LPAD(
+		CAST( SUBSTRING( MAX( name ), -4, 2) AS UNSIGNED INTEGER) + 1
+		, 2
+		, '0'
+		)
+		, '-A'
+		) AS instance_max_name
+		, is_origin
+		FROM
+		node
+		WHERE 	1=1
+		AND system_id = #{systemId}
+		AND region = #{region}
+		AND node_type = #{nodeType}
+		<if	test='mlType !=null and mlType !=""'>
+			AND ml_type = #{mlType}
+		</if>
+		AND is_auto_scale_out = 'CM01N'
+		UNION
+		SELECT
+		CONCAT(
+		REPLACE( MAX( name ), RIGHT( MAX( name ), 4), '')
+		, LPAD(
+		CAST( SUBSTRING( MAX( name ), -4, 2) AS UNSIGNED INTEGER) + 1
+		, 2
+		, '0'
+		)
+		, '-A'
+		) AS instance_max_name
+		, is_origin
+		FROM
+		node
+		WHERE 	1=1
+		AND system_id = #{systemId}
+		AND region = #{region}
+		AND node_type = #{nodeType}
+		<if	test='mlType !=null and mlType !=""'>
+			AND ml_type = #{mlType}
+		</if>
+		AND is_auto_scale_out = 'CM01Y'
+	</select>
+
 	<update id="scaleOut4DSSOk" parameterType="Map">
 		<include refid="initPrifix" />
-		UPDATE node 
-		SET	
-			public_ip = #{publicIp}
-			, public_port = #{publicPort}
-			, domain = #{domain}
-			, updated_at = #{updatedAt}
+		UPDATE node
+		SET
+		public_ip = #{publicIp}
+		, public_port = #{publicPort}
+		, domain = #{domain}
+		, updated_at = #{updatedAt}
 		WHERE id = #{id}
-			AND system_id = #{systemId}
+		AND system_id = #{systemId}
 	</update>
-	
+
 	<select id="listNodeForScaleOutOrInTarget4DRS" resultType="Map">
-		SELECT 
-			N.private_ip 
-			, N.private_port 
+		SELECT
+		N.private_ip
+		, N.private_port
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{systemId}
+		AND N.system_id = #{systemId}
 		<if	test='region !=null and region !=""'>
 			AND N.region = #{region}
 		</if>
@@ -487,21 +543,21 @@
 			AND N.node_type = #{nodeType}
 		</if>
 		ORDER BY N.name ASC
-    </select>
-	
+	</select>
+
 	<update id="scaleIn4DSS" parameterType="Map">
 		<include refid="initPrifix" />
 		DELETE FROM node WHERE id = #{id} AND system_id = #{systemId}
 	</update>
-	
+
 	<select id="listNodeForScaleInfoUpdateTarget4DLS" resultType="Map">
-		SELECT 
-			N.private_ip 
-			, N.private_port 
+		SELECT
+		N.private_ip
+		, N.private_port
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{systemId}
+		AND N.system_id = #{systemId}
 		<if	test='region !=null and region !=""'>
 			AND N.region = #{region}
 		</if>
@@ -509,16 +565,16 @@
 			AND N.node_type = #{nodeType}
 		</if>
 		ORDER BY N.name ASC
-    </select>
-	
+	</select>
+
 	<select id="listNodeFor4DSSUpdateTarget4DLS" resultType="Map">
-		SELECT 
-			N.private_ip 
-			, N.private_port 
+		SELECT
+		N.private_ip
+		, N.private_port
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{systemId}
+		AND N.system_id = #{systemId}
 		<if	test='region !=null and region !=""'>
 			AND N.region = #{region}
 		</if>
@@ -526,36 +582,16 @@
 			AND N.node_type = #{nodeType}
 		</if>
 		ORDER BY N.name ASC
-    </select>
-    
-    <select id="listNodeForScaleInfoUpdateTarget4DML" resultType="Map">
-		SELECT 
-			N.private_ip 
-			, N.private_port 
+	</select>
+
+	<select id="listNodeForScaleInfoUpdateTarget4DML" resultType="Map">
+		SELECT
+		N.private_ip
+		, N.private_port
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{systemId}
-		<if	test='region !=null and region !=""'>
-			AND N.region = #{region}
-		</if>
-		<if	test='nodeType !=null and nodeType !=""'>
-			AND N.node_type = #{nodeType}
-		</if>
-		<if	test='mlType !=null and mlType !=""'>
-			AND N.ml_type = #{mlType}
-		</if>
-		ORDER BY N.name ASC
-    </select>
-    
-    <select id="listNodeFor4DMLUpdateTarget4DML" resultType="Map">
-		SELECT 
-			N.private_ip 
-			, N.private_port 
-		FROM
-			node N 
-		WHERE 	1=1
-			AND N.system_id = #{systemId}
+		AND N.system_id = #{systemId}
 		<if	test='region !=null and region !=""'>
 			AND N.region = #{region}
 		</if>
@@ -566,71 +602,50 @@
 			AND N.ml_type = #{mlType}
 		</if>
 		ORDER BY N.name ASC
-    </select>
-    
-    <select id="listNodeFor4DML" resultType="Map">
-		SELECT 
-			N.id
-			, N.name 
-			, N.region 
-			, N.region_name
-			, FNC_CODENAME(N.is_origin) AS is_origin
-			, N.private_ip 
-			, N.private_port 
-			, N.public_ip 
-			, N.public_port 
-			, IFNULL(N.instance_id , '') AS instance_id
-			, N.domain 
-			, IFNULL(FNC_CODENAME(N.initial_state), '') AS initial_state
-			, IFNULL(FNC_CODENAME(N.ls_type), '') AS ls_type
-			, CAST(IFNULL(FNC_CODENAME(N.ml_type), '') AS UNSIGNED INTEGER) AS ml_type
-			, IFNULL(FNC_CODEDESC(N.ml_type), '') AS ml_type_name
-			, IFNULL(FNC_CODENAME(N.deploy_type), '') AS deploy_type
+	</select>
+
+	<select id="listNodeFor4DMLUpdateTarget4DML" resultType="Map">
+		SELECT
+		N.private_ip
+		, N.private_port
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{systemId}
+		AND N.system_id = #{systemId}
+		<if	test='region !=null and region !=""'>
+			AND N.region = #{region}
+		</if>
 		<if	test='nodeType !=null and nodeType !=""'>
 			AND N.node_type = #{nodeType}
 		</if>
 		<if	test='mlType !=null and mlType !=""'>
 			AND N.ml_type = #{mlType}
 		</if>
-		<if	test='region !=null and region !=""'>
-			AND N.region = #{region}
-		</if>
-		<if	test='serverIp !=null and serverIp !=""'>
-			AND (
-				N.private_ip = #{serverIp}
-				OR N.public_ip = #{serverIp}
-			)
-		</if>
 		ORDER BY N.name ASC
-    </select>
-    
-    <select id="listNodeFor4DMLIncludeRsPair" resultType="Map">
-		SELECT 
-			N.id
-			, N.name 
-			, N.region 
-			, N.region_name
-			, FNC_CODENAME(N.is_origin) AS is_origin
-			, N.private_ip 
-			, N.private_port 
-			, N.public_ip 
-			, N.public_port 
-			, IFNULL(N.instance_id , '') AS instance_id
-			, N.domain 
-			, IFNULL(FNC_CODENAME(N.initial_state), '') AS initial_state
-			, IFNULL(FNC_CODENAME(N.ls_type), '') AS ls_type
-			, CAST(IFNULL(FNC_CODENAME(N.ml_type), '') AS UNSIGNED INTEGER) AS ml_type
-			, IFNULL(FNC_CODEDESC(N.ml_type), '') AS ml_type_name
-			, IFNULL(FNC_CODENAME(N.deploy_type), '') AS deploy_type
-			, IFNULL ( (SELECT id FROM node WHERE private_ip = N.private_ip AND public_ip = N.public_ip AND node_type = 'CM0402'), '') AS rs_id
+	</select>
+
+	<select id="listNodeFor4DML" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.region
+		, N.region_name
+		, FNC_CODENAME(N.is_origin) AS is_origin
+		, N.private_ip
+		, N.private_port
+		, N.public_ip
+		, N.public_port
+		, IFNULL(N.instance_id , '') AS instance_id
+		, N.domain
+		, IFNULL(FNC_CODENAME(N.initial_state), '') AS initial_state
+		, IFNULL(FNC_CODENAME(N.ls_type), '') AS ls_type
+		, CAST(IFNULL(FNC_CODENAME(N.ml_type), '') AS UNSIGNED INTEGER) AS ml_type
+		, IFNULL(FNC_CODEDESC(N.ml_type), '') AS ml_type_name
+		, IFNULL(FNC_CODENAME(N.deploy_type), '') AS deploy_type
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{systemId}
+		AND N.system_id = #{systemId}
 		<if	test='nodeType !=null and nodeType !=""'>
 			AND N.node_type = #{nodeType}
 		</if>
@@ -642,31 +657,73 @@
 		</if>
 		<if	test='serverIp !=null and serverIp !=""'>
 			AND (
-				N.private_ip = #{serverIp}
-				OR N.public_ip = #{serverIp}
+			N.private_ip = #{serverIp}
+			OR N.public_ip = #{serverIp}
 			)
 		</if>
 		ORDER BY N.name ASC
-    </select>
-    
-    <select id="listService4Monit" resultType="Map">
-		SELECT 
-			node_type AS code
-			, FNC_CODENAME(node_type) AS name 
-		FROM node 
-		WHERE	1=1 
-			AND system_id = #{systemId}
-			AND node_type IN('CM0402', 'CM0405', 'CM0406', 'CM0408') 
+	</select>
+
+	<!--2022.03.16 subqury returns more than 1 row 에러로 수정 -->
+	<select id="listNodeFor4DMLIncludeRsPair" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.region
+		, N.region_name
+		, FNC_CODENAME(N.is_origin) AS is_origin
+		, N.private_ip
+		, N.private_port
+		, N.public_ip
+		, N.public_port
+		, IFNULL(N.instance_id , '') AS instance_id
+		, N.domain
+		, IFNULL(FNC_CODENAME(N.initial_state), '') AS initial_state
+		, IFNULL(FNC_CODENAME(N.ls_type), '') AS ls_type
+		, CAST(IFNULL(FNC_CODENAME(N.ml_type), '') AS UNSIGNED INTEGER) AS ml_type
+		, IFNULL(FNC_CODEDESC(N.ml_type), '') AS ml_type_name
+		, IFNULL(FNC_CODENAME(N.deploy_type), '') AS deploy_type
+		, IFNULL ( (SELECT id FROM node WHERE private_ip = N.private_ip AND public_ip = N.public_ip AND node_type = 'CM0402' HAVING count(*) = 1), '') AS rs_id
+		FROM
+		node N
+		WHERE 	1=1
+		AND N.system_id = #{systemId}
+		<if	test='nodeType !=null and nodeType !=""'>
+			AND N.node_type = #{nodeType}
+		</if>
+		<if	test='mlType !=null and mlType !=""'>
+			AND N.ml_type = #{mlType}
+		</if>
+		<if	test='region !=null and region !=""'>
+			AND N.region = #{region}
+		</if>
+		<if	test='serverIp !=null and serverIp !=""'>
+			AND (
+			N.private_ip = #{serverIp}
+			OR N.public_ip = #{serverIp}
+			)
+		</if>
+		ORDER BY N.name ASC
+	</select>
+
+	<select id="listService4Monit" resultType="Map">
+		SELECT
+		node_type AS code
+		, FNC_CODENAME(node_type) AS name
+		FROM node
+		WHERE	1=1
+		AND system_id = #{systemId}
+		AND node_type IN('CM0402', 'CM0405', 'CM0406', 'CM0408')
 		GROUP BY node_type
-    </select>
-    
-    <select id="listMlType4Monit" resultType="Map">
-		SELECT 
-			ml_type AS code
-			, FNC_CODEDESC(ml_type) AS name 
-		FROM node 
-		WHERE	1=1 
-			AND system_id = #{systemId}
+	</select>
+
+	<select id="listMlType4Monit" resultType="Map">
+		SELECT
+		ml_type AS code
+		, FNC_CODEDESC(ml_type) AS name
+		FROM node
+		WHERE	1=1
+		AND system_id = #{systemId}
 		<if	test='nodeType !=null and nodeType !=""'>
 			AND node_type = #{nodeType}
 		</if>
@@ -674,30 +731,30 @@
 			AND region = #{region}
 		</if>
 		GROUP BY ml_type
-    </select>
-    
-    <select id="listRegion4Monit" resultType="Map">
-		SELECT 
-			region AS code
-			, region AS name
-		FROM node 
-		WHERE	1=1 
-			AND system_id = #{systemId}
-			AND node_type IN('CM0402', 'CM0405', 'CM0406', 'CM0408')
+	</select>
+
+	<select id="listRegion4Monit" resultType="Map">
+		SELECT
+		region AS code
+		, region AS name
+		FROM node
+		WHERE	1=1
+		AND system_id = #{systemId}
+		AND node_type IN('CM0402', 'CM0405', 'CM0406', 'CM0408')
 		<if	test='nodeType !=null and nodeType !=""'>
 			AND node_type = #{nodeType}
 		</if>
-		GROUP BY region 
-    </select>
-    
-    <select id="listNode4Monit" resultType="Map">
-		SELECT 
-			id AS code
-			, name
-		FROM node 
-		WHERE	1=1 
-			AND system_id = #{systemId}
-			AND node_type IN('CM0402', 'CM0405', 'CM0406', 'CM0408')
+		GROUP BY region
+	</select>
+
+	<select id="listNode4Monit" resultType="Map">
+		SELECT
+		id AS code
+		, name
+		FROM node
+		WHERE	1=1
+		AND system_id = #{systemId}
+		AND node_type IN('CM0402', 'CM0405', 'CM0406', 'CM0408')
 		<if	test='nodeType !=null and nodeType !=""'>
 			AND node_type = #{nodeType}
 		</if>
@@ -708,25 +765,25 @@
 			AND ml_type = #{mlType}
 		</if>
 		ORDER BY name ASC
-    </select>
-    
-    <select id="listNode4MonitAction" resultType="Map">
-		SELECT 
-			N.id
-			, N.name 
-			, N.region 
-			, N.region_name
-			, FNC_CODENAME(N.is_origin) AS is_origin
-			, N.private_ip 
-			, N.private_port 
-			, N.public_ip 
-			, N.public_port 
-			, N.ml_type
-			, N.node_type
+	</select>
+
+	<select id="listNode4MonitAction" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.region
+		, N.region_name
+		, FNC_CODENAME(N.is_origin) AS is_origin
+		, N.private_ip
+		, N.private_port
+		, N.public_ip
+		, N.public_port
+		, N.ml_type
+		, N.node_type
 		FROM node N
-		WHERE	1=1 
-			AND N.system_id = #{systemId}
-			AND N.node_type IN('CM0402', 'CM0405', 'CM0406', 'CM0408')
+		WHERE	1=1
+		AND N.system_id = #{systemId}
+		AND N.node_type IN('CM0402', 'CM0405', 'CM0406', 'CM0408')
 		<if	test='nodeType !=null and nodeType !=""'>
 			AND N.node_type = #{nodeType}
 		</if>
@@ -740,72 +797,72 @@
 			AND N.id = #{list}
 		</if>
 		ORDER BY N.name ASC
-    </select>
-	
+	</select>
+
 	<select id="enableInstancesCount" parameterType="Map" resultType="Integer">
-		SELECT 
-			(
-				(SELECT max_instances FROM rule WHERE system_id = #{system_id}) 
-				-
-				(SELECT COUNT(1) AS ml_count FROM node WHERE system_id = #{system_id} AND ml_type = 'CM1403')
-			) AS enable_instances_count
-    </select>
-    
-    <select id="listRegion4TemporaryInstance" resultType="Map">
-		SELECT 
-			region AS code
-			, region AS name
-		FROM node 
-		WHERE	1=1 
-			AND system_id = #{system_id}
-		GROUP BY region 
-    </select>
-    
-    <select id="listRegion4OnlyTemporaryInstance" resultType="Map">
-		SELECT 
-			region AS code
-			, region AS name
-		FROM node 
-		WHERE	1=1 
-			AND system_id = #{system_id}
-			AND initial_state = 'CM0602'
-		GROUP BY region 
-    </select>
-    
-    <select id="listNodeForInstanceMng" resultType="Map">
-		SELECT 
-			N.id
-			, N.name
-			, N.system_id
-			, N.public_ip
-			, N.public_port
-			, N.private_ip
-			, N.private_port
-			, N.node_type
-			, FNC_CODENAME(N.node_type) AS node_type_name
-			, N.is_origin
-			, FNC_CODENAME(N.is_origin) AS is_origin_name
-			, N.domain
-			, N.region
-			, N.region_name
-			, N.instance_id
-			, N.initial_state
-			, FNC_CODENAME(N.initial_state) AS initial_state_name
-			, N.state
-			, FNC_CODENAME(N.state) AS state_name
-			, N.ls_type
-			, FNC_CODENAME(N.ls_type) AS ls_type_name
-			, N.ml_type
-			, FNC_CODEDESC(N.ml_type) AS ml_type_name
-			, N.deploy_type
-			, FNC_CODENAME(N.deploy_type) AS deploy_type_name
-			, N.parent_node_id
-			, N.updated_at
-			, N.registered_at
+		SELECT
+		(
+		(SELECT max_instances FROM rule WHERE system_id = #{system_id})
+		-
+		(SELECT COUNT(1) AS ml_count FROM node WHERE system_id = #{system_id} AND ml_type = 'CM1403')
+		) AS enable_instances_count
+	</select>
+
+	<select id="listRegion4TemporaryInstance" resultType="Map">
+		SELECT
+		region AS code
+		, region AS name
+		FROM node
+		WHERE	1=1
+		AND system_id = #{system_id}
+		GROUP BY region
+	</select>f
+
+	<select id="listRegion4OnlyTemporaryInstance" resultType="Map">
+		SELECT
+		region AS code
+		, region AS name
+		FROM node
+		WHERE	1=1
+		AND system_id = #{system_id}
+		AND initial_state = 'CM0602'
+		GROUP BY region
+	</select>
+
+	<select id="listNodeForInstanceMng" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.system_id
+		, N.public_ip
+		, N.public_port
+		, N.private_ip
+		, N.private_port
+		, N.node_type
+		, FNC_CODENAME(N.node_type) AS node_type_name
+		, N.is_origin
+		, FNC_CODENAME(N.is_origin) AS is_origin_name
+		, N.domain
+		, N.region
+		, N.region_name
+		, N.instance_id
+		, N.initial_state
+		, FNC_CODENAME(N.initial_state) AS initial_state_name
+		, N.state
+		, FNC_CODENAME(N.state) AS state_name
+		, N.ls_type
+		, FNC_CODENAME(N.ls_type) AS ls_type_name
+		, N.ml_type
+		, FNC_CODEDESC(N.ml_type) AS ml_type_name
+		, N.deploy_type
+		, FNC_CODENAME(N.deploy_type) AS deploy_type_name
+		, N.parent_node_id
+		, N.updated_at
+		, N.registered_at
 		FROM
-			node N 
+		node N
 		WHERE 	1=1
-			AND N.system_id = #{system_id}
+		AND N.system_id = #{system_id}
 		<if	test='regionName !=null and regionName !=""'>
 			AND N.region_name = #{regionName}
 		</if>
@@ -823,10 +880,66 @@
 		</if>
 		<if	test='ip !=null and ip !=""'>
 			AND (
-				N.public_ip = #{ip}
-				OR N.private_ip = #{ip}
+			N.public_ip = #{ip}
+			OR N.private_ip = #{ip}
 			)
 		</if>
 		ORDER BY N.id ASC
-    </select>
+	</select>
+
+	<select id="listNodePrewarmer" resultType="Map">
+		SELECT
+		domain
+		FROM node
+		WHERE	1=1
+		AND system_id = #{systemId}
+		AND node_type = #{nodeType}
+	</select>
+
+	<select id="getCFurl" resultType="Map">
+		SELECT
+		domain
+		FROM node
+		WHERE	1=1
+		AND system_id = #{systemId}
+		AND node_type = #{nodeType}
+		AND ml_type = #{mlType}
+	</select>
+
+	<select id="getNodeByNodeType" resultType="Map">
+		SELECT
+		N.id
+		, N.name
+		, N.system_id
+		, N.public_ip
+		, N.public_port
+		, N.private_ip
+		, N.private_port
+		, N.node_type
+		, FNC_CODENAME(N.node_type) AS node_type_name
+		, N.is_origin
+		, FNC_CODENAME(N.is_origin) AS is_origin_name
+		, N.domain
+		, N.region
+		, N.region_name
+		, N.instance_id
+		, N.initial_state
+		, FNC_CODENAME(N.initial_state) AS initial_state_name
+		, N.state
+		, FNC_CODENAME(N.state) AS state_name
+		, N.ls_type
+		, FNC_CODENAME(N.ls_type) AS ls_type_name
+		, N.ml_type
+		, FNC_CODEDESC(N.ml_type) AS ml_type_name
+		, N.deploy_type
+		, FNC_CODENAME(N.deploy_type) AS deploy_type_name
+		, N.parent_node_id
+		, N.updated_at
+		, N.registered_at
+		FROM
+		node N
+		WHERE	1=1
+		AND system_id = #{systemId}
+		AND node_type = #{nodeType}
+	</select>
 </mapper>

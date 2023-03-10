@@ -10,7 +10,7 @@ import {
   updateContentIdByEventId,
 } from "../decorator/cms.decorator";
 import { EventService } from "../../web/event/event.service";
-import { GroupsService } from "../../web/groups/groups.service";
+import { GroupsService } from "../../groups/groups.service";
 
 @Controller({ path: "cms", version: ["v1"] })
 @ApiTags("06. CMS >>> IMS")
