@@ -16,13 +16,12 @@ export class JsonResult {
     return result;
   }
 
-  public static makeSuccessArray(Data: object): Map<string, any> {
+  public static makeSuccessArray(Data: any): Map<string, any> {
     let result = new Map<string, any>();
     result
       .set(AjaxConstants.RESULT, AjaxConstants.RESULT_OK)
-      .set(AjaxConstants.DATA, Data)
+      .set(AjaxConstants.DATA, Object.fromEntries(Data))
       .set(AjaxConstants.MESSAGE, AjaxConstants.DEFAULT_MESSAGE)
-
     return result;
   }
 
