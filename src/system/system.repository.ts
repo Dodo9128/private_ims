@@ -28,4 +28,8 @@ export class SystemRepository extends Repository<System> {
   public async findByVenueId(venueId: string): Promise<any> {
     return await this.findBy({ venue_id: venueId });
   }
+
+  public async findById(systemId: string) {
+    return await this.findById(systemId);
+  }
 }

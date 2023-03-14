@@ -46,6 +46,8 @@ import { ScaleMapper } from "../scale/scale.mapper";
 import { GroupsMapper } from "../groups/groups.mapper";
 import { RuleMapper } from "../rule/rule.mapper";
 import { MonitMapper } from "../monit/monit.mapper";
+import { ChannelMapper } from "../channel/channel.mapper";
+
 import { HttpModule } from "@nestjs/axios";
 
 
@@ -99,6 +101,7 @@ import { HttpModule } from "@nestjs/axios";
     GroupsMapper,
     RuleMapper,
     MonitMapper,
+    ChannelMapper,
   ],
   exports: [
     AdminService,
@@ -120,6 +123,7 @@ import { HttpModule } from "@nestjs/axios";
     GroupsMapper,
     RuleMapper,
     MonitMapper,
+    ChannelMapper,
   ]
 })
 export class WebModule {}

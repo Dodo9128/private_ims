@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from "@nestjs/typeorm";
 import { ChannelRepository } from "./channel.repository";
+//import { GroupsMapper } from "../groups/groups.mapper";
 import { Channel } from '../entities/channel.entity';
-
+import { ChannelMapper } from "./channel.mapper";
 import * as MybatisMapper from "mybatis-mapper";
 
 MybatisMapper.createMapper(['./src/database/sqlmapper/Channel.xml']);
@@ -9,7 +11,10 @@ MybatisMapper.createMapper(['./src/database/sqlmapper/Channel.xml']);
 @Injectable()
 export class ChannelService {
   constructor(
-    private readonly channelRepository: ChannelRepository,
+    @InjectRepository(ChannelRepository)
+    private channelRepository: ChannelRepository,
+    //private groupsMapper: GroupsMapper,
+    private channelMapper: ChannelMapper,
   ) {}
   async postChannelList4Mng(system_id: string): Promise<object> {
     let param = {
@@ -71,5 +76,77 @@ export class ChannelService {
     items = await this.channelRepository.save(channel);
 
     return items;
+  }
+
+  async getChannelIncludeGroups(params: Map<string, any>) {
+    let channelList = await this.channelMapper.listChannel4Mng(params);
+    let preGroupId = null;
+    console.log(channelList);
+    console.log(typeof channelList)
+
+    return channelList;
+    /*channelList.forEach(async (channel) => {
+      let finalChannelList = new Map<string, any>();
+      let groupId: string = channel.group_id;
+
+      finalChannelList
+        .set("channel_id", channel.id)
+        .set("channel_index", channel.live_index)
+        .set("camera_ip", channel.camera_ip)
+        .set("name", channel.name)
+        .set("status", channel.status)
+        .set("media_type", channel.media_type)
+        .set("gimbal_ip", channel.gimbal_ip)
+        .set("is_gimbal_preset", channel.is_gimbal_preset)
+        .set("server_ip", channel.server_ip)
+        .set("server_port", channel.server_port)
+        .set("pdview_master_index", channel.pdview_master_index)
+
+      if (preGroupId !== null && (preGroupId === groupId)) {
+        finalChannelList
+          .set("group_id", "")
+          .set("group_index", "")
+          .set("group_name", "")
+          .set("view_type", "")
+          .set("description", "")
+          .set("type", "")
+          .set("is_external_group", "")
+          .set("default_channel_index", "")
+          .set("default_audio_index", "")
+          .set("is_default_group", "")
+          .set("is_interactive", "")
+          .set("is_replay", "")
+          .set("is_timemachine", "")
+          .set("is_pdview", "")
+          .set("video_input_codec", "")
+          .set("video_input_width", "")
+          .set("video_input_height", "")
+          .set("video_input_bitrate", "")
+          .set("video_input_gop", "")
+          .set("video_input_fps", "")
+          .set("video_output_codec", "")
+          .set("video_output_width", "")
+          .set("video_output_height", "")
+          .set("video_output_bitrate", "")
+          .set("video_output_gop", "")
+          .set("video_output_fps", "")
+          .set("audio_input_channel_type", "")
+          .set("audio_input_codec", "")
+          .set("audio_input_sample_rate", "")
+          .set("audio_input_sample_bit", "")
+          .set("audio_output_channel_type", "")
+          .set("audio_output_codec", "")
+          .set("audio_output_sample_rate", "")
+          .set("audio_output_sample_bit", "")
+      } else {
+        let groupParam = new Map<string, any>();
+        groupParam.set("id", groupId)
+
+        let groupMap: Map<string, any> = await this.groupsMapper.getGroups4Mng(groupParam);
+
+
+      }
+    })*/
+
   }
 }

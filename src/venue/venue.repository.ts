@@ -96,21 +96,9 @@ export class VenueRepository extends Repository<Venue> {
     return true;
   }
 
-  async findById(query: string): Promise<object> {
-    const venue = await this.query(query);
-
-    if (!venue) {
-      throw new HttpException(
-        {
-          message: 1,
-          error: "찾을 수 없는 베뉴입니다."
-        },
-        HttpStatus.NOT_FOUND,
-      )
-    }
-    return venue[0];
+  async findById(id: string) {
+    return await this.findById(id);
   }
-
   async getCountryId(code: string): Promise<object> {
     return await this.query(`SELECT id from ims.world_country WHERE code=${code}`)
   }

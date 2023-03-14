@@ -1,24 +1,22 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { SystemRepository } from "../system/system.repository";
+import { GroupsRepository } from "./groups.repository";
 import { GroupsMapper } from "./groups.mapper";
 import { Groups } from '../entities/group.entity';
+import { Request } from "express";
 
-import * as MybatisMapper from "mybatis-mapper";
-
-import {GroupsRepository} from "./groups.repository";
-import {makeSuccessPaging} from "../util/ajaxreturn.util";
-import fs from "fs";
-import {extname} from "path";
 import { AdminService } from "../admin/admin.service";
+import { SystemRepository } from "../system/system.repository";
 
-MybatisMapper.createMapper(['./src/database/sqlmapper/System.xml', './src/database/sqlmapper/Groups.xml', './src/database/sqlmapper/Channel.xml']);
-// @Injectable()
+import {makeSuccessPaging} from "../util/ajaxreturn.util";
+import * as fs from "fs";
+import {extname} from "path";
+
 export class GroupsService {
   constructor(
     @InjectRepository(SystemRepository)
     private groupsRepository: GroupsRepository,
     private groupsMapper: GroupsMapper,
-    private adminService: AdminService,
+    //private adminService: AdminService,
   ) {}
 
   async insertGroup(params: Map<string, any>): Promise<Groups> {
@@ -118,7 +116,7 @@ export class GroupsService {
 
       if (fs.existsSync(uploadPath)) {
 
-        Result = await this.adminService.upLoadIMSGroupChannelExcel(uploadPath, system_id);
+        //Result = await this.adminService.upLoadIMSGroupChannelExcel(uploadPath, system_id);
         console.log(Result);
       }
       return Result;

@@ -1,11 +1,18 @@
 import { catchError, firstValueFrom } from "rxjs";
-import { Logger } from "@nestjs/common";
+import {Inject, Logger} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Node } from '../entities/node.entity';
+import { Venue } from "../entities/venue.entity";
+import {System} from "../entities/system.entity";
+
 import { NodeMapper } from "./node.mapper";
 import { ScaleMapper } from "../scale/scale.mapper";
 import { NodeRepository } from "./node.repository";
-import {EventRepository} from "../web/event/event.repository";
+import { EventRepository } from "../web/event/event.repository";
+import { SystemRepository } from "../system/system.repository";
+import { CodeCommonRepository} from "../code/CodeCommon.repository";
+import { WorldCountryRepository } from "../world/world.repository";
+import { VenueRepository } from "../venue/venue.repository";
 import {
   APIMethod,
   ApplicationConstants,
@@ -19,6 +26,7 @@ import {
 import { makeSuccessPaging } from "../util/ajaxreturn.util";
 import { HttpService } from "@nestjs/axios";
 import { AxiosError } from "axios";
+import {WorldCountry} from "../entities/worldCountry.entity";
 
 export class NodeService {
   private readonly logger = new Logger(NodeService.name);
@@ -27,9 +35,15 @@ export class NodeService {
     private nodeRepository: NodeRepository,
     @InjectRepository(EventRepository)
     private eventRepository: EventRepository,
+    //@InjectRepository(CodeCommonRepository)
+    //private codeCommonRepository: CodeCommonRepository,
+    @InjectRepository(SystemRepository)
+    private systemRepository: SystemRepository,
     private nodeMapper: NodeMapper,
     private scaleMapper: ScaleMapper,
     private readonly httpService: HttpService,
+    private venueRepository: VenueRepository,
+    //private worldCountryRepository: WorldCountryRepository,
   ) {}
 
   public async scaleOut4DSS(
@@ -40,7 +54,14 @@ export class NodeService {
     initialStateValue: string,
     region: string
   ) {
+    //const regionCode = this.codeCommonRepository.findByCode(region);
+/*    if (regionCode === null) {
+      const system: System = this.systemRepository.findById(systemId);
+      const venue: Venue = this.venueRepository.findById(system.venue_id);
+      //const worldCountry: WorldCountry = this.worldCountryRepository.findById(venue.country_id.toString());
 
+      let regionCode
+    }*/
   }
   async listNode(params: Map<string, any>): Promise<Map<string, any>> {
     return makeSuccessPaging(await this.nodeMapper.listNode(params));
@@ -204,7 +225,7 @@ export class NodeService {
   }
 
 
-  public async nodeIp44DLS(srcServerIp: string, systemId: string): Promise<any> {
+  public async nodeIp44DLS(srcServerIp: string, systemId: string): Promise<Map<string, any>> {
     let retMap = new Map<string, string>();
     let lsParam = new Map<string, string>();
 
@@ -218,6 +239,12 @@ export class NodeService {
     if (requestLSList.get("data").size === 1) { retMap.set("node", requestLSList.get("data")); }
     else {
       //TODO : 에러처리
+      /*자바에서는
+      requestLSList.get("data").size === 0 이면
+        throw new ExceptionBase( EnumException.SRC_IP_NOT_EXIST_4DLS, systemId + ":" + srcServerIp);
+      requestLSList.get("data").size > 0 이면
+        throw new ExceptionBase( EnumException.SRC_IP_HAS_ONE_MORE_4DLS, systemId + ":" + srcServerIp);
+      * */
     }
 
     return retMap;
@@ -411,7 +438,6 @@ export class NodeService {
         })
       );
       console.log(result);
-
     });
 
     return true;

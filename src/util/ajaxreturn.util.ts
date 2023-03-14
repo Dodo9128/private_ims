@@ -11,7 +11,7 @@ export function makeSuccess({message, data, dataArray}:{message?:string, data?:a
 
     let arr = new Array<any>();
     dataArray.forEach(function (value) {
-      console.log(value);
+
       arr.push(value);
     });
 
@@ -85,7 +85,6 @@ export function makeSuccessVo(data: any) {
 }
 
 export function makeSuccessPaging(retMap: any) {
-
   return makeSuccessPagingLocal(retMap.get("list"), retMap.get("totalCount"))
 }
 

@@ -1,6 +1,5 @@
 import { InjectRepository } from "@nestjs/typeorm";
 import { GroupsRepository } from "./groups.repository";
-import { Scale } from "../entities/scale.entity";
 import * as MybatisMapper from "mybatis-mapper";
 import { PageUtil } from "../util/page.util";
 
@@ -52,6 +51,12 @@ export class GroupsMapper {
 
   public async getGroups(params: Map<string, any>) {
     const query = MybatisMapper.getStatement('Groups', 'getGroups', Object.fromEntries(params), myBatisFormat);
+
+    return await this.groupsRepository.query(query);
+  }
+
+  public async getGroups4Mng(params: Map<string, any>) {
+    const query = MybatisMapper.getStatement('Groups', 'getGroups4Mng', Object.fromEntries(params), myBatisFormat);
 
     return await this.groupsRepository.query(query);
   }

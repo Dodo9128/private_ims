@@ -1,4 +1,15 @@
-import { Controller, Res, Req, Post, Body, HttpStatus, UseInterceptors, Bind, UploadedFiles } from '@nestjs/common';
+import {
+  Controller,
+  Res,
+  Req,
+  Post,
+  Body,
+  HttpStatus,
+  UseInterceptors,
+  Bind,
+  UploadedFiles,
+  Query
+} from '@nestjs/common';
 import { Response, Request } from 'express';
 import { VenueService } from "../venue/venue.service";
 import { FilesInterceptor } from "@nestjs/platform-express";
@@ -13,20 +24,42 @@ export class WebVenueController {
 
   @Post('/listVenue4Mng')
   async listVenue4Mng(
+    @Query('pageNo') pageNo: number,
+    @Query('pageSize') pageSize: number,
+    @Query('sortColumn') sortColumn: string,
+    @Query('isDescending') isDescending: string,
     @Res() res: Response,
-    @Req() req: Request,
   ) {
-    const TotalCount = await this.venueService.getTotalCount();
+    let params = new Map<string, any>();
+    params
+      .set("pageNo", (pageNo) ? pageNo : 1)
+      .set("pageSize", (pageSize) ? pageSize : 9999)
+      .set("sortColumn", (sortColumn) ? sortColumn : "id")
+      .set("isDescending", (isDescending) ? isDescending : "asc")
 
-    return this.venueService.listVenue(req).then(data => {
-      res.status(HttpStatus.OK).json({
-        result: "ok",
-        message: "SUCCESS",
-        iTotalDisplayRecords: TotalCount,
-        iTotalRecords: TotalCount,
-        data,
-      })
-    });
+    const Result: Map<string, any> = await this.venueService.listVenue4Mng(params);
+
+    return res.status(HttpStatus.OK).json(Object.fromEntries(Result));
+  }
+
+  @Post('/listVenue')
+  async listVenue(
+    @Query('pageNo') pageNo: number,
+    @Query('pageSize') pageSize: number,
+    @Query('sortColumn') sortColumn: string,
+    @Query('isDescending') isDescending: string,
+    @Res() res: Response,
+  ) {
+    let params = new Map<string, any>();
+    params
+      .set("pageNo", (pageNo) ? pageNo : 1)
+      .set("pageSize", (pageSize) ? pageSize : 9999)
+      .set("sortColumn", (sortColumn) ? sortColumn : "id")
+      .set("isDescending", (isDescending) ? isDescending : "asc")
+
+    const Result: Map<string, any> = await this.venueService.listVenue(params);
+
+    return res.status(HttpStatus.OK).json(Object.fromEntries(Result));
   }
 
   @Post('/getVenue')

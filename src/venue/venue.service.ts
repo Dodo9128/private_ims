@@ -1,19 +1,15 @@
-import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { CreateVenueDto, UpdateVenueDto } from "./venue.dto";
+import { VenueRepository } from "./venue.repository";
+import { VenueMapper } from "./venue.mapper";
 import { Venue } from '../entities/venue.entity';
 import { Request } from "express";
 
-import * as MybatisMapper from "mybatis-mapper";
+import { AdminService } from "../admin/admin.service";
+
+import {makeSuccessPaging} from "../util/ajaxreturn.util";
 import * as fs from "fs";
 import { extname } from "path";
 
-import { VenueRepository } from "./venue.repository";
-import { VenueMapper } from "./venue.mapper";
-import { AdminService } from "../admin/admin.service";
-
-MybatisMapper.createMapper(['./src/database/sqlmapper/Venue.xml']);
-@Injectable()
 export class VenueService {
   constructor(
     @InjectRepository(VenueRepository)
@@ -32,14 +28,14 @@ export class VenueService {
 
   }
 
-  async listVenue(req: Request): Promise<object> {
-    return await this.venueMapper.listVenue(req);
+  async listVenue4Mng(params: Map<string, any>) {
+    return makeSuccessPaging(await this.venueMapper.listVenue(params));
   }
 
-  async getTotalCount() {
-    const query = MybatisMapper.getStatement('Venue', 'listVenueCount', {}, {language: "sql"});
-    return await this.venueRepository.count();
+  async listVenue(params: Map<string, any>) {
+    return makeSuccessPaging(await this.venueMapper.listVenue(params));
   }
+
   async getVenue(id: string): Promise<object> {
     return this.venueMapper.getVenue(id)
   }

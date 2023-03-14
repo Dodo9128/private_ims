@@ -10,6 +10,12 @@ import { IWorldCount } from "../global/interface";
 export class WorldCountryRepository {
   constructor(private readonly dataSource: DataSource) {}
 
+  async findById(id: string): Promise<WorldCountry> {
+    return await this.dataSource
+      .getRepository(WorldCountry)
+      .findOne({ where: {id: id} });
+  }
+
   async totalWorldCountryCount(totalCount: string): Promise<IWorldCount> {
     // return await this.query(`SELECT COUNT(1) FROM ${tableWorldCountry} ${tableForShortWC}
     //             WHERE 1=1

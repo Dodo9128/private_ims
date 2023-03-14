@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { GroupsService} from "../groups/groups.service";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { multerMemoryOptions } from "../libs/utils/multer.options";
-import {JsonResult} from "../libs/utils/jsonResult";
+import { JsonResult } from "../libs/utils/jsonResult";
 
 @Controller('/web/group')
 export class WebGroupsController {

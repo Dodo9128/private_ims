@@ -1,11 +1,13 @@
 import { InjectRepository } from "@nestjs/typeorm";
 import { VenueRepository } from "./venue.repository";
-import { Request } from "express";
+
 import * as MybatisMapper from "mybatis-mapper";
 import {Venue} from "../entities/venue.entity";
 import {HttpException, HttpStatus} from "@nestjs/common";
+import {PageUtil} from "../util/page.util";
 
 MybatisMapper.createMapper(['./src/database/sqlmapper/Venue.xml'])
+
 const myBatisFormat: object = { language: 'sql' };
 
 export class VenueMapper {
@@ -14,18 +16,16 @@ export class VenueMapper {
     private venueRepository: VenueRepository,
   ) {}
 
-  async listVenue(req: Request): Promise<any> {
-    let params = new Map<string, any>();
-    let param = {
-      id: "",
-      pageNo: 1,
-      sortColStr: ["id asc"],
-      pageSize: 9999,
-      pageOffset: 0,
-    };
+  async listVenue(params: Map<string, any>): Promise<Map<string, any>> {
+    (isNaN(params.get('pageNo'))) ? params.set('pageNo', 1) : 1;
+    (isNaN(params.get('pageSize'))) ? params.set('pageSize', 9999) : 1;
+    (undefined === params.get('sortColumn')) ? params.set('sortColumn', 'id') : 1;
+    (undefined === params.get('isDescending')) ? params.set('isDescending', 'asc') : 1;
 
-    const query = MybatisMapper.getStatement('Venue', 'listVenue', param, myBatisFormat);
-    return await this.venueRepository.query(query)
+    const totalCount: number = await this.listVenueCount(params);
+    const query = MybatisMapper.getStatement('Venue', 'listVenue', Object.fromEntries(params), myBatisFormat);
+
+    return PageUtil.setPageDataMap(await this.venueRepository.query(query), totalCount);
   }
 
   async getVenue(id: string): Promise<any> {
@@ -36,16 +36,20 @@ export class VenueMapper {
     return await this.venueRepository.query(query);
   }
 
-  async deleteVenue(id: string): Promise<any> {
-    return await this.venueRepository.onDelete(id);
+  private async listVenueCount(params: Map<string, any>): Promise<number> {
+    (isNaN(params.get('pageNo'))) ? params.set('pageNo', 1) : 1;
+    (isNaN(params.get('pageSize'))) ? params.set('pageSize', 9999) : 1;
+    (undefined === params.get('sortColumn')) ? params.set('sortColumn', 'id') : 1;
+    (undefined === params.get('isDescending')) ? params.set('isDescending', 'asc') : 1;
+
+    const query = MybatisMapper.getStatement("Venue", 'listVenueCount', Object.fromEntries(params), myBatisFormat);
+    const Result = await this.venueRepository.query(query);
+
+    return Result[0].cnt;
   }
 
-  async listVenueCount(): Promise<number> {
-    let params = new Map<string, any>();
-    params.set("id", null);
-    const query = MybatisMapper.getStatement('Venue', 'listVenueCount', Object.fromEntries(params), myBatisFormat);
-
-    return await this.venueRepository.query(query);
+  async deleteVenue(id: string): Promise<any> {
+    return await this.venueRepository.onDelete(id);
   }
 
   /*

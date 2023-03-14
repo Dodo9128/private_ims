@@ -1,6 +1,5 @@
-import {Bind, Body, Controller, Post, Res, UploadedFiles, UseInterceptors} from '@nestjs/common';
+import {Bind, Body, Controller, HttpStatus, Post, Res, UploadedFiles, UseInterceptors} from '@nestjs/common';
 import { ChannelService } from "../channel/channel.service";
-import { CreateChannelDto, UpdateChannelDto } from "../channel/channel.dto";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { multerMemoryOptions } from "../libs/utils/multer.options";
 import { Response } from "express";
@@ -11,40 +10,25 @@ export class WebChannelController {
     private readonly channelService: ChannelService
   ) {
   }
-  @Post('/channel/getChannelIncludeGroups')
-  postChannelList4Mng(@Body('system_id') system_id: string): object {
+  @Post('/getChannelIncludeGroups')
+  postChannelList4Mng(
+    @Body('system_id') system_id: string,
+    @Res() res: Response,
+  ): object {
     return this.channelService.postChannelList4Mng(system_id);
   }
 
-  @Post('/insertChannel')
-  insertChannel(
-    @Body() createChannelDto: CreateChannelDto,
-  ) {
-    // return this.channelService.insertChannel(createChannelDto)
-  }
-
-  @Post('/updateChannel')
-  updateChannel(
-    @Body() updateChannelDto: UpdateChannelDto,
-  ) {
-    // return this.channelService.updateChannel(updateChannelDto)
-  }
-
-  @Post('/deleteChannel')
-  deleteChannel(
-    @Body('id') id: string,
-  ) {
-    // return this.channelService.deleteChannel(id);
-  }
-
-  @Post('/upLoadIMSGroupChannelExcel')
-  @UseInterceptors(FilesInterceptor('files', null, multerMemoryOptions))
-  @Bind(UploadedFiles())
-  async uploadFileMemory(
-    files: File[],
+  @Post('/getChannelIncludeGroups4Cms')
+  async getChannelIncludeGroups4Cms(
+    @Body('system_id') system_id: string,
     @Res() res: Response,
   ) {
+    let params = new Map<string, any>();
+    params.set("system_id", system_id)
 
+    const Result: Map<string, any> = await this.channelService.getChannelIncludeGroups(params);
+
+    return res.status(HttpStatus.OK).json(Object.fromEntries(Result));
   }
 
   @Post('/notificationGroupChannelInfo')
@@ -53,4 +37,17 @@ export class WebChannelController {
   ) {
     // return this.channelService.notificationGroupChannelInfo(system_id)
   }
+
+  @Post('upLoadIMSGroupChannelExcel')
+  upLoadIMSGroupChannelExcel() {
+
+  }
+
+  @Post('/updateChannel')
+  updateChannel(
+
+  ) {
+    // return this.channelService.updateChannel(updateChannelDto)
+  }
+
 }

@@ -1,7 +1,6 @@
-import { Injectable } from "@nestjs/common";
+import * as Constant from "../global/constant";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Row, Workbook } from "exceljs";
-import * as Constant from "../global/constant";
 import { DataSource } from "typeorm";
 
 import { VenueRepository } from "../venue/venue.repository";
@@ -9,15 +8,10 @@ import { SystemRepository } from "../system/system.repository";
 import { RuleRepository } from "../rule/rule.repository";
 import { ScaleRepository } from "../scale/scale.repository";
 import { NodeRepository } from "../node/node.repository";
-import { GroupsRepository } from "../groups/groups.repository";
 import { WorldCountry } from "../entities/worldCountry.entity";
 
 import { VenueMapper } from "../venue/venue.mapper";
 import { SystemMapper } from "../system/system.mapper";
-import { NodeMapper } from "../node/node.mapper";
-import { GroupsMapper } from "../groups/groups.mapper";
-import { ScaleMapper } from "../scale/scale.mapper";
-import { RuleMapper } from "../rule/rule.mapper";
 
 import { Venue } from "../entities/venue.entity";
 import { System } from "../entities/system.entity";
@@ -32,33 +26,27 @@ import { Channel } from "../entities/channel.entity";
 import { NodeService } from "../node/node.service";
 import { RuleService } from "../rule/rule.service";
 import { ScaleService } from "../scale/scale.service";
-import { nodeStatus, IsYN } from "../global/commonCode";
 import { GroupsService } from "../groups/groups.service";
 import { VideoService } from "../video/video.service";
 import { AudioService } from "../audio/audio.service";
 import { ChannelService } from "../channel/channel.service";
 
+import { nodeStatus, IsYN } from "../global/commonCode";
 
 export class AdminService {
   constructor(
-    @InjectRepository(VenueRepository)
-    private venueRepository: VenueRepository,
-    @InjectRepository(SystemRepository)
-    private systemRepository: SystemRepository,
-    @InjectRepository(RuleRepository)
-    private ruleRepository: RuleRepository,
-    @InjectRepository(ScaleRepository)
-    private scaleRepository: ScaleRepository,
-    @InjectRepository(NodeRepository)
-    private nodeRepository: NodeRepository,
+    @InjectRepository(VenueRepository) private venueRepository: VenueRepository,
+    @InjectRepository(SystemRepository) private systemRepository: SystemRepository,
+    @InjectRepository(RuleRepository) private ruleRepository: RuleRepository,
+    @InjectRepository(ScaleRepository) private scaleRepository: ScaleRepository,
+    @InjectRepository(NodeRepository) private nodeRepository: NodeRepository,
     private dataSource: DataSource,
     private venueMapper: VenueMapper,
     private systemMapper: SystemMapper,
-    private nodeMapper: NodeMapper,
     private nodeService: NodeService,
     private ruleService: RuleService,
     private scaleService: ScaleService,
-    private groupService: GroupsService,
+    private groupsService: GroupsService,
     private videoService: VideoService,
     private audioService: AudioService,
     private channelService: ChannelService,
@@ -366,9 +354,9 @@ export class AdminService {
       .set("is_default_group", is_default_group)
 
     if (group_id === null || group_id === '') {
-      group = await this.groupService.insertGroup(tmpData);
+      //group = await this.groupsService.insertGroup(tmpData);
     } else {
-      group = await this.groupService.updateGroup(tmpData);
+      //group = await this.groupsService.updateGroup(tmpData);
     }
 
     this.m_group_id = group.id;

@@ -1,7 +1,6 @@
 import { Controller, Res, Req, Post, Body, HttpStatus, UseInterceptors, Bind, UploadedFiles } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { VenueService } from "./venue.service";
-import { CreateVenueDto, UpdateVenueDto } from "./venue.dto";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { multerMemoryOptions } from "../libs/utils/multer.options";
 
@@ -25,30 +24,14 @@ export class VenueController {
     @Res() res: Response,
     @Req() req: Request,
   ) {
-    return this.venueService.listVenue(req).then(rst => {
-      res.status(HttpStatus.OK).json({
-        data: rst,
-        result: "ok",
-        message: "SUCCESS"
-      })
-    });
+
   }
   @Post('/listVenue4Mng')
   async listVenue4Mng(
     @Res() res: Response,
     @Req() req: Request,
   ) {
-    const TotalCount = await this.venueService.getTotalCount();
 
-    return this.venueService.listVenue(req).then(data => {
-      res.status(HttpStatus.OK).json({
-        result: "ok",
-        message: "SUCCESS",
-        iTotalDisplayRecords: TotalCount,
-        iTotalRecords: TotalCount,
-        data,
-      })
-    });
   }
 /*
   @Post('/updateVenue')
