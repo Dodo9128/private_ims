@@ -3,7 +3,7 @@ import {
   Post,
   Body,
   Query,
-  Res, HttpStatus
+  Res, HttpStatus, Get, Param, Ip
 } from '@nestjs/common';
 import { Response} from 'express';
 import { NodeService } from "../node/node.service";
@@ -184,7 +184,7 @@ export class WebNodeController {
 
     const Result: Map<string, any> = JsonResult.makeSuccessArray(await this.nodeService.getTemporaryInstanceInfo(params));
 
-    res.status(HttpStatus.OK).json(Result);
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
 
   }
 
