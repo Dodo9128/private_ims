@@ -353,7 +353,7 @@ export class NodeService {
       }
     }
 
-    await this.nodeRepository.delete(id);
+    await this.nodeRepository.delete(node.id);
 
     return true;
   }

@@ -169,8 +169,8 @@ export class WebNodeController {
     @Res() res: Response,
   ) {
 
-    const Result: Map<string, any> = JsonResult.makeSuccessArray(await this.nodeService.deleteNode(id));
-
+    const Result: Map<string, any> = JsonResult.makeSuccessBool(await this.nodeService.deleteNode(id));
+    console.log(Result);
     res.status(HttpStatus.OK).json(Object.fromEntries(Result));
   }
 

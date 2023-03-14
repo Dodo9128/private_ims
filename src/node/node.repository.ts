@@ -22,7 +22,7 @@ export class NodeRepository extends Repository<Node> {
     return tmpId;
   }
 
-  async findById(nodeId: string) {
-    return await this.findById(nodeId)
+  async findById(id: string) {
+    return await this.findById(id);
   }
 }
