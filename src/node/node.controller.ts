@@ -1,18 +1,7 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Post,
-  Body,
-  Query,
-  Headers,
-  Req, Res, HttpStatus,
-
-} from '@nestjs/common';
-import { InjectRepository } from "@nestjs/typeorm";
+import { Controller, Get, Param, Post, Query, Ip } from '@nestjs/common';
 import { NodeService } from "../node/node.service";
-import { NodeMapper } from "./node.mapper";
 import { NodeRepository } from "./node.repository";
+
 
 @Controller('node')
 export class NodeController {
@@ -48,5 +37,14 @@ export class NodeController {
       .set("isDescending", (isDescending) ? isDescending : "asc")
       .set("system_id", system_id);
     this.nodeService.listNodeForInstanceMng(params);
+  }
+
+  @Get("/:system_id/nodeIp44DML")
+  nodeIp44DML(
+    @Param("system_id") systemId: string,
+    @Ip() srcServerIp,
+  ) {
+    console.log(systemId)
+    this.nodeService.nodeIp44DML(srcServerIp, systemId)
   }
 }

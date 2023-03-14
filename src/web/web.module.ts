@@ -38,6 +38,8 @@ import { AudioRepository } from "../audio/audio.repository";
 import { ChannelRepository } from "../channel/channel.repository";
 import { EventRepository } from "./event/event.repository";
 import { MonitRepository } from "../monit/monit.repository";
+import {CodeCommonRepository} from "../code/CodeCommon.repository";
+import { WorldCountryRepository } from "../world/world.repository";
 
 import { VenueMapper } from "../venue/venue.mapper";
 import { SystemMapper } from "../system/system.mapper";
@@ -65,6 +67,8 @@ import { HttpModule } from "@nestjs/axios";
       ChannelRepository,
       EventRepository,
       MonitRepository,
+      CodeCommonRepository,
+      WorldCountryRepository
     ]),
     HttpModule,
   ],

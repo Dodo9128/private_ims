@@ -93,7 +93,7 @@ export class NodeMapper {
     return await this.nodeRepository.query(query);
   }
 
-  public async scaleOut4DSSOk(params: Map<any, any>): Promise<number> {
+  public async scaleOut4DSSOk(params: Map<string, any>): Promise<number> {
     const query = MybatisMapper.getStatement('Node', 'scaleOut4DSSOk', Object.fromEntries(params), myBatisFormat);
     return await this.nodeRepository.query(query);
   }
@@ -113,16 +113,18 @@ export class NodeMapper {
     const query = MybatisMapper.getStatement('Node', 'listNodeForScaleInfoUpdateTarget4DML', Object.fromEntries(params), myBatisFormat);
     return await this.nodeRepository.query(query);
   }
-  public async listNodeFor4DMLUpdateTarget4DML(params: Map<any, any>): Promise<any> {
+  public async listNodeFor4DMLUpdateTarget4DML(params: Map<string, any>): Promise<Map<string, any>> {
     const query = MybatisMapper.getStatement('Node', 'listNodeFor4DMLUpdateTarget4DML', Object.fromEntries(params), myBatisFormat);
     return await this.nodeRepository.query(query);
   }
-  public async scaleIn4DSS(params: Map<any, any>): Promise<number> {
+  public async scaleIn4DSS(params: Map<string, any>): Promise<number> {
     const query = MybatisMapper.getStatement('Node', 'scaleIn4DSS', Object.fromEntries(params), myBatisFormat);
     return await this.nodeRepository.query(query);
   }
-  public async listNodeFor4DML(params: Map<any, any>): Promise<any> {
+  public async listNodeFor4DML(params: Map<string, any>): Promise<Map<string, any>> {
     const query = MybatisMapper.getStatement('Node', 'listNodeFor4DML', Object.fromEntries(params), myBatisFormat);
+    console.log(query);
+    console.log(await this.nodeRepository.query(query));
     return await this.nodeRepository.query(query);
   }
   public async listNodeFor4DMLIncludeRsPair(params: Map<any, any>): Promise<any> {

@@ -1,19 +1,16 @@
-import { Injectable } from "@nestjs/common";
-import { DataSource } from "typeorm";
+import { Repository} from "typeorm";
 import { AppDataSource } from "../database/dataSource";
 import { WorldCountry } from "../entities/worldCountry.entity";
 import { WorldState } from "../entities/worldState.entity";
 import { WorldCity } from "../entities/worldCity.entity";
 import { IWorldCount } from "../global/interface";
+import {CustomRepository} from "../api/decorator/typeorm.decorator";
 
-@Injectable()
-export class WorldCountryRepository {
-  constructor(private readonly dataSource: DataSource) {}
 
+@CustomRepository(WorldCountry)
+export class WorldCountryRepository extends Repository<WorldCountry> {
   async findById(id: string): Promise<WorldCountry> {
-    return await this.dataSource
-      .getRepository(WorldCountry)
-      .findOne({ where: {id: id} });
+    return await this.findOne({ where: {id: id} });
   }
 
   async totalWorldCountryCount(totalCount: string): Promise<IWorldCount> {
@@ -21,9 +18,7 @@ export class WorldCountryRepository {
     //             WHERE 1=1
     //             `);
 
-    const result: IWorldCount = await this.dataSource
-      .getRepository(WorldCountry)
-      .createQueryBuilder()
+    const result: IWorldCount = await this.createQueryBuilder()
       .select("COUNT(1)", totalCount)
       .where("1=1")
       .getRawOne();
@@ -57,9 +52,7 @@ export class WorldCountryRepository {
     //     `,
     // );
 
-    const result: WorldCountry[] = await this.dataSource
-      .getRepository(WorldCountry)
-      .createQueryBuilder()
+    const result: WorldCountry[] = await this.createQueryBuilder()
       .select(["id", "name", "iso3", "iso2", "phonecode", "capital", "currency", "natives", "flag", "code"])
       .orderBy(`${sortColumn}`, sortOption)
       .limit(pageSize)
@@ -70,14 +63,10 @@ export class WorldCountryRepository {
   }
 }
 
-@Injectable()
-export class WorldStateRepository {
-  constructor(private readonly dataSource: DataSource) {}
-
+@CustomRepository(WorldState)
+export class WorldStateRepository extends Repository<WorldState>{
   async totalWorldStateCount(totalCount: string, countryId: number) {
-    const result: IWorldCount = await this.dataSource
-      .getRepository(WorldState)
-      .createQueryBuilder()
+    const result: IWorldCount = await this.createQueryBuilder()
       .select("COUNT(1)", totalCount)
       .where("1=1")
       .andWhere(`country_id = :country_id`, { country_id: `${countryId}` })
@@ -88,9 +77,7 @@ export class WorldStateRepository {
   async listWorldState(data) {
     const { pageSize, sortColumn, offset, sortOption, countryId } = data;
 
-    const result: WorldState[] = await this.dataSource
-      .getRepository(WorldState)
-      .createQueryBuilder()
+    const result: WorldState[] = await this.createQueryBuilder()
       .select(["id", "name", "country_id", "country_code", "fips_code", "iso2", "flag", "wiki_data_id"])
       .where("1=1")
       .andWhere(`country_id = :country_id`, { country_id: `${countryId}` })
@@ -103,14 +90,10 @@ export class WorldStateRepository {
   }
 }
 
-@Injectable()
-export class WorldCityRepository {
-  constructor(private readonly dataSource: DataSource) {}
-
+@CustomRepository(WorldCity)
+export class WorldCityRepository extends Repository<WorldCity>{
   async totalWorldCityCount(totalCount: string, stateId: number, countryId: number) {
-    const result: IWorldCount = await this.dataSource
-      .getRepository(WorldCity)
-      .createQueryBuilder()
+    const result: IWorldCount = await this.createQueryBuilder()
       .select("COUNT(1)", totalCount)
       .where("1=1")
       .andWhere(`country_id = :country_id`, { country_id: countryId })
@@ -123,9 +106,7 @@ export class WorldCityRepository {
   async listWorldCity(data) {
     const { pageSize, sortColumn, offset, sortOption, countryId, stateId } = data;
 
-    const result: WorldCity[] = await this.dataSource
-      .getRepository(WorldCity)
-      .createQueryBuilder()
+    const result: WorldCity[] = await this.createQueryBuilder()
       .select([
         "id",
         "name",

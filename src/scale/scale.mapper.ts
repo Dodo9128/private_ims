@@ -14,13 +14,9 @@ export class ScaleMapper {
     private scaleRepository: ScaleRepository,
   ) {
   }
-  public async getScaleInstanceType(params: Map<string, any>): Promise<Map<string, any>> {
-    let retMap = new Map<string, any>();
+  public async getScaleInstanceType(params: Map<string, any>) {
     const query = MybatisMapper.getStatement('Scale', 'getScaleInstanceType', Object.fromEntries(params), myBatisFormat);
-
-    retMap.set("data", await this.scaleRepository.query(query));
-
-    return retMap;
+    return await this.scaleRepository.query(query);
   }
 
   public async listScale(params: Map<string, any>) {
@@ -49,6 +45,12 @@ export class ScaleMapper {
 
   public async getScale(params: Map<string, any>) {
     const query = MybatisMapper.getStatement("Scale", 'getScale', Object.fromEntries(params), myBatisFormat);
+
+    return await this.scaleRepository.query(query);
+  }
+
+  public async getScaleBySystemId(params: Map<string, any>): Promise<Map<string, any>> {
+    const query = MybatisMapper.getStatement("Scale", "getScaleBySystemId", Object.fromEntries(params), myBatisFormat);
 
     return await this.scaleRepository.query(query);
   }

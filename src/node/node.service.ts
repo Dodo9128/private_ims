@@ -1,9 +1,9 @@
 import { catchError, firstValueFrom } from "rxjs";
-import {Inject, Logger} from "@nestjs/common";
+import { Inject, Logger} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Node } from '../entities/node.entity';
 import { Venue } from "../entities/venue.entity";
-import {System} from "../entities/system.entity";
+import { System } from "../entities/system.entity";
 
 import { NodeMapper } from "./node.mapper";
 import { ScaleMapper } from "../scale/scale.mapper";
@@ -27,6 +27,8 @@ import { makeSuccessPaging } from "../util/ajaxreturn.util";
 import { HttpService } from "@nestjs/axios";
 import { AxiosError } from "axios";
 import {WorldCountry} from "../entities/worldCountry.entity";
+import {CodeCommon} from "../entities/codeCommon.entity";
+
 
 export class NodeService {
   private readonly logger = new Logger(NodeService.name);
@@ -35,16 +37,97 @@ export class NodeService {
     private nodeRepository: NodeRepository,
     @InjectRepository(EventRepository)
     private eventRepository: EventRepository,
-    //@InjectRepository(CodeCommonRepository)
-    //private codeCommonRepository: CodeCommonRepository,
+    @InjectRepository(CodeCommonRepository)
+    private codeCommonRepository: CodeCommonRepository,
     @InjectRepository(SystemRepository)
     private systemRepository: SystemRepository,
     private nodeMapper: NodeMapper,
     private scaleMapper: ScaleMapper,
     private readonly httpService: HttpService,
     private venueRepository: VenueRepository,
-    //private worldCountryRepository: WorldCountryRepository,
+    @InjectRepository(WorldCountryRepository)
+    private worldCountryRepository: WorldCountryRepository,
   ) {}
+
+  public async call4DRSAfterScaleOutOrIn(systemId: string, nodeId: string, method: APIMethod): Promise<boolean> {
+    let fdss: Node = await this.nodeRepository.findById(nodeId);
+    let region: string = fdss.region;
+    const jsonMap = new Map<string, any>();
+    const region4DRSparam = new Map<string, any>();
+
+    jsonMap
+      .set("id", fdss.id)
+      .set("name", fdss.name)
+      .set("region", region)
+      .set("private_ip", fdss.private_ip)
+      .set("private_port", fdss.private_port);
+
+    region4DRSparam
+      .set("systemId", systemId)
+      .set("region", region)
+      .set("nodeType", nodeType.FDRS);
+
+    let data: Map<string, any> = await this.nodeMapper.listNodeForScaleOutOrInTarget4DRS(region4DRSparam);
+    data.forEach(item => {
+      const stringUrl = `http://${item.private_ip}:${item.private_port}/live/4drs/target/${nodeId}`;
+      this.httpService.request({
+        "url": stringUrl,
+        "method": method,
+      }).pipe(
+        catchError((error: AxiosError) => {
+          this.logger.error(error.response.data);
+          throw 'An error happend!';
+        })
+      )
+    })
+    return true;
+  }
+
+  public async nodeIp44DML(srcServerIp: string, systemId: string): Promise<Map<string, any>> {
+    let retMap = new Map<string, any>();
+    let lsParam = new Map<string, any>();
+
+    lsParam
+      .set("systemId", systemId)
+      .set("serverIp", srcServerIp)
+      .set("nodeType", nodeType.FDML)
+      .set("mlType", mlType.FDML_MANAGER);
+
+    console.log(lsParam)
+    let requestMLList: Map<string, any> = await this.nodeMapper.listNodeFor4DML(lsParam);
+
+    if (!(requestMLList.size === 0) || !(requestMLList.size > 1)) {
+      //retMap.set("node", requestMLList(0))
+    }
+
+    return retMap;
+  }
+  public call4DRS(systemId: string, nodeId: string, method: APIMethod): void {
+    this.call4DRSAfterScaleOutOrIn(systemId, nodeId, method);
+  }
+  public async scaleIn4DSS(systemId: string, nodeId: string): Promise<boolean> {
+    let param = new Map<string, any>();
+    param.set("id", nodeId).set("systemId", systemId);
+    await this.nodeMapper.scaleIn4DSS(param);
+    //TelegramUtil.sendMsg("4DSS scaleIn[" + nodeId + "] OK!");
+    this.call4DRS(systemId, nodeId, APIMethod.DELETE);
+    return true;
+  }
+
+  public async scaleOut4DSSOk(systemId: string, nodeId: string, publicIp: string, publicPort: string, doamin: string): Promise<boolean> {
+    let param = new Map<string, any>();
+    param
+      .set("systemId", systemId)
+      .set("idd", nodeId)
+      .set("publicIp", publicIp)
+      .set("publicPort", publicPort)
+      .set("doamin", doamin)
+      .set("updatedAt", new Date(Date.now()))
+
+    await this.nodeMapper.scaleOut4DSSOk(param);
+
+    return true;
+  }
 
   public async scaleOut4DSS(
     systemId: string,
@@ -54,14 +137,65 @@ export class NodeService {
     initialStateValue: string,
     region: string
   ) {
-    //const regionCode = this.codeCommonRepository.findByCode(region);
-/*    if (regionCode === null) {
+    const regionCode = this.codeCommonRepository.findByCode(region);
+    if (regionCode === null) {
       const system: System = this.systemRepository.findById(systemId);
       const venue: Venue = this.venueRepository.findById(system.venue_id);
-      //const worldCountry: WorldCountry = this.worldCountryRepository.findById(venue.country_id.toString());
+      const worldCountry: WorldCountry = await this.worldCountryRepository.findById(venue.country_id.toString());
 
-      let regionCode
-    }*/
+      let regionCode = new CodeCommon();
+      regionCode.group_code = "CM07"
+      regionCode.code = region;
+      regionCode.description = worldCountry.iso3;
+      regionCode.is_use = "Y";
+      regionCode.name = worldCountry.iso3;
+      regionCode.order_seq = 1;
+      regionCode = await this.codeCommonRepository.save(regionCode);
+    }
+    let regionName = regionCode["name"];
+    let scaleMap = new Map<string, any>();
+    let scaleParam = new Map<string, any>();
+    let nodeNameParam = new Map<string, any>();
+    let instancenameList = new Map<string, any>();
+    let instanceNameMap = new Map<string, any>();
+
+    scaleParam.set("systemId", systemId).set("region", region);
+    scaleMap = await this.scaleMapper.getScaleBySystemId(scaleParam);
+
+    const scaleName = scaleMap.get("scale_ss_name")
+    let
+      nodeName: string = null,
+      publicIp: string = null,
+      publicPort: number = 0,
+      nodeTypes: string = nodeType.FDSS, //변수명이 겹치므로 nodeTypes로 함...
+      isOrigin: string = null,
+      domain: string = null,
+      initialState: string = null,
+      isAutoScaleOut: string = null,
+      lsType: string = null,
+      mlType: string = null,
+      deployType: string = null,
+      parentNodeId: string = null,
+      state: string = nodeStatus.ENABLE;
+
+    if (initialStateValue === "running") {
+      initialState = instanceStatus.RUNNING;
+    } else if (initialStateValue === "temporary") {
+      initialState = instanceStatus.TEMPORARY;
+    } else if (initialStateValue === "terminated") {
+      initialState = instanceStatus.TERMINATED;
+    }
+    nodeNameParam.set("systemId", systemId).set("region", region).set("nodeType", nodeTypes);
+    instancenameList = await this.nodeMapper.getScaleOutInstanceMaxName(nodeNameParam);
+
+    if (instancenameList.size === 2) {
+    //  instanceNameMap = instancenameList(1)
+    }
+
+    //let node: Node = this.insertNode()
+
+    let retMap = new Map<string, any>();
+    return retMap;
   }
   async listNode(params: Map<string, any>): Promise<Map<string, any>> {
     return makeSuccessPaging(await this.nodeMapper.listNode(params));
@@ -250,18 +384,20 @@ export class NodeService {
     return retMap;
   }
 
-  public async getTemporaryInstanceInfo(params: Map<string, string>): Promise<Map<string, any>> {
+  public async getTemporaryInstanceInfo(params: Map<string, string>): Promise<Map<string, object>> {
     let retMap = new Map<string, any>();
     let enableInstancesCount: number = await this.nodeMapper.enableInstancesCount(params);
+
     let instanceCountList = [];
 
     for (let i = 0; i < enableInstancesCount; i+= 1) {
       let instanceCountMap = new Map<string, any>();
       instanceCountMap.set("code", i+1).set("name", i+1);
-      instanceCountList.push(instanceCountMap);
+      instanceCountList.push(Object.fromEntries(instanceCountMap));
     }
-    const instanceTypeList: Map<string, any> = await this.scaleMapper.getScaleInstanceType(params);
-    const regionList: Map<string, any> = await this.nodeMapper.listRegion4TemporaryInstance(params);
+
+    const instanceTypeList = await this.scaleMapper.getScaleInstanceType(params);
+    const regionList = await this.nodeMapper.listRegion4TemporaryInstance(params);
 
     retMap
       .set("instanceCountList", instanceCountList)
