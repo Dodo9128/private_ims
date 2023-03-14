@@ -12,12 +12,13 @@ export class WebSystemController {
     @Body('id') id: string,
     @Res() res: Response,
   ) {
-    let Result: IResultReturn = {
-      result: "OK",
-      message: "SUCCESS",
-      data: await this.systemMapper.getSystem(id),
-    }
-    return res.status(HttpStatus.OK).json(Result);
+    return this.systemMapper.getSystem(id).then((rst) => {
+      res.status(HttpStatus.OK).json({
+        result: "ok",
+        message: "SUCCESS",
+        data: rst,
+      })
+    });
   }
 
   @Post('/listSystem4Mng')
