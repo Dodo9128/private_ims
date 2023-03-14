@@ -219,7 +219,7 @@ export class WebNodeController {
 
     const Result: Map<string, any> = JsonResult.makeSuccessArray(await this.nodeService.listRegion4OnlyTemporaryInstance(params));
 
-    res.status(HttpStatus.OK).json(Result);
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
   }
 
   @Post('/deleteTemporaryInstance')
