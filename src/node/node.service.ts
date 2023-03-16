@@ -8,7 +8,7 @@ import {System} from "../entities/system.entity";
 import {NodeMapper} from "./node.mapper";
 import {ScaleMapper} from "../scale/scale.mapper";
 import {ChannelMapper} from "../channel/channel.mapper";
-import { EventMapper } from "../event/event.mapper";
+import {EventMapper } from "../event/event.mapper";
 import {NodeRepository} from "./node.repository";
 import {EventRepository} from "../event/event.repository";
 import {SystemRepository} from "../system/system.repository";

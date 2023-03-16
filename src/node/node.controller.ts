@@ -347,7 +347,7 @@ export class NodeController {
     return res.status(HttpStatus.OK).json(Object.fromEntries(Result));
   }
 
-  @Post("/getNdoe")
+  @Post("/getNode")
   public async getNode(
     @Body("id") id: string
   ): Promise<Map<string, object>> {

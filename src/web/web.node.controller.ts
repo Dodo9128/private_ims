@@ -3,7 +3,7 @@ import {
   Post,
   Body,
   Query,
-  Res, HttpStatus, Get, Param, Ip
+  Res, HttpStatus
 } from '@nestjs/common';
 import { Response} from 'express';
 import { NodeService } from "../node/node.service";
@@ -270,5 +270,12 @@ export class WebNodeController {
   ) {
 
     this.nodeService.startStopInstance(system_id, action, nodeArr);
+  }
+
+  @Post("/getNode")
+  public async getNode(
+    @Body("id") id: string
+  ): Promise<Map<string, object>> {
+    return JsonResult.makeSuccessVo(await this.nodeService.getNode(new Map(Object.entries( {id}))));
   }
 }

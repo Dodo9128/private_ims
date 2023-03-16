@@ -12,7 +12,6 @@ export class NodeMapper {
   constructor(
     @InjectRepository(NodeRepository)
     private nodeRepository: NodeRepository,
-
   ) {}
 
   public async listNode(params: Map<any, any>): Promise<Map<string, any>> {
@@ -76,7 +75,7 @@ export class NodeMapper {
     return await this.nodeRepository.query(query);
   }
   public async getNode(params: Map<string, any>): Promise<Node> {
-    const query = MybatisMapper.getStatement('Node', 'getNode', Object.fromEntries(params), myBatisFormat);
+    const query: string  = MybatisMapper.getStatement('Node', 'getNode', Object.fromEntries(params), myBatisFormat);
     return await this.nodeRepository.query(query);
   }
   public async getNode4Mng(params: Map<string, any>): Promise<Map<string, any>> {
