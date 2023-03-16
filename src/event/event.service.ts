@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EventRepository } from "./event.repository";
 import { CreateEventDto, UpdateEventDto } from "./event.dto";
-import { Event } from '../../entities/event.entity';
+import { Event } from '../entities/event.entity';
 
 import * as MybatisMapper from "mybatis-mapper";
 
