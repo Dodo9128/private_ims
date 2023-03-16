@@ -1,33 +1,27 @@
-import { catchError, firstValueFrom } from "rxjs";
-import { Inject, Logger} from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Node } from '../entities/node.entity';
-import { Venue } from "../entities/venue.entity";
-import { System } from "../entities/system.entity";
+import {catchError} from "rxjs";
+import {Logger} from "@nestjs/common";
+import {InjectRepository} from "@nestjs/typeorm";
+import {Node} from '../entities/node.entity';
+import {Venue} from "../entities/venue.entity";
+import {System} from "../entities/system.entity";
 
-import { NodeMapper } from "./node.mapper";
-import { ScaleMapper } from "../scale/scale.mapper";
-import { NodeRepository } from "./node.repository";
-import { EventRepository } from "../web/event/event.repository";
-import { SystemRepository } from "../system/system.repository";
-import { CodeCommonRepository} from "../code/CodeCommon.repository";
-import { WorldCountryRepository } from "../world/world.repository";
-import { VenueRepository } from "../venue/venue.repository";
-import {
-  APIMethod,
-  ApplicationConstants,
-  instanceStatus,
-  IsYN,
-  mlType,
-  nodeStatus,
-  nodeType
-} from "../global/commonCode";
+import {NodeMapper} from "./node.mapper";
+import {ScaleMapper} from "../scale/scale.mapper";
+import {ChannelMapper} from "../channel/channel.mapper";
+import { EventMapper } from "../event/event.mapper";
+import {NodeRepository} from "./node.repository";
+import {EventRepository} from "../event/event.repository";
+import {SystemRepository} from "../system/system.repository";
+import {CodeCommonRepository} from "../code/CodeCommon.repository";
+import {WorldCountryRepository} from "../world/world.repository";
+import {VenueRepository} from "../venue/venue.repository";
+import * as CommonCode from "../global/commonCode";
 
-import { makeSuccessPaging } from "../util/ajaxreturn.util";
+import {makeSuccessPaging} from "../util/ajaxreturn.util";
 import { HttpService } from "@nestjs/axios";
 import { AxiosError } from "axios";
-import {WorldCountry} from "../entities/worldCountry.entity";
-import {CodeCommon} from "../entities/codeCommon.entity";
+import { WorldCountry } from "../entities/worldCountry.entity";
+import { CodeCommon } from "../entities/codeCommon.entity";
 
 
 export class NodeService {
@@ -43,13 +37,197 @@ export class NodeService {
     private systemRepository: SystemRepository,
     private nodeMapper: NodeMapper,
     private scaleMapper: ScaleMapper,
-    private readonly httpService: HttpService,
+    private httpService: HttpService,
     private venueRepository: VenueRepository,
     @InjectRepository(WorldCountryRepository)
     private worldCountryRepository: WorldCountryRepository,
+    private channelMapper: ChannelMapper,
+    private eventMapper: EventMapper,
   ) {}
 
-  public async call4DRSAfterScaleOutOrIn(systemId: string, nodeId: string, method: APIMethod): Promise<boolean> {
+  private async call4DMLAfter4DMLStateUpdate(nodeId: string, state: string): Promise<boolean> {
+    let node: Node = await this.getNode(new Map(Object.entries({id: nodeId})));
+    node.state = state;
+    node = await this.nodeRepository.save(node);
+
+    return this._call4DMLAfter4DMLStateUpdate(node);
+  }
+  private async _call4DMLAfter4DMLStateUpdate(node: Node): Promise<boolean> {
+    const region4DMLparam = new Map<string, any>();
+    let state: string;
+
+    if (CommonCode.nodeStatus.ENABLE === node.state) {
+      state = CommonCode.ApplicationConstants.NODE_STATUS_ENABLE;
+    } else if ( CommonCode.nodeStatus.DISABLE === node.state) {
+      state = CommonCode.ApplicationConstants.NODE_STATUS_DISABLE;
+    }
+
+    region4DMLparam
+      .set("systemId", node.system_id)
+      .set("region", node.region)
+      .set("nodeType", CommonCode.nodeType.FDML)
+      .set("mlType", CommonCode.mlType.FDML_MANAGER);
+
+    let rsList: Map<string, any> = await this.nodeMapper.listNodeFor4DMLUpdateTarget4DML(region4DMLparam);
+
+    rsList.forEach(item => {
+      let stringUrl = `http://${item.private_ip}:${item.private_port}/service/4dml/state?4dml_id=${item.nodeId}&state=${state}`;
+      this.httpService.request({
+        "url": stringUrl,
+        "method": CommonCode.APIMethod.PUT,
+      }).pipe(
+        catchError((error: AxiosError) => {
+          this.logger.error(error.response.data);
+          throw 'An error happend!';
+        })
+      )
+    })
+    return true;
+  }
+  private call4DMLState(node: Node): void {
+    this._call4DMLAfter4DMLStateUpdate(node);
+  }
+  public async getNode(param: Map<string, any>): Promise<Node> {
+    return this.nodeMapper.getNode(param);
+  }
+  public async listNode4Cms(param: Map<string,any>): Promise<Map<string, any>> {
+    return await this.nodeMapper.listNode4Cms(param);
+  }
+  public async scaleIn4DML(systemId: string, nodeId: string, rsId: string): Promise<boolean> {
+    let params = {
+      id: nodeId,
+      systemId
+    };
+    await this.nodeMapper.scaleIn4DSS(new Map(Object.entries(params)));
+
+    params.id = rsId;
+    await this.nodeMapper.scaleIn4DSS(new Map(Object.entries(params)));
+
+    return true;
+  }
+
+  public async call4DLSAfter4DSSUpsertDelete(nodeId: string, isInsert: boolean, isDelete: boolean): Promise<boolean> {
+    let node: Node = await this.getNode(new Map(Object.entries({ id: nodeId })));
+    return this._call4DLSAfter4DSSUpsertDelete(node, isInsert, isDelete)
+  }
+  public async scaleOut4DMLOk(systemId: string, nodeId: string, rsId: string, publicIp: string, publicPort: string, domain: string): Promise<boolean> {
+    let param = {
+      systemId,
+      "id": nodeId,
+      publicIp,
+      publicPort: 5003,
+      "updatedAt": new Date(Date.now())
+    }
+    await this.channelMapper.changeCameraIpMapping(new Map(Object.entries(param)));
+
+    param["domain"] = domain;
+    param["updatedAt"] = new Date(Date.now())
+    await this.nodeMapper.scaleOut4DSSOk(new Map(Object.entries(param)));
+
+    param["publicPort"] = 8554
+    param["updatedAt"] = new Date(Date.now())
+    await this.nodeMapper.scaleOut4DSSOk(new Map(Object.entries(param)));
+
+    return true;
+  }
+  public async scaleOut4DML(systemId: string, instanceId: string, privateIp: string, privatePort: number, initialStateValue: string, region: string ): Promise<Map<string, any>> {
+    let retMap = new Map<string, any>();
+    let node: Node = null, rsNode: Node = null;
+    let regionCode: CodeCommon = await this.codeCommonRepository.findByCode(region);
+
+    if (regionCode === null) {
+      const system: System = await this.systemRepository.findById(systemId);
+      const venue: Venue = await this.venueRepository.findById(system.venue_id);
+      const worldCountry: WorldCountry = await this.worldCountryRepository.findById(venue.country_id);
+
+      regionCode = new CodeCommon();
+      regionCode.group_code = "CM07";
+      regionCode.code = region;
+      regionCode.description = worldCountry.iso3;
+      regionCode.is_use = "Y"
+      regionCode.name = worldCountry.iso3;
+      regionCode.order_seq = 1;
+      regionCode = await this.codeCommonRepository.save(regionCode);
+    }
+    const scaleParam = {systemId, region};
+    let regionName = regionCode.name;
+    let scaleMap: Map<string, any> = await this.scaleMapper.getScaleBySystemId(new Map(Object.entries(scaleParam)));
+    const scaleName: string = scaleMap.get("scale_ss_name");
+
+    let nodeName: string = null,
+      publicIp: string = null,
+      publicPort: number = 0,
+      nodeType: string = CommonCode.nodeType.FDML,
+      isOrigin: string = null,
+      domain: string = null,
+      initialState: string = null,
+      isAutoScaleOut: string = CommonCode.IsYN.Y,
+      lsType: string = null,
+      mlType: string = CommonCode.mlType.FDML_MEDIA_PIPELINE,
+      deployType: string = null,
+      parentNodeId: string = null;
+
+    if (scaleMap.get("region") === region) { isOrigin = CommonCode.IsYN.Y }
+    if (initialStateValue === "running") { initialState = CommonCode.instanceStatus.RUNNING }
+    else if (initialStateValue === "terminated") {initialState = CommonCode.instanceStatus.TERMINATED }
+    else if (initialStateValue === "temporary") { initialStateValue= CommonCode.instanceStatus.TEMPORARY }
+
+    let state = CommonCode.nodeStatus.ENABLE;
+
+    let nodeNameParam = { systemId, region, nodeType, mlType }
+    let instancenameList = await this.nodeMapper.getScaleOutInstanceMaxName(new Map(Object.entries(nodeNameParam)));
+    let instanceNameMap = new Map<string, any>();
+    if (instancenameList.length === 2) {
+      //TODO: 이걸 어쩌지...
+    } else {
+      nodeName = `${scaleName}01-A`;
+    }
+
+    let insertParams = new Map<string, any>();
+    insertParams
+      .set("name", nodeName)
+      .set("system_id", systemId)
+      .set("public_ip", publicIp)
+      .set("public_port", publicPort)
+      .set("private_ip", privateIp)
+      .set("private_port", privatePort)
+      .set("domain", domain)
+      .set("region", region)
+      .set("region_name", regionName)
+      .set("instance_id", instanceId)
+      .set("node_type", nodeType)
+      .set("is_origin", isOrigin)
+      .set("initial_state", initialState)
+      .set("state", state)
+      .set("is_auto_scale_out", isAutoScaleOut)
+      .set("ls_type", lsType)
+      .set("ml_type", mlType)
+      .set("deploy_type", deployType)
+      .set("parent_node_id", parentNodeId)
+
+    //4DML-MP
+    node = await this.insertNode(insertParams);
+    //4DRS
+    let rsNodeName: string = nodeName.replace("4DML-MP", "4DRS");
+    let rsNodeType: string = CommonCode.nodeType.FDRS;
+    let rsMlType: string = null;
+    let rsPublicPort: number = 8554;
+    let rsPrivatePort: number = 8554;
+    insertParams
+      .set("name", rsNodeName)
+      .set("public_port", rsPublicPort)
+      .set("private_port", rsPrivatePort)
+      .set("node_type", rsNodeType)
+      .set("ml_type", rsMlType)
+
+    rsNode = await this.insertNode(insertParams);
+
+    retMap.set("id", node.id).set("name", node.name).set("rs_id", rsNode.id);
+
+    return retMap;
+  }
+
+  public async call4DRSAfterScaleOutOrIn(systemId: string, nodeId: string, method: CommonCode.APIMethod): Promise<boolean> {
     let fdss: Node = await this.nodeRepository.findById(nodeId);
     let region: string = fdss.region;
     const jsonMap = new Map<string, any>();
@@ -65,11 +243,11 @@ export class NodeService {
     region4DRSparam
       .set("systemId", systemId)
       .set("region", region)
-      .set("nodeType", nodeType.FDRS);
+      .set("nodeType", CommonCode.nodeType.FDRS);
 
     let data: Map<string, any> = await this.nodeMapper.listNodeForScaleOutOrInTarget4DRS(region4DRSparam);
     data.forEach(item => {
-      const stringUrl = `http://${item.private_ip}:${item.private_port}/live/4drs/target/${nodeId}`;
+      let stringUrl = `http://${item.private_ip}:${item.private_port}/live/4drs/target/${nodeId}`;
       this.httpService.request({
         "url": stringUrl,
         "method": method,
@@ -90,10 +268,9 @@ export class NodeService {
     lsParam
       .set("systemId", systemId)
       .set("serverIp", srcServerIp)
-      .set("nodeType", nodeType.FDML)
-      .set("mlType", mlType.FDML_MANAGER);
+      .set("nodeType", CommonCode.nodeType.FDML)
+      .set("mlType", CommonCode.mlType.FDML_MANAGER);
 
-    console.log(lsParam)
     let requestMLList: Map<string, any> = await this.nodeMapper.listNodeFor4DML(lsParam);
 
     if (!(requestMLList.size === 0) || !(requestMLList.size > 1)) {
@@ -102,7 +279,7 @@ export class NodeService {
 
     return retMap;
   }
-  public call4DRS(systemId: string, nodeId: string, method: APIMethod): void {
+  public call4DRS(systemId: string, nodeId: string, method: CommonCode.APIMethod): void {
     this.call4DRSAfterScaleOutOrIn(systemId, nodeId, method);
   }
   public async scaleIn4DSS(systemId: string, nodeId: string): Promise<boolean> {
@@ -110,7 +287,7 @@ export class NodeService {
     param.set("id", nodeId).set("systemId", systemId);
     await this.nodeMapper.scaleIn4DSS(param);
     //TelegramUtil.sendMsg("4DSS scaleIn[" + nodeId + "] OK!");
-    this.call4DRS(systemId, nodeId, APIMethod.DELETE);
+    this.call4DRS(systemId, nodeId, CommonCode.APIMethod.DELETE);
     return true;
   }
 
@@ -137,13 +314,13 @@ export class NodeService {
     initialStateValue: string,
     region: string
   ) {
-    const regionCode = this.codeCommonRepository.findByCode(region);
+    let regionCode: CodeCommon = await this.codeCommonRepository.findByCode(region);
     if (regionCode === null) {
       const system: System = this.systemRepository.findById(systemId);
       const venue: Venue = this.venueRepository.findById(system.venue_id);
-      const worldCountry: WorldCountry = await this.worldCountryRepository.findById(venue.country_id.toString());
+      const worldCountry: WorldCountry = await this.worldCountryRepository.findById(venue.country_id);
 
-      let regionCode = new CodeCommon();
+      regionCode = new CodeCommon();
       regionCode.group_code = "CM07"
       regionCode.code = region;
       regionCode.description = worldCountry.iso3;
@@ -152,7 +329,7 @@ export class NodeService {
       regionCode.order_seq = 1;
       regionCode = await this.codeCommonRepository.save(regionCode);
     }
-    let regionName = regionCode["name"];
+    let regionName = regionCode.name;
     let scaleMap = new Map<string, any>();
     let scaleParam = new Map<string, any>();
     let nodeNameParam = new Map<string, any>();
@@ -167,7 +344,7 @@ export class NodeService {
       nodeName: string = null,
       publicIp: string = null,
       publicPort: number = 0,
-      nodeTypes: string = nodeType.FDSS, //변수명이 겹치므로 nodeTypes로 함...
+      nodeType: string = CommonCode.nodeType.FDSS,
       isOrigin: string = null,
       domain: string = null,
       initialState: string = null,
@@ -176,22 +353,22 @@ export class NodeService {
       mlType: string = null,
       deployType: string = null,
       parentNodeId: string = null,
-      state: string = nodeStatus.ENABLE;
+      state: string = CommonCode.nodeStatus.ENABLE;
 
     if (initialStateValue === "running") {
-      initialState = instanceStatus.RUNNING;
+      initialState = CommonCode.instanceStatus.RUNNING;
     } else if (initialStateValue === "temporary") {
-      initialState = instanceStatus.TEMPORARY;
+      initialState = CommonCode.instanceStatus.TEMPORARY;
     } else if (initialStateValue === "terminated") {
-      initialState = instanceStatus.TERMINATED;
+      initialState = CommonCode.instanceStatus.TERMINATED;
     }
-    nodeNameParam.set("systemId", systemId).set("region", region).set("nodeType", nodeTypes);
+    nodeNameParam.set("systemId", systemId).set("region", region).set("nodeType", nodeType);
     instancenameList = await this.nodeMapper.getScaleOutInstanceMaxName(nodeNameParam);
 
     if (instancenameList.size === 2) {
     //  instanceNameMap = instancenameList(1)
     }
-
+    //TODO : 함수 완성 필요
     //let node: Node = this.insertNode()
 
     let retMap = new Map<string, any>();
@@ -211,7 +388,7 @@ export class NodeService {
     let items: Node = null;
 
     if (params.get("is_auto_scale_out") === null) {
-      isAutoScaleOut = IsYN.N;
+      isAutoScaleOut = CommonCode.IsYN.N;
     }
 
     node.id = nodeId;
@@ -238,11 +415,11 @@ export class NodeService {
 
     items = await this.nodeRepository.save(node)
 
-    if (params.get("isCcall4DLSPut") && (IsYN.N === isAutoScaleOut)) {
-      if (nodeType.FDSS === items.node_type) {
+    if (params.get("isCcall4DLSPut") && (CommonCode.IsYN.N === isAutoScaleOut)) {
+      if (CommonCode.nodeType.FDSS === items.node_type) {
         await this.call4DLSPut(items, true, false);
-      } else if (nodeType.FDML === items.node_type
-        && mlType.FDML_MEDIA_PIPELINE === items.ml_type) {
+      } else if (CommonCode.nodeType.FDML === items.node_type
+        && CommonCode.mlType.FDML_MEDIA_PIPELINE === items.ml_type) {
         await this.call4DMLPut(items, true, false)
       }
     }
@@ -292,19 +469,19 @@ export class NodeService {
 
     if (params.get("state") !== node["state"]) { isCall4DLSStatusAPI = true; }
 
-    if (IsYN.N === items.is_auto_scale_out) {
+    if (CommonCode.IsYN.N === items.is_auto_scale_out) {
       if (isCall4DLSPutAPI) {
-        if (nodeType.FDSS === items.node_type) {
+        if (CommonCode.nodeType.FDSS === items.node_type) {
           await this.call4DLSPut(items, false, false);
-        } else if ((nodeType.FDML === items.node_type) && (mlType.FDML_MEDIA_PIPELINE === items.ml_type)) {
+        } else if ((CommonCode.nodeType.FDML === items.node_type) && (CommonCode.mlType.FDML_MEDIA_PIPELINE === items.ml_type)) {
           await this.call4DMLPut(items, false, false)
         }
       }
 
       if (isCall4DLSStatusAPI) {
-        if (nodeType.FDSS === items.node_type) {
+        if (CommonCode.nodeType.FDSS === items.node_type) {
            this.call4DLSState(items);
-        } else if (nodeType.FDML === items.node_type && mlType.FDML_MEDIA_PIPELINE === items.ml_type) {
+        } else if (CommonCode.nodeType.FDML === items.node_type && CommonCode.mlType.FDML_MEDIA_PIPELINE === items.ml_type) {
           // 여긴 주석 처리되어 있음...
           // this.call4DMLState(items);
         }
@@ -323,16 +500,16 @@ export class NodeService {
 
   async deleteTemporaryInstance(params: Map<string, any>): Promise<any> {
     params
-      .set('nodeType', nodeType.FDML)
-      .set('mlType', mlType.FDML_MANAGER)
+      .set('nodeType', CommonCode.nodeType.FDML)
+      .set('mlType', CommonCode.mlType.FDML_MANAGER)
 
     const data: Map<string, string> = await this.nodeMapper.listNodeFor4DMLUpdateTarget4DML(params);
 
     data.forEach( item => {
-      const stringUrl = `http://${item['private_ip']}:${item['private_port']}/service/scale/temporary`;
+      let stringUrl = `http://${item['private_ip']}:${item['private_port']}/service/scale/temporary`;
       this.httpService.request({
         url: stringUrl,
-        method: APIMethod.DELETE
+        method: CommonCode.APIMethod.DELETE
       }).pipe(
         catchError((error: AxiosError) => {
           this.logger.error(error.response.data);
@@ -344,11 +521,11 @@ export class NodeService {
     return true;
   }
 
-  async deleteNode(id: string): Promise<any> {
+  async deleteNode(id: string): Promise<boolean> {
     const node: Node = await this.nodeRepository.findOneBy({id});
 
-    if (IsYN.N === node.is_auto_scale_out) {
-      if ((nodeType.FDML === node.node_type) && (mlType.FDML_MEDIA_PIPELINE === node.ml_type)) {
+    if (CommonCode.IsYN.N === node.is_auto_scale_out) {
+      if ((CommonCode.nodeType.FDML === node.node_type) && (CommonCode.mlType.FDML_MEDIA_PIPELINE === node.ml_type)) {
         await this.call4DMLPut(node, false, true);
       }
     }
@@ -366,7 +543,7 @@ export class NodeService {
     lsParam
       .set("systemId", systemId)
       .set("serverIp", srcServerIp)
-      .set("nodeType", nodeType.FDLS)
+      .set("nodeType", CommonCode.nodeType.FDLS)
 
     let requestLSList: Map<string, any> = await this.nodeMapper.listNodeForSelf(lsParam);
 
@@ -410,8 +587,16 @@ export class NodeService {
   /*
   * eventMapper와 연결 되야 함... */
   public async getCFurl(eventId: string): Promise<any> {
-    let systemId = await this.eventRepository.findBy({id: eventId});
-    console.log(systemId)
+    let systemId: string = await this.eventMapper.getSystemId(new Map(Object.entries({"event_id": eventId} )));
+    let cloudFrontParam = new Map<string, any>();
+    cloudFrontParam
+      .set("systemId", systemId)
+      .set("nodeType", CommonCode.nodeType.FDML)
+      .set("mlType", CommonCode.mlType.CLOUD_FRONT);
+
+    let cfurl = await this.nodeMapper.getCFurl(cloudFrontParam);
+
+    return cfurl;
   }
 
   public async call4DLSPut(node: Node, isInsert: boolean, isDelete: boolean): Promise<void> {
@@ -432,12 +617,12 @@ export class NodeService {
     let method = null;
 
     if (isDelete) {
-      method = APIMethod.DELETE;
+      method = CommonCode.APIMethod.DELETE;
     } else {
       if (isInsert) {
-        method = APIMethod.POST;
+        method = CommonCode.APIMethod.POST;
       } else {
-        method = APIMethod.PUT;
+        method = CommonCode.APIMethod.PUT;
       }
     }
 
@@ -445,14 +630,14 @@ export class NodeService {
       let initialState = node.initial_state;
 
       switch(initialState) {
-        case instanceStatus.RUNNING:
-          initialState = ApplicationConstants.INSTANCE_STATUS_RUNNING;
+        case CommonCode.instanceStatus.RUNNING:
+          initialState = CommonCode.ApplicationConstants.INSTANCE_STATUS_RUNNING;
           break;
-        case instanceStatus.TEMPORARY:
-          initialState = ApplicationConstants.INSTANCE_STATUS_TEMPORARY;
+        case CommonCode.instanceStatus.TEMPORARY:
+          initialState = CommonCode.ApplicationConstants.INSTANCE_STATUS_TEMPORARY;
           break;
-        case instanceStatus.TERMINATED:
-          initialState = ApplicationConstants.INSTANCE_STATUS_TERMINATED;
+        case CommonCode.instanceStatus.TERMINATED:
+          initialState = CommonCode.ApplicationConstants.INSTANCE_STATUS_TERMINATED;
           break;
       }
       jsonMap
@@ -466,17 +651,17 @@ export class NodeService {
     region4DLSparam
       .set("systemId", node.system_id)
       .set("region", node.region)
-      .set("nodeType", nodeType.FDLS)
+      .set("nodeType", CommonCode.nodeType.FDLS)
 
     const rsList: Map<string, any> = await this.nodeMapper.listNodeFor4DSSUpdateTarget4DLS(region4DLSparam);
 
     rsList.forEach(item => {
       let serverIp: string = item.private_ip;
       let serverPort: number = item.private_port;
-      const stringUrl = `http://${serverIp}:${serverPort}/service/4dss/info?id=${node.id}`;
+      let stringUrl = `http://${serverIp}:${serverPort}/service/4dss/info?id=${node.id}`;
       const result = this.httpService.request({
         url: stringUrl,
-        method: APIMethod.POST,
+        method: CommonCode.APIMethod.POST,
         data: Object.fromEntries(jsonMap),
       }).pipe(
         catchError((error: AxiosError) => {
@@ -494,46 +679,50 @@ export class NodeService {
     await this._call4DMLAfter4DSSUpsertDelete(node, isInsert, isDelete);
   }
 
+  public async call4DMLAfter4DSSUpsertDelete(nodeId: string, isInsert: boolean, isDelete: boolean): Promise<boolean> {
+    let node: Node = await this.getNode(new Map(Object.entries({ id: nodeId })));
+    return this._call4DLSAfter4DSSUpsertDelete(node, isInsert, isDelete);
+  }
   private async _call4DMLAfter4DSSUpsertDelete(node: Node, isInsert: boolean, isDelete: boolean): Promise<boolean> {
     const nodeId = node.id;
-    const mlTypes = node.ml_type;
+    const mlType = node.ml_type;
     let region4DMLParam = new Map<string, any>();
     let jsonMap = new Map<string, any>();
     let mlTypeInt: number = 0;
 
     if (isDelete) {
-      const method = APIMethod.DELETE;
+      const method = CommonCode.APIMethod.DELETE;
     } else {
       if (isInsert) {
-        const method = APIMethod.POST;
+        const method = CommonCode.APIMethod.POST;
       } else {
-        const method = APIMethod.PUT;
+        const method = CommonCode.APIMethod.PUT;
       }
     }
 
-    switch(mlTypes) {
-      case mlType.DISPATCHER:
+    switch(mlType) {
+      case CommonCode.mlType.DISPATCHER:
         mlTypeInt = 1;
         break;
-      case mlType.EMSG:
+      case CommonCode.mlType.EMSG:
         mlTypeInt = 2;
         break;
-      case mlType.FDML_MEDIA_PIPELINE:
+      case CommonCode.mlType.FDML_MEDIA_PIPELINE:
         mlTypeInt = 3;
         break;
-      case mlType.VOD_PIPELINE:
+      case CommonCode.mlType.VOD_PIPELINE:
         mlTypeInt = 4;
         break;
-      case mlType.IVOD_PIPELINE:
+      case CommonCode.mlType.IVOD_PIPELINE:
         mlTypeInt = 5;
         break;
-      case mlType.MEDIASTORE:
+      case CommonCode.mlType.MEDIASTORE:
         mlTypeInt = 6;
         break;
-      case mlType.FDML_MANAGER:
+      case CommonCode.mlType.FDML_MANAGER:
         mlTypeInt = 7;
         break;
-      case mlType.CLOUD_FRONT:
+      case CommonCode.mlType.CLOUD_FRONT:
         mlTypeInt = 8;
     }
 
@@ -553,8 +742,8 @@ export class NodeService {
     region4DMLParam
       .set("systemId", node.system_id)
       .set("region", node.region)
-      .set("nodeType", nodeType.FDML)
-      .set("mlType", mlType.FDML_MANAGER)
+      .set("nodeType", CommonCode.nodeType.FDML)
+      .set("mlType", CommonCode.mlType.FDML_MANAGER)
 
 
     const rsList: Map<string, any> = await this.nodeMapper.listNodeFor4DMLUpdateTarget4DML(region4DMLParam);
@@ -562,10 +751,10 @@ export class NodeService {
     rsList.forEach(item => {
       let serverIp: string = item.private_ip;
       let serverPort: string = item.private_port;
-      const stringUrl = `http://${serverIp}:${serverPort}/service/4dml/info?id=${nodeId}`;
+      let stringUrl = `http://${serverIp}:${serverPort}/service/4dml/info?id=${nodeId}`;
       const result = this.httpService.request({
         url: stringUrl,
-        method: APIMethod.POST,
+        method: CommonCode.APIMethod.POST,
         data: Object.fromEntries(jsonMap),
       }).pipe(
         catchError((error: AxiosError) => {
@@ -617,8 +806,8 @@ export class NodeService {
     region4DMLparam
       .set("systemId", systemId)
       .set("region", region)
-      .set("nodeType", nodeType.FDML)
-      .set("mlType", mlType.FDML_MANAGER);
+      .set("nodeType", CommonCode.nodeType.FDML)
+      .set("mlType", CommonCode.mlType.FDML_MANAGER);
 
     const rsList = await this.nodeMapper.listNodeFor4DMLUpdateTarget4DML(region4DMLparam);
 
@@ -628,7 +817,7 @@ export class NodeService {
       let stringUrl: string = `http://${serverIp}:${serverPort}/service/scale/${action}`
       const result = this.httpService.request({
           url: stringUrl,
-          method: APIMethod.POST,
+          method: CommonCode.APIMethod.POST,
           data: Object.fromEntries(jsonMap)
         }
       ).pipe(
@@ -643,26 +832,27 @@ export class NodeService {
   }
 
   public async listNodeForInstanceMng(params): Promise<Map<string, any>> {
-      params
-        .set("nodeType", nodeType.FDML)
-        .set("mlType", mlType.FDML_MEDIA_PIPELINE);
+    params
+      .set("nodeType", CommonCode.nodeType.FDML)
+      .set("mlType", CommonCode.mlType.FDML_MEDIA_PIPELINE);
 
-    return makeSuccessPaging(await this.nodeMapper.listNode(params));
+    //return makeSuccessPaging(await this.nodeMapper.listNode(params));
+    return await this.nodeMapper.listNode(params);
   }
 
   public async insertNode4Web(params: Map<string, any>): Promise<Map<string, any>> {
     let node: Node = await this.insertNode(params);
     let systemParam = new Map<string, any>();
     let retMap = new Map<string, any>();
+
     systemParam.set("id", node.id);
-    retMap.set('data', await this.getNode4Mng(systemParam))
+    retMap.set("data", await this.getNode4Mng(systemParam))
 
     return retMap;
   }
 
-  public async getNode4Mng(params: Map<string, any>): Promise<object> {
-    let result = await this.nodeMapper.getNode4Mng(params)
-    return result[0];
+  public async getNode4Mng(params: Map<string, any>) {
+    return await this.nodeMapper.getNode4Mng(params);
   }
 
   public async updateNode4Web(params: Map<string, any>): Promise<Map<string, any>> {
@@ -679,29 +869,35 @@ export class NodeService {
     this._call4DLSAfter4DSSStateUpdate(node)
   }
 
+  public async call4DLSAfter4DSSStateUpdate(nodeId: string, state: string): Promise<boolean> {
+    let node: Node = await this.getNode(new Map(Object.entries({ id: nodeId})));
+    node.state = state;
+    node = await this.nodeRepository.save(node);
+    return this._call4DLSAfter4DSSStateUpdate(node);
+  }
   private async _call4DLSAfter4DSSStateUpdate(node: Node): Promise<boolean> {
     let jsonMap: Map<string, any> = new Map<string, any>();
     let region4DLSparam: Map<string, any> = new Map<string, any>();
     let nodeId: string  = node.id;
     let state: string = node.state;
 
-    state = (nodeStatus.ENABLE === state) ? ApplicationConstants.NODE_STATUS_ENABLE : ApplicationConstants.NODE_STATUS_DISABLE;
+    state = (CommonCode.nodeStatus.ENABLE === state) ? CommonCode.ApplicationConstants.NODE_STATUS_ENABLE : CommonCode.ApplicationConstants.NODE_STATUS_DISABLE;
 
     region4DLSparam
       .set("systemId", node.system_id)
       .set("region", node.region)
-      .set("nodetype", nodeType.FDLS)
+      .set("nodetype", CommonCode.nodeType.FDLS)
 
     const rsList: Map<string, any> = await this.nodeMapper.listNodeFor4DSSUpdateTarget4DLS(region4DLSparam);
 
     rsList.forEach(item => {
       let serverIp: string = item.private_ip;
       let serverPort: string = item.private_port;
-      const stringUrl = `http://${serverIp}:${serverPort}/service/4dss/state?4dss_id=${node.id}&state=${state}`;
+      let stringUrl = `http://${serverIp}:${serverPort}/service/4dss/state?4dss_id=${node.id}&state=${state}`;
 
       const result = this.httpService.request({
         url: stringUrl,
-        method: APIMethod.POST,
+        method: CommonCode.APIMethod.POST,
         data: Object.fromEntries(jsonMap)
       }).pipe(
         catchError((error: AxiosError) => {
@@ -723,19 +919,19 @@ export class NodeService {
     region4DMLparam
       .set("systemId", params.get("system_id"))
       .set("region", params.get("region"))
-      .set("nodeType", nodeType.FDML)
-      .set("mlType", mlType.FDML_MANAGER)
+      .set("nodeType", CommonCode.nodeType.FDML)
+      .set("mlType", CommonCode.mlType.FDML_MANAGER)
 
     rsList = await this.nodeMapper.listNodeFor4DMLUpdateTarget4DML(region4DMLparam);
 
     rsList.forEach(item => {
       let serverIp: string = item.private_ip;
       let serverPort: string = item.private_port;
-      const stringUrl = `http://${serverIp}:${serverPort}/service/scale/temporary?count=${params.get("instanceCount")}&instanceType=${params.get("instanceType")}`;
+      let stringUrl = `http://${serverIp}:${serverPort}/service/scale/temporary?count=${params.get("instanceCount")}&instanceType=${params.get("instanceType")}`;
 
       const result = this.httpService.request({
         url: stringUrl,
-        method: APIMethod.POST,
+        method: CommonCode.APIMethod.POST,
       }).pipe(
         catchError((error: AxiosError) => {
           this.logger.error(error.response.data);

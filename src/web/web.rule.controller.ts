@@ -1,13 +1,6 @@
-import {
-  Controller,
-  Res,
-  Post,
-  Body,
-  HttpStatus, Query,
-} from '@nestjs/common';
+import { Controller, Res, Post, Body, HttpStatus, Query } from '@nestjs/common';
 import { Response } from 'express';
 import { RuleService } from "../rule/rule.service";
-import { Rule } from "../entities/rule.entity";
 import { JsonResult } from "../libs/utils/jsonResult";
 
 @Controller('web/rule')

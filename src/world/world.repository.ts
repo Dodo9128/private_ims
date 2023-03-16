@@ -9,8 +9,8 @@ import {CustomRepository} from "../api/decorator/typeorm.decorator";
 
 @CustomRepository(WorldCountry)
 export class WorldCountryRepository extends Repository<WorldCountry> {
-  async findById(id: string): Promise<WorldCountry> {
-    return await this.findOne({ where: {id: id} });
+  async findById(id: number): Promise<WorldCountry> {
+    return await this.findById(id);
   }
 
   async totalWorldCountryCount(totalCount: string): Promise<IWorldCount> {

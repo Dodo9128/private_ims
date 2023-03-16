@@ -28,11 +28,8 @@ export class VenueMapper {
     return PageUtil.setPageDataMap(await this.venueRepository.query(query), totalCount);
   }
 
-  async getVenue(id: string): Promise<any> {
-    let params = new Map<string, any>();
-    params.set("id", id);
-    const query = MybatisMapper.getStatement('Venue', 'getVenue', Object.fromEntries(params), myBatisFormat);
-
+  async getVenue(id: string) {
+    const query = MybatisMapper.getStatement('Venue', 'getVenue', {id}, myBatisFormat);
     return await this.venueRepository.query(query);
   }
 

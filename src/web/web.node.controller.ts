@@ -33,13 +33,13 @@ export class WebNodeController {
       .set("isDescending", (isDescending) ? isDescending : "asc")
       .set("system_id", system_id);
 
-    const Result: Map<string, any> = await this.nodeService.listNode(params);
+    const Result: Map<string, any> = JsonResult.makeSuccessPaging(await this.nodeService.listNode(params));
 
     return res.status(HttpStatus.OK).json(Object.fromEntries(Result));
   }
 
   @Post('/listNode')
-  listNode(
+  public async listNode(
     @Query('pageNo') pageNo: number,
     @Query('pageSize') pageSize: number,
     @Query('sortColumn') sortColumn: string,
@@ -55,7 +55,9 @@ export class WebNodeController {
       .set("isDescending", (isDescending) ? isDescending : "asc")
       .set("system_id", system_id);
 
-    //return this.nodeService.listNode();
+    const Result: Map<string, any> = JsonResult.makeSuccessArray(await this.nodeService.listNode4Cms(params));
+
+    return res.status(HttpStatus.OK).json(Object.fromEntries(Result));
   }
 
   @Post('/insertNode')
@@ -110,7 +112,7 @@ export class WebNodeController {
 
   @Post('/updateNode')
   async updateNode(
-    @Body('id') id: string,
+    //@Body('id') id: string,
     @Body('node_id') node_id: string,
     @Body('system_id') system_id: string,
     @Body('name') name: string,
@@ -136,7 +138,7 @@ export class WebNodeController {
 
     let params = new Map<string, any>;
     params
-      .set("id", id)
+      //.set("id", id)
       .set("node_id", node_id)
       .set("name", name)
       .set("system_id", system_id)

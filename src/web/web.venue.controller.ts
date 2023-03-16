@@ -66,7 +66,7 @@ export class WebVenueController {
   getVenue(@Body('id') id: string, @Res() res: Response) {
     return this.venueService.getVenue(id).then((rst) => {
       res.status(HttpStatus.OK).json({
-        data: rst,
+        data: rst[0],
         result: "ok",
         message: "SUCCESS"
       })

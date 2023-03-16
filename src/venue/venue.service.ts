@@ -36,7 +36,7 @@ export class VenueService {
     return makeSuccessPaging(await this.venueMapper.listVenue(params));
   }
 
-  async getVenue(id: string): Promise<object> {
+  async getVenue(id: string) {
     return this.venueMapper.getVenue(id)
   }
 

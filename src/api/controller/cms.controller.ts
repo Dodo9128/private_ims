@@ -9,7 +9,7 @@ import {
   getGroupChannelForMobile,
   updateContentIdByEventId,
 } from "../decorator/cms.decorator";
-import { EventService } from "../../web/event/event.service";
+import { EventService } from "../../event/event.service";
 import { GroupsService } from "../../groups/groups.service";
 
 @Controller({ path: "cms", version: ["v1"] })

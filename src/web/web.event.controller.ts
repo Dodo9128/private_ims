@@ -1,8 +1,8 @@
 import {
   Body, Post, Controller
 } from "@nestjs/common";
-import { EventService } from "./event/event.service";
-import { CreateEventDto, UpdateEventDto} from "./event/event.dto";
+import { EventService } from "../event/event.service";
+import { CreateEventDto, UpdateEventDto} from "../event/event.dto";
 
 @Controller("web/event")
 export class WebEventController {

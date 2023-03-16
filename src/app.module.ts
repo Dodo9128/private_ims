@@ -19,6 +19,7 @@ import { FdlsController } from "./api/controller/fdls.controller";
 import { ExcelModule } from "./excel/excel.module";
 import { ExcelController } from "./excel/excel.controller";
 import { WebModule } from "./web/web.module";
+import { NodeModule } from "./node/node.module";
 
 const node_env = process.env.NODE_ENV || "development";
 
@@ -57,6 +58,7 @@ console.log(`Environment Path is: ${envPath}`);
     ApiModule,
     ExcelModule,
     WebModule,
+    NodeModule,
   ],
   controllers: [AppController],
   providers: [

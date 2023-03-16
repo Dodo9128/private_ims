@@ -75,7 +75,7 @@ export class NodeMapper {
     const query = MybatisMapper.getStatement('Node', 'listNodeForNodeType', Object.fromEntries(params), myBatisFormat);
     return await this.nodeRepository.query(query);
   }
-  public async getNode(params: Map<any, any>): Promise<any> {
+  public async getNode(params: Map<string, any>): Promise<Node> {
     const query = MybatisMapper.getStatement('Node', 'getNode', Object.fromEntries(params), myBatisFormat);
     return await this.nodeRepository.query(query);
   }

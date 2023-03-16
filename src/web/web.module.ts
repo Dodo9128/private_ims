@@ -23,7 +23,7 @@ import { GroupsService } from "../groups/groups.service";
 import { VideoService } from "../video/video.service";
 import { AudioService } from "../audio/audio.service";
 import { ChannelService } from "../channel/channel.service";
-import { EventService } from "./event/event.service";
+import { EventService } from "../event/event.service";
 import { MonitService } from "../monit/monit.service";
 
 /*repository 영역*/
@@ -36,9 +36,9 @@ import { GroupsRepository } from "../groups/groups.repository";
 import { VideoRepository } from "../video/video.repository";
 import { AudioRepository } from "../audio/audio.repository";
 import { ChannelRepository } from "../channel/channel.repository";
-import { EventRepository } from "./event/event.repository";
+import { EventRepository } from "../event/event.repository";
 import { MonitRepository } from "../monit/monit.repository";
-import {CodeCommonRepository} from "../code/CodeCommon.repository";
+import { CodeCommonRepository } from "../code/CodeCommon.repository";
 import { WorldCountryRepository } from "../world/world.repository";
 
 import { VenueMapper } from "../venue/venue.mapper";
@@ -49,7 +49,7 @@ import { GroupsMapper } from "../groups/groups.mapper";
 import { RuleMapper } from "../rule/rule.mapper";
 import { MonitMapper } from "../monit/monit.mapper";
 import { ChannelMapper } from "../channel/channel.mapper";
-
+import { EventMapper } from "../event/event.mapper";
 import { HttpModule } from "@nestjs/axios";
 
 
@@ -106,6 +106,7 @@ import { HttpModule } from "@nestjs/axios";
     RuleMapper,
     MonitMapper,
     ChannelMapper,
+    EventMapper,
   ],
   exports: [
     AdminService,

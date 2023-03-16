@@ -88,4 +88,9 @@ export class ChannelMapper {
 
     return await this.channelRepository.query(query);
   }
+
+  public async changeCameraIpMapping(params: Map<string, any>) {
+    const query = MybatisMapper.getStatement('Channel', 'changeCameraIpMapping', Object.fromEntries(params), myBatisFormat);
+    return await this.channelRepository.query(query);
+  }
 }
