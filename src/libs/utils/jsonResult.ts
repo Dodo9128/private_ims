@@ -39,10 +39,9 @@ export class JsonResult {
     let result = new Map<string, any>();
     result.set(AjaxConstants.RESULT, AjaxConstants.RESULT_OK);
     if (Array.isArray(Data)) {
-      let sbData = JSON.stringify(Data);
-      result.set(AjaxConstants.DATA, sbData);
+      result.set(AjaxConstants.DATA, Data);
     } else {
-      result.set(AjaxConstants.DATA, JSON.stringify(Data));
+      result.set(AjaxConstants.DATA, Data);
     }
 
     result.set(AjaxConstants.MESSAGE, AjaxConstants.DEFAULT_MESSAGE);

@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Query,
-  Res, HttpStatus
-} from '@nestjs/common';
+import { Controller, Post, Body, Query, Res, HttpStatus } from '@nestjs/common';
 import { Response} from 'express';
 import { NodeService } from "../node/node.service";
 import { JsonResult } from "../libs/utils/jsonResult";
@@ -274,8 +268,10 @@ export class WebNodeController {
 
   @Post("/getNode")
   public async getNode(
-    @Body("id") id: string
-  ): Promise<Map<string, object>> {
-    return JsonResult.makeSuccessVo(await this.nodeService.getNode(new Map(Object.entries( {id}))));
+    @Body("id") id: string,
+    @Res() res: Response,
+  ) {
+    const Result: Map<string, any> = JsonResult.makeSuccessVo(await this.nodeService.getNode(new Map(Object.entries( {id}))));
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
   }
 }

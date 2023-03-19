@@ -349,8 +349,10 @@ export class NodeController {
 
   @Post("/getNode")
   public async getNode(
-    @Body("id") id: string
-  ): Promise<Map<string, object>> {
-    return JsonResult.makeSuccessVo(await this.nodeService.getNode(new Map(Object.entries( {id}))));
+    @Body("id") id: string,
+    @Res() res: Response,
+  ) {
+    const Result: Map<string, any> = JsonResult.makeSuccessVo(await this.nodeService.getNode(new Map(Object.entries( {id}))));
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
   }
 }
