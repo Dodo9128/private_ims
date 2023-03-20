@@ -586,8 +586,8 @@ export class NodeService {
 
   /*
   * eventMapper와 연결 되야 함... */
-  public async getCFurl(eventId: string): Promise<any> {
-    let systemId: string = await this.eventMapper.getSystemId(new Map(Object.entries({"event_id": eventId} )));
+  public async getCFurl(params: Map<string, any>): Promise<any> {
+    let systemId: string = await this.eventMapper.getSystemId(params);
     let cloudFrontParam = new Map<string, any>();
     cloudFrontParam
       .set("systemId", systemId)
@@ -945,22 +945,22 @@ export class NodeService {
   }
 
   public async listService4Monit(params: Map<string, any>): Promise<Map<string, any>> {
-    return this.nodeMapper.listMlType4Monit(params);
+    return await this.nodeMapper.listMlType4Monit(params);
   }
 
   public async listRegion4Monit(params: Map<string, any>): Promise<Map<string, any>> {
-    return this.nodeMapper.listRegion4Monit(params);
+    return await this.nodeMapper.listRegion4Monit(params);
   }
 
   public async listNode4Monit(params: Map<string, any>): Promise<Map<string, any>> {
-    return this.nodeMapper.listNode4Monit(params);
+    return await this.nodeMapper.listNode4Monit(params);
   }
 
   public async listNode4MonitAction(params: Map<string,any>): Promise<Map<string, any>> {
-    return this.nodeMapper.listNode4MonitAction(params);
+    return await this.nodeMapper.listNode4MonitAction(params);
   }
 
   public async listMlType4Monit(params: Map<string, any>): Promise<Map<string, any>> {
-    return this.nodeMapper.listMlType4Monit(params);
+    return await this.nodeMapper.listMlType4Monit(params);
   }
 }

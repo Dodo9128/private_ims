@@ -147,6 +147,7 @@ export class NodeMapper {
 
   public async listNode4Monit(params: Map<any, any>): Promise<any> {
     const query = MybatisMapper.getStatement('Node', 'listNode4Monit', Object.fromEntries(params), myBatisFormat);
+    console.log(query);
     return await this.nodeRepository.query(query);
   }
 

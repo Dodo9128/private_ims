@@ -355,4 +355,126 @@ export class NodeController {
     const Result: Map<string, any> = JsonResult.makeSuccessVo(await this.nodeService.getNode(new Map(Object.entries( {id}))));
     res.status(HttpStatus.OK).json(Object.fromEntries(Result));
   }
+
+  @Post ("/deleteNode")
+  public async deleteNode(
+    @Body("id") id: string,
+    @Res() res: Response,
+  ) {
+    const Result: Map<string, any> = JsonResult.makeSuccessBool(await this.nodeService.deleteNode(id));
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
+  }
+
+  @Post("/listService4Monit")
+  public async listService4Monit(
+    @Body("systemId") systemId: string,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+
+    const Result: Map<string, any> = JsonResult.makeSuccessVo(await this.nodeService.listService4Monit(new Map(Object.entries({systemId}))));
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
+  }
+
+  @Post("/listMlType4Monit")
+  public async listMlType4Monit(
+    @Body("systemId") systemId: string,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    const Result: Map<string, any> = JsonResult.makeSuccessVo(await this.nodeService.listMlType4Monit(new Map(Object.entries({systemId}))));
+
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
+  }
+
+  @Post("/listRegion4Monit")
+  public async listRegion4Monit(
+    @Body("systemId") systemId: string,
+    @Body("nodeType") nodeType: string,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    const Result: Map<string, any> = JsonResult.makeSuccessArray(await this.nodeService.listRegion4Monit(new Map(Object.entries({systemId, nodeType}))));
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
+  }
+
+  @Post("/listNode4Monit")
+  public async listNode4Monit(
+    @Body("systemId") systemId: string,
+    @Body("nodeType") nodeType: string,
+    @Body("region") region: string,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    const Result: Map<string, any> = JsonResult.makeSuccessArray(await this.nodeService.listNode4Monit(new Map(Object.entries({systemId, nodeType, region}))));
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
+  }
+
+  @Post("/listNode4MonitAction")
+  public async listNode4MonitAction(
+    @Body("systemId") systemId: string,
+    @Body("nodeType") nodeType: string,
+    @Body("region") region: string,
+    @Body("mlType") mlType: string,
+    @Body("list") list: string,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    const Result: Map<string, any> = JsonResult.makeSuccessArray(await this.nodeService.listNode4MonitAction(new Map(Object.entries({systemId, nodeType, region, mlType, list}))));
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
+  }
+
+  @Post("/getTemporaryInstanceInfo")
+  public async getTemporaryInstanceInfo(
+    @Body("system_id") systemId: string,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    const Result: Map<string, any> = JsonResult.makeSuccessArray(await this.nodeService.getTemporaryInstanceInfo(new Map(Object.entries({systemId}))));
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
+  }
+
+  @Post("/addTemporaryInstance")
+  public async addTemporaryInstance(
+    @Body("system_id") systemId: string,
+    @Body("instanceCount") instanceCount: number,
+    @Body("instanceType") instanceType: string,
+    @Body("region") region: string,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    const Result: Map<string, any> = JsonResult.makeSuccessArray(await this.nodeService.addTemporaryInstance(new Map(Object.entries({systemId, instanceCount, instanceType, region}))));
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
+  }
+
+  @Post("/listRegion4OnlyTemporaryInstance")
+  public async listRegion4OnlyTemporaryInstance(
+    @Body("system_id") systemId: string,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    const Result: Map<string, any> = JsonResult.makeSuccessArray(await this.nodeService.listRegion4OnlyTemporaryInstance(new Map(Object.entries({systemId}))));
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
+  }
+
+  @Post("/deleteTemporaryInstance")
+  public async deleteTemporaryInstance(
+    @Body("system_id") systemId: string,
+    @Body("region") region: string,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    const Result: Map<string, any> = JsonResult.makeSuccessArray(await this.nodeService.deleteTemporaryInstance(new Map(Object.entries({systemId, region}))));
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
+  }
+
+  @Post("/:event_id/getCFurl")
+  public async getCFurl(
+    @Param("event_id") eventId: string,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    const Result: Map<string, any> = JsonResult.makeSuccessArray(await this.nodeService.getCFurl(new Map(Object.entries({"event_id": eventId}))));
+    res.status(HttpStatus.OK).json(Object.fromEntries(Result));
+  }
 }
