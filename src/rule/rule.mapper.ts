@@ -40,7 +40,17 @@ export class RuleMapper {
 
   public async getRule(params: Map<string, any>): Promise<Map<string, any>> {
     const query = MybatisMapper.getStatement("Rule", 'getRule', Object.fromEntries(params), myBatisFormat);
+    console.log(query)
+    return await this.ruleRepository.query(query);
+  }
 
+  public async getMaxRuleId(params: Map<string, any>): Promise<number>{
+    const query = MybatisMapper.getStatement("Rule", "getMaxRuleId", Object.fromEntries(params), myBatisFormat);
+    return await this.ruleRepository.query(query);
+  }
+
+  public async getRuleForNodeType(params: Map<string, any>): Promise<Map<string, any>> {
+    const query = MybatisMapper.getStatement("Rule", "getRuleForNodeType", Object.fromEntries(params), myBatisFormat);
     return await this.ruleRepository.query(query);
   }
 }

@@ -1,18 +1,20 @@
 import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 import { Rule } from '../entities/rule.entity';
+
 import { RuleMapper } from "./rule.mapper";
+
 import { RuleRepository } from "./rule.repository";
 
-import {JsonResult} from "../libs/utils/jsonResult";
 import {makeSuccessPaging} from "../util/ajaxreturn.util";
 
 @Injectable()
 export class RuleService {
   constructor(
-    private ruleRepository: RuleRepository,
     private ruleMapper: RuleMapper,
-  ) {
-  }
+    @InjectRepository(RuleRepository)
+    private ruleRepository: RuleRepository,
+  ) {}
 
   async insertRule(params: Map<string, any>): Promise<Rule> {
     let rule: Rule = new Rule();

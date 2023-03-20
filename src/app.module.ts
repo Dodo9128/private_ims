@@ -20,6 +20,7 @@ import { ExcelModule } from "./excel/excel.module";
 import { ExcelController } from "./excel/excel.controller";
 import { WebModule } from "./web/web.module";
 import { NodeModule } from "./node/node.module";
+import { RuleModule } from "./rule/rule.module";
 
 const node_env = process.env.NODE_ENV || "development";
 
@@ -59,6 +60,7 @@ console.log(`Environment Path is: ${envPath}`);
     ExcelModule,
     WebModule,
     NodeModule,
+    RuleModule,
   ],
   controllers: [AppController],
   providers: [
