@@ -1,5 +1,5 @@
 export interface IResultReturn {
-  result: "OK" | "FAIL";
+  result: "ok" | "fail";
   message: string | null;
   data: object | null;
 }

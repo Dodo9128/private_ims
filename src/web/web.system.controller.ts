@@ -27,7 +27,7 @@ export class WebSystemController {
     @Res() res: Response,
     ) {
     let Result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: await this.systemMapper.listSystem(venue_id),
     }

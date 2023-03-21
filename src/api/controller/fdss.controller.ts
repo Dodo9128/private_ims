@@ -18,7 +18,7 @@ export class FdssController {
   @getNode4DSS()
   async getNode4DSS(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId },
     };

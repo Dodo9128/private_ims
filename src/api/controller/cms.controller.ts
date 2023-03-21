@@ -24,7 +24,7 @@ export class CmsController {
   @getGroupChannelForMobile()
   async getGroupChannelForMobile(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId },
     };
@@ -43,7 +43,7 @@ export class CmsController {
   @getLiveEventId()
   async getLiveEventId(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId },
     };
@@ -69,7 +69,7 @@ export class CmsController {
     contentId ||= 0;
     scheduledAt ||= null;
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId, content_id: contentId, scheduled_at: scheduledAt },
     };
@@ -95,7 +95,7 @@ export class CmsController {
   ) {
     const reqParams = req.params;
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { request_params: reqParams, system_id: systemId, event_id: eventId, content_id: contentId },
     };

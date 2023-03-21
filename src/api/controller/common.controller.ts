@@ -15,7 +15,7 @@ export class CommonController {
   // TODO: change this logic_COMMON HealthCheck
   async getHealthCheck(@Res() res: Response) {
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { health: true },
     };

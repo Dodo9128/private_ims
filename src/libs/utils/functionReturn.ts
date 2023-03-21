@@ -1,17 +1,17 @@
 import { IResultReturn } from "../../global/interface";
 
-export const sendOk = (msg: string, data: object) => {
+export const sendOk = (msg: string, data: any) => {
   const returnObject: IResultReturn = {
-    result: "OK",
+    result: "ok",
     message: msg,
     data: data,
   };
   return returnObject;
 };
 
-export const sendFail = (msg: string, data: object) => {
+export const sendFail = (msg: string, data: any) => {
   const returnObject: IResultReturn = {
-    result: "FAIL",
+    result: "fail",
     message: msg,
     data: data,
   };

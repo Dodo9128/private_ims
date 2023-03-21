@@ -1,6 +1,6 @@
-import { Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Res } from "@nestjs/common";
+import { Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Req, Res } from "@nestjs/common";
 import { ApiExcludeController, ApiExcludeEndpoint, ApiTags } from "@nestjs/swagger";
-import { Response } from "express";
+import { Request, Response } from "express";
 import { IResultReturn } from "../../global/interface";
 import { nodeIp, get4DSS, getScale, scaleOut4DSS, scaleOut4DSSOk, scaleIn4DSS } from "../decorator/fdls.decorator";
 import {
@@ -15,6 +15,9 @@ import {
   REGION,
   SYSTEM_ID,
 } from "../../global/constant";
+import { NodeService } from "../../node/node.service";
+import { NetworkUtil } from "../../util/network.util";
+import { sendOk } from "../../libs/utils/functionReturn";
 
 // @ApiExcludeController()
 @Controller({ path: "4dls", version: ["v1"] })
@@ -22,19 +25,19 @@ import {
 // @ApiResponse({ status: 200, description: "4DPD 에서 호출되는 API들" })
 export class FdlsController {
   // TODO: add systemService, scaleService, nodeService on constructor;
-  constructor() {}
+  // constructor() {}
 
-  // constructor(
-  //   private readonly systemService: SystemService;
-  //   private readonly scaleService: ScaleService;
-  //   private readonly nodeService: NodeService;
-  // ) {}
+  constructor(
+    // private readonly systemService: SystemService;
+    // private readonly scaleService: ScaleService;
+    private readonly nodeService: NodeService,
+  ) {}
 
   @Get(`/:${SYSTEM_ID}/get4DSS`)
   @get4DSS()
   async get4DSS(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId },
     };
@@ -53,7 +56,7 @@ export class FdlsController {
   @getScale()
   async getScale(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId },
     };
@@ -70,21 +73,13 @@ export class FdlsController {
 
   @Get(`/:${SYSTEM_ID}/nodeIp`)
   @nodeIp()
-  async nodeIp(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
-    const result: IResultReturn = {
-      result: "OK",
-      message: "SUCCESS",
-      data: { system_id: systemId },
-    };
+  async nodeIp(@Param(`${SYSTEM_ID}`) systemId: string, @Req() req: Request, @Res() res: Response) {
+    const srcServerIp: string = NetworkUtil.getRemoteIP(req);
+    const nodeIp44DMLReturn = await this.nodeService.nodeIp44DLS(srcServerIp, systemId);
+
+    const result: IResultReturn = sendOk("SUCCESS", { node: nodeIp44DMLReturn });
 
     return res.status(HttpStatus.OK).json(result);
-
-    /**
-     * TODO: connect with nodeService.nodeIp44DLS(systemId);
-     *
-     * const result: IResultReturn = await this.nodeService.nodeIp44DLS(systemId);
-     * return res.status(HttpStatus.OK).json(result);
-     */
   }
 
   @Delete(`/:${SYSTEM_ID}/scaleIn4dSS/:${NODE_ID}`)
@@ -94,23 +89,10 @@ export class FdlsController {
     @Param(`${NODE_ID}`) nodeId: string,
     @Res() res: Response,
   ) {
-    const result: IResultReturn = {
-      result: "OK",
-      message: "SUCCESS",
-      data: {
-        system_id: systemId,
-        node_id: nodeId,
-      },
-    };
+    const scaleIn4DSSReturn = await this.nodeService.scaleIn4DSS(systemId, nodeId);
+    const result: IResultReturn = sendOk("SUCCESS", scaleIn4DSSReturn);
 
     return res.status(HttpStatus.OK).json(result);
-
-    /**
-     * TODO: connect with nodeService.scaleIn4DSS(systemId, nodeId);
-     *
-     * const result: IResultReturn = await this.nodeService.scaleIn4DSS(systemId, nodeId);
-     * return res.status(HttpStatus.OK).json(result);
-     */
   }
 
   @Post(`/:${SYSTEM_ID}/scaleOut4DSS`)
@@ -125,7 +107,7 @@ export class FdlsController {
     @Res() res: Response,
   ) {
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: {
         system_id: systemId,
@@ -157,25 +139,9 @@ export class FdlsController {
     @Query(`${DOMAIN}`) domain: string,
     @Res() res: Response,
   ) {
-    const result: IResultReturn = {
-      result: "OK",
-      message: "SUCCESS",
-      data: {
-        system_id: systemId,
-        node_id: nodeId,
-        public_ip: publicIp,
-        public_port: publicPort,
-        domain: domain,
-      },
-    };
+    const scaleOut4DSSOkReturn = await this.nodeService.scaleOut4DSSOk(systemId, nodeId, publicIp, publicPort, domain);
+    const result: IResultReturn = sendOk("SUCCESS", scaleOut4DSSOkReturn);
 
     return res.status(HttpStatus.OK).json(result);
-
-    /**
-     * TODO: connect with nodeService.scaleOut4DSSOk(systemId, nodeId, publicIp, publicPort, domain);
-     *
-     * const result: IResultReturn = await this.nodeService.scaleOut4DSSOk(systemId, nodeId, publicIp, publicPort, domain);
-     * return res.status(HttpStatus.OK).json(result);
-     */
   }
 }

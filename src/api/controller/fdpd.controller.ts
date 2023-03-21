@@ -40,7 +40,7 @@ export class FdpdController {
     channelList = JSON.parse(channelList);
 
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId, channelList: channelList },
     };
@@ -69,7 +69,7 @@ export class FdpdController {
     @Res() res: Response,
   ) {
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId, event_id: eventId, status: status },
     };
@@ -94,7 +94,7 @@ export class FdpdController {
   ) {
     param = JSON.parse(param);
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId, event_id: eventId, param: param },
     };
@@ -119,7 +119,7 @@ export class FdpdController {
   ) {
     param = JSON.parse(param);
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId, event_id: eventId, param: param },
     };
@@ -143,7 +143,7 @@ export class FdpdController {
     @Res() res: Response,
   ) {
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId, event_id: eventId, scheduled_at: scheduledAt },
     };
@@ -167,7 +167,7 @@ export class FdpdController {
     @Res() res: Response,
   ) {
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId, live_index: liveIndex, status: status },
     };
@@ -186,7 +186,7 @@ export class FdpdController {
   @getEventId()
   async getEventId(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId },
     };
@@ -205,7 +205,7 @@ export class FdpdController {
   @getGroupChannel()
   async getGroupChannel(@Param(`${SYSTEM_ID}`) systemId: string, @Res() res: Response) {
     const result: IResultReturn = {
-      result: "OK",
+      result: "ok",
       message: "SUCCESS",
       data: { system_id: systemId },
     };
